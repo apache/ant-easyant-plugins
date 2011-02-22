@@ -15,46 +15,46 @@
    limitations under the License.
 -->
 <project name="org.apache.easyant.plugins;rat" 
-		xmlns:ivy="antlib:org.apache.ivy.ant" 
-     	xmlns:ea="antlib:org.apache.easyant">
-     	
-	<!--
-		<ea:core-version requiredrevision="[0.7,+]" />
-	-->
-	
-	<target name=":init" phase="validate">
-		<typedef resource="org/apache/rat/anttasks/antlib.xml"
-	             uri="antlib:org.apache.rat.anttasks"
-	    	     classpathref="org.apache.easyant.plugins#rat.classpath" />
-		<ea:parameter property="rat.report.dir" description="directory where rat report will be generated" default="${target.report}/rat"/>
-		<ea:parameter property="rat.failOnError" description="specify if rat report should fail build if unknown licenses are found" default="true"/> 
-		<fileset id="rat.fileset" dir="${basedir}">
-			<exclude name=".classpath" />
-			<exclude name=".project" />
-			<exclude name="target/**" />
-			<exclude name="**/*.sha1" />
-			<exclude name="**/*.md5" />
-		</fileset>
-	
-	</target>
-	
-	<target name=":rat" description="generate rat report" depends=":init" phase="report">
-		<mkdir dir="${rat.report.dir}"/>
-		<echo>Generating rat report ...</echo>
-		<property name="rat.report" value="${rat.report.dir}/rat-report.txt"/>
-	
-		<rat:report xmlns:rat="antlib:org.apache.rat.anttasks" reportFile="${rat.report}">
-		    <fileset refid="rat.fileset"/>
-		</rat:report>
-		
-		<fail message="Some files have missing or incorrect license information. Check RAT report in ${rat.report} for more details!">
-		    <condition>
-			<and>
-			    <not><resourcecontains resource="${rat.report}" substring="0 Unknown Licenses" casesensitive="false" /></not>
-			    <equals arg1="${rat.failOnError}" arg2="true"/>
-			</and>
-		    </condition>
-		</fail>
-	</target>
+        xmlns:ivy="antlib:org.apache.ivy.ant" 
+        xmlns:ea="antlib:org.apache.easyant">
+        
+    <!--
+        <ea:core-version requiredrevision="[0.7,+]" />
+    -->
+    
+    <target name=":init" phase="validate">
+        <typedef resource="org/apache/rat/anttasks/antlib.xml"
+                 uri="antlib:org.apache.rat.anttasks"
+                 classpathref="org.apache.easyant.plugins#rat.classpath" />
+        <ea:parameter property="rat.report.dir" description="directory where rat report will be generated" default="${target.report}/rat"/>
+        <ea:parameter property="rat.failOnError" description="specify if rat report should fail build if unknown licenses are found" default="true"/> 
+        <fileset id="rat.fileset" dir="${basedir}">
+            <exclude name=".classpath" />
+            <exclude name=".project" />
+            <exclude name="target/**" />
+            <exclude name="**/*.sha1" />
+            <exclude name="**/*.md5" />
+        </fileset>
+    
+    </target>
+    
+    <target name=":rat" description="generate rat report" depends=":init" phase="report">
+        <mkdir dir="${rat.report.dir}"/>
+        <echo>Generating rat report ...</echo>
+        <property name="rat.report" value="${rat.report.dir}/rat-report.txt"/>
+    
+        <rat:report xmlns:rat="antlib:org.apache.rat.anttasks" reportFile="${rat.report}">
+            <fileset refid="rat.fileset"/>
+        </rat:report>
+        
+        <fail message="Some files have missing or incorrect license information. Check RAT report in ${rat.report} for more details!">
+            <condition>
+            <and>
+                <not><resourcecontains resource="${rat.report}" substring="0 Unknown Licenses" casesensitive="false" /></not>
+                <equals arg1="${rat.failOnError}" arg2="true"/>
+            </and>
+            </condition>
+        </fail>
+    </target>
 
 </project>

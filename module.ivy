@@ -15,10 +15,10 @@
    limitations under the License.
 -->
 <ivy-module version="2.0" xmlns:ea="http://www.easyant.org"> 
-	<info organisation="org.apache.easyant.plugins" module="plugins-orchestrator" revision="0.1" >
-	       <description>This module acts as orchestrator to build all easyant plugins.</description>
-		<ea:build module="meta-build" revision="0.2"/>
-		<!-- If we use build scoped repository easyant use it as a dictator resolver, this have side effects as we use same ivy instance to build the plugin and to resolve plugin dependencies -->
-		<ea:property name="use.build.repository" value="false"/>
-	</info>
+    <info organisation="org.apache.easyant.plugins" module="plugins-orchestrator" revision="0.1" >
+           <description>This module acts as orchestrator to build all easyant plugins.</description>
+        <ea:build module="meta-build" revision="0.2"/>
+        <!-- If we use build scoped repository easyant use it as a dictator resolver, this have side effects as we use same ivy instance to build the plugin and to resolve plugin dependencies -->
+        <ea:property name="use.build.repository" value="false"/>
+    </info>
 </ivy-module>

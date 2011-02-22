@@ -15,21 +15,21 @@
    limitations under the License.
 -->
 <ivy-module version="2.0" xmlns:ea="http://www.easyant.org"> 
-	<info organisation="org.apache.easyant.plugins" module="rat" 
-			status="integration" revision="0.1">
-		<ea:build organisation="org.apache.easyant.buildtypes" module="build-std-ant-plugin" revision="0.1"/>
-		<ea:property name="retrieve.dependencies" value="true"/>
-	</info>
-	<configurations>
-		<conf name="default" visibility="public" description="runtime dependencies artifact can be used with this conf"/>
-		<conf name="test" visibility="private" description="this scope indicates that the dependency is not required for normal use of the application, and is only available for the test compilation and execution phases."/>
-		<conf name="provided" visibility="public" description="this is much like compile, but indicates you expect the JDK or a container to provide it. It is only available on the compilation classpath, and is not transitive."/>
-	</configurations>
-	<publications>
+    <info organisation="org.apache.easyant.plugins" module="rat" 
+            status="integration" revision="0.1">
+        <ea:build organisation="org.apache.easyant.buildtypes" module="build-std-ant-plugin" revision="0.1"/>
+        <ea:property name="retrieve.dependencies" value="true"/>
+    </info>
+    <configurations>
+        <conf name="default" visibility="public" description="runtime dependencies artifact can be used with this conf"/>
+        <conf name="test" visibility="private" description="this scope indicates that the dependency is not required for normal use of the application, and is only available for the test compilation and execution phases."/>
+        <conf name="provided" visibility="public" description="this is much like compile, but indicates you expect the JDK or a container to provide it. It is only available on the compilation classpath, and is not transitive."/>
+    </configurations>
+    <publications>
                 <artifact name="rat" type="ant"/>
         </publications>
 
-	<dependencies>
-		<dependency org="org.apache.rat" name="apache-rat-tasks" rev="0.7" conf="default->default" />
-	</dependencies>
+    <dependencies>
+        <dependency org="org.apache.rat" name="apache-rat-tasks" rev="0.7" conf="default->default" />
+    </dependencies>
 </ivy-module>

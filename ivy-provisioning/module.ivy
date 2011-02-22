@@ -15,15 +15,15 @@
    limitations under the License.
 -->
 <ivy-module version="2.0" xmlns:ea="http://www.easyant.org"> 
-	<info organisation="org.apache.easyant.plugins" module="ivy-provisioning" revision="0.1">
-	       <ea:build organisation="org.apache.easyant.buildtypes" module="build-std-ant-plugin" revision="0.1"/>
+    <info organisation="org.apache.easyant.plugins" module="ivy-provisioning" revision="0.1">
+           <ea:build organisation="org.apache.easyant.buildtypes" module="build-std-ant-plugin" revision="0.1"/>
         </info>
         <configurations>
                 <conf name="default" description="runtime dependencies artifact can be used with this conf"/>
                 <conf name="test" description="this scope indicates that the dependency is not required for normal use of the application, and is only available for the test compilation and execution phases."/>
                 <conf name="provided" description="this is much like compile, but indicates you expect the JDK or a container to provide it. It is only available on the compilation classpath, and is not transitive."/>
         </configurations>
-	<publications>
-		<artifact type="ant"/>
-	</publications>
+    <publications>
+        <artifact type="ant"/>
+    </publications>
 </ivy-module>

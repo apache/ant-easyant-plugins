@@ -15,32 +15,32 @@
    limitations under the License.
 -->
 <project name="org.apache.easyant.plugins;rat-test" xmlns:au="antlib:org.apache.ant.antunit" xmlns:ivy="antlib:org.apache.ivy.ant">
-	
-	<!-- Mocking required phase --> 
-	<phase name="validate"/>
-	<phase name="report" depends="validate"/>
-	<path id="org.apache.easyant.plugins#rat.classpath">
-		<fileset dir="../../../lib/main"/>
-	</path>
-	<property name="target.report" value="${basedir}/target/report"/>
-		
-	<!-- Import your plugin -->	
-	<import file="../../main/resources/rat.ant"/>
-	
-	<!-- Defines a setUp / tearDown (before each test) that cleans the environnement --> 
-	<target name="clean" description="remove stale build artifacts before / after each test">
-		<delete dir="${basedir}" includeemptydirs="true">
-			<include name="**/target/**"/>
-			<include name="**/lib/**"/>
-		</delete>
-	</target>
-	
-	<target name="setUp" depends="clean"/>
-	<target name="tearDown" depends="clean"/>
-	
-	<target name="testRat">
-		<antcall target=":rat" />
-		<au:assertLogContains text="Generating rat report ..."/>
-	</target>
+    
+    <!-- Mocking required phase --> 
+    <phase name="validate"/>
+    <phase name="report" depends="validate"/>
+    <path id="org.apache.easyant.plugins#rat.classpath">
+        <fileset dir="../../../lib/main"/>
+    </path>
+    <property name="target.report" value="${basedir}/target/report"/>
+        
+    <!-- Import your plugin --> 
+    <import file="../../main/resources/rat.ant"/>
+    
+    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement --> 
+    <target name="clean" description="remove stale build artifacts before / after each test">
+        <delete dir="${basedir}" includeemptydirs="true">
+            <include name="**/target/**"/>
+            <include name="**/lib/**"/>
+        </delete>
+    </target>
+    
+    <target name="setUp" depends="clean"/>
+    <target name="tearDown" depends="clean"/>
+    
+    <target name="testRat">
+        <antcall target=":rat" />
+        <au:assertLogContains text="Generating rat report ..."/>
+    </target>
 
 </project>
