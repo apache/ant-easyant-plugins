@@ -18,7 +18,7 @@
 <project name="easyant-test-utils">
 
     <description>Macros and targets to assist in writing AntUnit test cases for EasyAnt</description>
-    
+
     <macrodef name="easyant" description="fork an easyant process for testing">
         <attribute name="target" description="(optional) the easyant target(s), passed on the command line" default=""/>
         <attribute name="dir" description="(optional) the base directory from which to invoke easyant" default="${basedir}"/>
@@ -33,5 +33,5 @@
             </exec>
         </sequential>
     </macrodef>
-    
+
 </project>

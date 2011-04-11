@@ -17,26 +17,17 @@
 <project name="org.apache.easyant.plugins#test-junit"
     xmlns:ea="antlib:org.apache.easyant">
 
-    <ea:core-version requiredrevision="[0.8,+]" />
+    <ea:core-version requiredrevision="[0.9,+]" />
 
-    <ea:include mrid="org.apache.easyant.plugins#abstract-test;0.1" as=":abstract-junit-test"/>
-    <ea:include mrid="org.apache.easyant.plugins#antcontrib-activator;0.1" as=":ac"/>
+    <ea:import mrid="org.apache.easyant.plugins#abstract-test;0.2" />
+    <ea:import mrid="org.apache.easyant.plugins#antcontrib-activator;0.2" />
 
-    <target name="/skip" description="skip tests">
-        <property name="skip.test" value="true" />
-        <property name="skip.test.integration" value="true" />
-    </target>
-
-    <target name=":init" phase="validate" depends=":abstract-junit-test:init">
-        <ea:parameter phase="validate" />
-        <ea:parameter phase="test" />
-        <ea:parameter phase="integration-test" />
-
+    <target name="test-junit:init" depends="abstract-test:init">
         <ea:parameter property="test.run.includes.pattern" 
             default="**/*" description="Pattern describing class files included in test run" /> 
         <ea:parameter property="test.run.excludes.pattern" 
             default="" description="Pattern describing class files excluded in test run" />
-        
+
         <ea:parameter property="test.integration.run.includes.pattern" 
             default="**/*" description="Pattern describing class files included in integration test run" /> 
         <ea:parameter property="test.integration.run.excludes.pattern" 
@@ -48,15 +39,14 @@
             default="true" description="Run the tests in a separate VM. (true/false)"/>
         <ea:parameter property="test.run.jvmargs"
             default="" description="Extra parameters to pass to the test JVM, for example to enable debugging"/>
-    
+
         <ea:parameter property="test.integration.run.forkmode"
             default="perTest" description="The forkmode for junit integration tests; 'perTest' or 'once'"/>
         <ea:parameter property="test.integration.run.fork"
             default="true" description="Run integration tests in a separate VM. (true/false)"/>
         <ea:parameter property="test.integration.run.jvmargs"
             default="" description="Extra parameters to pass to the integration test JVM, for example to enable debugging"/>
-        
-        
+
         <ea:parameter property="target.test.xml" required="true" 
             description="Directory were xml test reports will be generated"/>
         <ea:parameter property="test.run.dir"
@@ -147,13 +137,13 @@
 
         </sequential>
     </macrodef>
-    
+
     <macrodef name="junit-test">
         <attribute name="prefix"/>
         <sequential>
             <mkdir dir="${target.test.xml}" />
             <mkdir dir="${@{prefix}.run.dir}"/>
-            
+
             <junit
                haltonfailure="off"
                haltonerror="off"
@@ -170,7 +160,7 @@
                 <classpath>
                     <path refid="run.@{prefix}.classpath" />
                 </classpath>
-                
+
                 <formatter type="xml"/>
                 <batchtest todir="${target.test.xml}">
                     <resources refid="target.@{prefix}.set"/>
@@ -180,8 +170,7 @@
         </sequential>
     </macrodef>
 
-    <target name="-compute-test-sets" depends="test-compile" description="compute the set of test cases to run">
-
+    <target name="-test-junit:compute-test-sets" depends="abstract-test:test-ready" description="compute the set of test cases to run">
         <compute-test-path prefix="test">
             <path refid="compile.test.classpath" />
         </compute-test-path>
@@ -189,31 +178,27 @@
         <compute-test-path prefix="test.integration">
             <path refid="compile.test.classpath" />
         </compute-test-path>
-
     </target>
 
-    <target name="-test" depends="-compute-test-sets" unless="skip.test">
+    <target name="-test-junit:test" depends="-test-junit:compute-test-sets" unless="skip.test">
         <junit-test prefix="test"/>
     </target>
 
-    <target name="-integration-test" depends="-compute-test-sets" unless="skip.test.integration">
+    <target name="-test-junit:integration-test" depends="-test-junit:compute-test-sets" unless="skip.test.integration">
         <junit-test prefix="test.integration"/>
     </target>
-    
-    <target name=":run" if="test.mode.run" unless="skip.test" depends="-test"
-         phase="test" description="run junit tests">
+
+    <target name="test-junit:run" if="test.mode.run" unless="skip.test" depends="-test-junit:test" description="run junit tests" extensionOf="abstract-test:test-run">
         <check-test-result propertytocheck="test.failed" 
             message="At least one test has failed. See logs in ${target.test.xml} for details or use the report target to run the test with a report"/>
     </target>
 
-    <target name=":run-integration" if="test.mode.run" unless="skip.test.integration" depends="-integration-test"
-         phase="integration-test" description="run junit integration tests">
+    <target name="test-junit:run-integration" if="test.mode.run" unless="skip.test.integration" depends="-test-junit:integration-test" description="run junit integration tests" extensionOf="abstract-test:test-run">
         <check-test-result propertytocheck="test.integration.failed"
             message="At least one integration test has failed. See logs in ${target.test.xml} for details or use the report target to run the test with a report" />
     </target>
 
-    <target name=":report" if="test.mode.report" unless="skip.test" depends="-test,-integration-test"
-         phase="report" description="generate junit report">
+    <target name="test-junit:report" if="test.mode.report" unless="skip.test" depends="-test-junit:test,-test-junit:integration-test" description="generate junit report">
         <junitreport todir="${target.test.xml}">
             <fileset dir="${target.test.xml}">
                 <include name="TEST-*.xml" />
@@ -225,7 +210,5 @@
         <fail if="test.integration.failed"
               message="At least one integration test has failed. See logs in ${target.test.xml} or report in ${target.test.html}" />
     </target>
-    
-    <target name=":doit" depends=":run, :run-integration, :report" />
 
 </project>

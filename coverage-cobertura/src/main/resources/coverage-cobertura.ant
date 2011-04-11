@@ -17,15 +17,12 @@
 <project name="org.apache.easyant.plugins#coverage-cobertura" 
     xmlns:ac="antlib:net.sf.antcontrib"
     xmlns:ea="antlib:org.apache.easyant">
-    
-    <ea:core-version requiredrevision="[0.8,+]" />
-        
-    <ea:include mrid="org.apache.easyant.plugins#abstract-coverage;0.1" as=":abstract-coverage"/>
 
-    <target name=":init" phase="validate" depends=":abstract-coverage:init">
-        
-        <ea:parameter phase="verify"/>
+    <ea:core-version requiredrevision="[0.9,+]" />
 
+    <ea:import mrid="org.apache.easyant.plugins#abstract-coverage;0.2" />
+
+    <target name="coverage-cobertura:init" depends="abstract-coverage:init">
         <ea:parameter property="coverage.report.format" description="report output format; text/html/xml" default="html"/>
         <ea:parameter property="cobertura.datafile.path" description="serialized object file where cobertura tracks coverage statistics" 
             default="${target.coverage.report}/cobertura.ser"/>
@@ -36,7 +33,7 @@
         <ea:parameter property="coverage.required.packagebranchrate" description="the required minimum branch coverage for each package, as a percentage" default="0"/>
         <ea:parameter property="coverage.required.totallinerate" description="the required minimum line coverage for the entire module, as a percentage" default="0"/>
         <ea:parameter property="coverage.required.totalbranchrate" description="the required minimum branch coverage for the entire module, as a percentage" default="0"/>
-        
+
         <available property="cobertura.available" classname="net.sourceforge.cobertura.ant.CheckTask" classpathref="org.apache.easyant.plugins#coverage-cobertura.classpath"/>
         <fail unless="cobertura.available" message="Cobertura not found on project classpath!" />
 
@@ -54,12 +51,12 @@
 
     </target>
 
-    <target name=":instrument" depends=":init" phase="process-classes" if="has.src.test.java">
+    <target name="coverage-cobertura:instrument" depends="coverage-cobertura:init" if="has.src.test.java" extensionOf="abstract-test:test-ready">
         <ea:path overwrite="prepend" pathid="run.test.classpath">
             <pathelement path="${target.coverage.classes}" />
             <path refid="org.apache.easyant.plugins#coverage-cobertura.classpath"/>
-        </ea:path>  
-                
+        </ea:path>
+
         <!-- Apply instrumentation to app classes -->
         <cobertura-instrument todir="${target.coverage.classes}"
                 datafile="${net.sourceforge.cobertura.datafile}">
@@ -70,14 +67,12 @@
         </cobertura-instrument>
     </target>
 
-    <target name=":report" depends=":init" phase="report" if="has.src.test.java">
-
+    <target name="coverage-cobertura:report" depends="coverage-cobertura:init,abstract-test:test-run" if="has.src.test.java" description="generate cobertura covera report">
         <cobertura-report format="${coverage.report.format}" destdir="${target.coverage.report}" srcdir="${src.main.java}" 
             datafile="${net.sourceforge.cobertura.datafile}"/>
-        
     </target>
-    
-    <target name=":check" depends=":init" phase="verify" if="has.src.test.java"
+
+    <target name="coverage-cobertura:check" depends="coverage-cobertura:init" if="has.src.test.java"
             description="fail the build if code coverage targets are not satisfied">
         <cobertura-check branchrate="${coverage.required.branchrate}" 
                          linerate="${coverage.required.linerate}" 
@@ -88,7 +83,4 @@
                          datafile="${net.sourceforge.cobertura.datafile}"/>
     </target>
 
-    <target name=":cobertura" depends="validate,test,report" description="generate cobertura covera report" />
-    <target name="doit" depends=":cobertura" />
-    
 </project>

@@ -15,7 +15,7 @@
    limitations under the License.
 -->
 <ivy-module version="2.0" xmlns:m="http://ant.apache.org/ivy/maven" xmlns:ea="http://www.easyant.org"> 
-    <info organisation="org.apache.easyant.plugins" module="docbook" revision="0.1">
+    <info organisation="org.apache.easyant.plugins" module="docbook" revision="0.2">
            <description>Generates project documentation as HTML or PDF using docbook-xsl.  
            See <a href="http://www.sagehill.net/docbookxsl">http://www.sagehill.net/docbookxsl</a>
            for instructions on writing DocBook documentation and configuring the DocBook generator.

@@ -17,12 +17,10 @@
 <project name="org.apache.easyant.plugins;rat" 
         xmlns:ivy="antlib:org.apache.ivy.ant" 
         xmlns:ea="antlib:org.apache.easyant">
-        
-    <!--
-        <ea:core-version requiredrevision="[0.7,+]" />
-    -->
-    
-    <target name=":init" phase="validate">
+
+    <ea:core-version requiredrevision="[0.9,+]" />
+
+    <target name="rat:init">
         <typedef resource="org/apache/rat/anttasks/antlib.xml"
                  uri="antlib:org.apache.rat.anttasks"
                  classpathref="org.apache.easyant.plugins#rat.classpath" />
@@ -35,18 +33,17 @@
             <exclude name="**/*.sha1" />
             <exclude name="**/*.md5" />
         </fileset>
-    
     </target>
-    
-    <target name=":rat" description="generate rat report" depends=":init" phase="report">
+
+    <target name="rat:rat" description="generate rat report" depends="rat:init">
         <mkdir dir="${rat.report.dir}"/>
         <echo>Generating rat report ...</echo>
         <property name="rat.report" value="${rat.report.dir}/rat-report.txt"/>
-    
+
         <rat:report xmlns:rat="antlib:org.apache.rat.anttasks" reportFile="${rat.report}">
             <fileset refid="rat.fileset"/>
         </rat:report>
-        
+
         <fail message="Some files have missing or incorrect license information. Check RAT report in ${rat.report} for more details!">
             <condition>
             <and>

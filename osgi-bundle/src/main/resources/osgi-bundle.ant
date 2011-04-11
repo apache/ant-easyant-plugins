@@ -16,10 +16,9 @@
 -->
 <project name="org.apache.easyant.plugins#osgi-bundle" xmlns:ea="antlib:org.apache.easyant">
     
-    <ea:core-version requiredrevision="[0.8,+]" />
+    <ea:core-version requiredrevision="[0.9,+]" />
 
-    <target name=":init" phase="validate">
-        <ea:parameter phase="validate" />
+    <target name="osgi-bundle:init">
         <ea:parameter property="target.artifacts" required="true" description="destination directory for target artifacts"/>
         <ea:parameter property="target.artifacts.main.bundle.name" required="true"
                     description="main artifact file name" />
@@ -30,7 +29,9 @@
             classpathref="org.apache.easyant.plugins#osgi-bundle.classpath" />
     </target>
 
-    <target name=":bundle" depends="validate, compile,prepare-package" phase="package">
+    <extension-point name="osgi-bundle:bundle-ready" />
+
+    <target name="osgi-bundle:bundle" depends="osgi-bundle:init,osgi-bundle:bundle-ready">
         <dirname file="${target.artifacts.main.bundle.name}" property="target.artifacts.main.bundle.dir" />
         <mkdir dir="${target.artifacts.main.bundle.dir}"/>
 
@@ -41,17 +42,17 @@
                 <isset property="osgi.include.resource"/>
             </or>
         </condition>
-        
+
         <fail unless="is.osgi.bundle.empty">
-Missing property            
-*******************************************************************************         
+Missing property
+*******************************************************************************
 At least one of the following property must be set :
   - osgi.export.package : The packages that will be exported by the bundle.
   - osgi.private.package : The private packages of the generated bundle (i.e. packages that are not exported).
   - osgi.include.resource : Resource to include in the generated bundle.
-*******************************************************************************         
+*******************************************************************************
         </fail>
-    
+
         <!-- Should we provide a way to fill the following properties in interractive mode? -->
         <ea:parameter property="osgi.bundle.classpath" default="" description="The (internal) bundle classpath (corresponds to OSGi manifest header 'Bundle-Classpath')."/>
         <ea:parameter property="osgi.bundle.copyright" default="" description="Copyright header (corresponds to OSGi manifest header 'Bundle-Copyright')."/>
@@ -85,7 +86,7 @@ At least one of the following property must be set :
         <ea:parameter property="osgi.include.resource" default="" description="Resource to include in the generated bundle."/>
         <ea:parameter property="osgi.include.resource.header" default="" description="Whether to include the include-resource header in the manifest."/>
         <ea:parameter property="osgi.additional.manifest" default="${manifest.file}" description="Specify an additional manifest file"/>
-        
+
         <!-- Override this path if you need to customize what will be included in the osgi-bundle
             <bundle> ant task allow you to make bundle from another JAR, or a list of DIRECTORY.
             This is quite strange but you can't use <fileset>.
@@ -94,7 +95,7 @@ At least one of the following property must be set :
         <path id="osgi.classpath">
             <filelist><file name="${target.main.classes}"/></filelist>
         </path>
-        
+
         <bundle outputDir="${target.artifacts}"
             bundleClassPath="${osgi.bundle.classpath}"
             bundleCopyright="${osgi.bundle.copyright}"
@@ -124,6 +125,5 @@ At least one of the following property must be set :
             filename="${target.artifacts.main.bundle.name}"
             classpathRefId="osgi.classpath"/>
     </target>
-    
-    <target name="doit" depends=":bundle" />
+
 </project>

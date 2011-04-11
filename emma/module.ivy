@@ -15,7 +15,7 @@
    limitations under the License.
 -->
 <ivy-module version="2.0" xmlns:ea="http://www.easyant.org"> 
-    <info organisation="org.apache.easyant.plugins" module="emma" revision="0.1">
+    <info organisation="org.apache.easyant.plugins" module="emma" revision="0.2">
         <description>
 This module provides coverage report using emma framework.<br/>
 Emma library and instrumentation classes (classes used for coverage report) will be prepended at the begining of compile.test.classpath and lib.test.classpath.

@@ -17,20 +17,20 @@
 <project name="org.apache.easyant.plugins#emma" 
     xmlns:ac="antlib:net.sf.antcontrib"
     xmlns:ea="antlib:org.apache.easyant">
-    
-    <ea:core-version requiredrevision="[0.8,+]" />
-        
-    <ea:include mrid="org.apache.easyant.plugins#abstract-coverage;0.1" as=":abstract-coverage"/>
 
-    <target name=":init" phase="validate" depends=":abstract-coverage:init">
-        
+    <ea:core-version requiredrevision="[0.9,+]" />
+
+    <ea:import mrid="org.apache.easyant.plugins#abstract-coverage;0.2" />
+    <ea:import mrid="org.apache.easyant.plugins#abstract-test;0.2" />
+
+    <target name="emma:init" depends="abstract-coverage:init">
         <ea:parameter property="emma.metadata.path" description="location of emma metadata file" 
             default="${target.coverage.report}/coverage.em"/>
         <ea:parameter property="emma.datafile.path" description="location of emma coverage data file" 
             default="${target.coverage.report}/coverage.ec"/>
-        
+
         <ea:parameter property="emma.overrides.file" default="${target.coverage.report}/emma-overrides.properties"/>
-        
+
         <!-- add datafile to system properties during test run, if it isn't explicitly set elsewhere -->
         <property name="emma.properties" location="${emma.overrides.file}"/>
         <mkdir dir="${target.coverage.report}" />
@@ -40,7 +40,7 @@
             <entry key="metadata.out.file" value="${emma.metadata.path}"/>
             <entry key="coverage.out.file" value="${emma.datafile.path}"/>
         </propertyfile>
-        
+
         <ac:if>
             <not><contains string="${test.run.jvmargs}" substring="emma.properties"/></not>
             <ac:then>
@@ -54,12 +54,12 @@
         
     </target>
 
-    <target name=":instrument" depends=":init" phase="process-classes" if="has.src.test.java">
+    <target name="emma:instrument" depends="emma:init" if="has.src.test.java" extensionOf="abstract-test:test-ready">
         <ea:path overwrite="prepend" pathid="run.test.classpath">
             <pathelement path="${target.coverage.classes}" />
             <path refid="org.apache.easyant.plugins#emma.classpath"/>
         </ea:path>  
-                
+
         <!-- Apply emma instrumentation to the classes in instrpath and copy to destdir -->
         <emma verbosity="${coverage.verbosity}" properties="${emma.properties}">
             <instr instrpath="${target.main.classes}" destdir="${target.coverage.classes}" mode="copy" merge="true">
@@ -68,8 +68,7 @@
         </emma>
     </target>
 
-    <target name=":report" depends=":init" phase="report" if="has.src.test.java">
-
+    <target name="emma:report" depends="emma:init,abstract-test:test-run" if="has.src.test.java" description="generate emma covera report">
         <!-- Generate code coverage report -->
         <emma>
             <report sourcepath="${src.main.java}">
@@ -83,9 +82,6 @@
                 <html outfile="${target.coverage.report}/${coverage.report.name}.html" />
             </report>
         </emma>
-
     </target>
 
-    <target name=":emma" depends="validate,test,report" description="generate emma covera report" />
-    <target name="doit" depends=":emma" />
 </project>

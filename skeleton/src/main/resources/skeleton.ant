@@ -19,12 +19,11 @@
     xmlns:ivy="antlib:org.apache.ivy.ant"
     xmlns:ea="antlib:org.apache.easyant">
 
-    <ea:core-version requiredrevision="[0.8,+]" />
-   
+    <ea:core-version requiredrevision="[0.9,+]" />
+
     <dirname file="${ant.file.org.apache.easyant.plugins#skeleton}" property="ant.dir.org.apache.easyant.plugins#skeleton" />
-   
-    <target name=":init" phase="validate">
-        <ea:parameter phase="validate" />
+
+    <target name="skeleton:init">
         <ea:parameter property="skeleton.default.basedir" default="${basedir}" description="define the root path of your skeleton project" />
         <ea:parameter property="skeleton.default.excludes.pattern" default="target/**" description="define the default excludes pattern used to package a project skeleton" />
         <ea:parameter property="skeleton.default.includes.pattern" default="" description="define the default excludes pattern used to package a project skeleton" />
@@ -33,20 +32,19 @@
         <ea:parameter property="skeleton.default.revision" default="0.1" description="The default revision if the skeleton that will be published"/>
         <ea:parameter property="skeleton.default.organisation" default="org.apache.easyant.skeletons" description="The default organisation name of skeletons"/>
         <ea:parameter property="project.default.organisation" default="" description="The default organisation name of generated project"/>
-       
+
         <ea:parameter property="skeleton.interactive.mode" default="true" description="specify if easyant should ask questions instead of using -Dproperties" />
-               
+
         <condition property="skeleton.is.interactive">
             <istrue value="${skeleton.interactive.mode}"/>
         </condition>
-       
+
     </target>
-   
-   
+
     <!-- =================================
-                      target: generate             
-                     ================================= -->
-    <target name="-generate-usage">
+                 target: generate
+         ================================= -->
+    <target name="-skeleton:generate-usage">
         <echo level="info">This target will now create a new project from a project skeleton.</echo>
         <echo level="info">This target can be called with -Dparameters, refer to the skeleton plugin documentation to have more informations.</echo>
         <ac:if>
@@ -64,26 +62,26 @@
         </ac:if>
     </target>
 
-    <target name="-check-generate" if="skeleton.is.interactive">
+    <target name="-skeleton:check-generate" if="skeleton.is.interactive">
         <input message="Organisation name of the skeleton project" addproperty="skeleton.org" defaultvalue="${skeleton.default.organisation}"/>
         <input message="Module name of the skeleton project" addproperty="skeleton.module"/>
         <input message="Revision number of the skeleton project" addproperty="skeleton.rev"/>
-       
+
         <input message="The path where the skeleton project will be unzipped" addproperty="skeleton.target.dir" defaultvalue="${skeleton.default.basedir}"/>
-       
+
         <input message="Organisation name of YOUR project" addproperty="project.org" defaultvalue="${project.default.organisation}"/>
         <input message="Module name of YOUR project" addproperty="project.module"/>
         <input message="Revision number of YOUR project" addproperty="project.rev" defaultvalue="0.1"/>
     </target>
-   
-    <target name="-select" depends="validate" if="skeleton.is.interactive">
+
+    <target name="-skeleton:select" depends="skeleton:init" if="skeleton.is.interactive">
         <echo>Choose a skeleton in the following list:</echo>
         <ea:searchmodule organisation="org.apache.easyant.skeletons" module="*" revision="*" propertyprefix="skeleton" settingsRef="easyant.ivy.instance"/>
     </target>
-   
-    <target name=":select" depends="-select,:generate" description="select and create a new project from a list of all available skeletons" if="skeleton.is.interactive"/>
 
-    <target name=":generate" depends="validate,-generate-usage, -check-generate" description="generate a new project from skeleton">
+    <target name="skeleton:select" depends="-skeleton:select,skeleton:generate" description="select and create a new project from a list of all available skeletons" if="skeleton.is.interactive"/>
+
+    <target name="skeleton:generate" depends="skeleton:init,-skeleton:generate-usage,-skeleton:check-generate" description="generate a new project from skeleton">
         <ea:parameter property="skeleton.org" default="${skeleton.default.organisation}" description="Organisation name of the skeleton project" />
         <ea:parameter property="skeleton.module" required="true" description="Module name of the skeleton project" />
         <ea:parameter property="skeleton.rev" required="true" description="Revision number of the skeleton project" />
@@ -104,7 +102,7 @@
         <property name="skeleton.download.artifact" value="${skeleton.target.dir}/${skeleton.artifact.name}"/>
         <available file="${skeleton.download.artifact}" property="skeleton.download.artifact.exist"/>
         <fail unless="skeleton.download.artifact.exist" message="Impossible to find the downloaded artifact!"/>
-       
+
         <!-- Unzip the project skeleton -->
         <echo>Unzipping project skeleton to ${skeleton.target.dir}</echo>
         <unjar dest="${skeleton.target.dir}" src="${skeleton.download.artifact}">
@@ -112,13 +110,13 @@
                 <exclude name="META-INF/**"/>
             </patternset>
         </unjar>
-       
+
         <filterset id="skeleton.create.replace.filter">
             <filter token="project.module" value="${project.module}" />
             <filter token="project.organisation" value="${project.org}" />
             <filter token="project.revision" value="${project.rev}" />
         </filterset>
-       
+
         <!-- Replacing filter pattern -->
         <echo level="info">Trying to replace property related to YOUR project in .tpl files</echo>
         <move todir="${skeleton.target.dir}">
@@ -126,7 +124,7 @@
             <filterset refid="skeleton.create.replace.filter"/>
             <mapper type="glob" from="*.tpl" to="*" />
         </move>
-           
+
         <condition property="skeleton.postinstall.script.exists">
             <available file="${skeleton.postinstall.script}"/>
         </condition>
@@ -138,34 +136,33 @@
 
                 <!-- Run post install script (Optionnal) -->
                 <ant antfile="${postinstall.script.path}" inheritall="true" inheritrefs="true" dir="${skeleton.target.dir}"/>
-               
+
                 <!-- Delete skeleton post install script -->
                 <delete file="${skeleton.postinstall.script}"/>
             </ac:then>
         </ac:if>
-       
+
         <!-- Delete the skeleton archive -->
         <echo>Cleaning your ${skeleton.download.artifact} directory</echo>
         <delete file="${skeleton.download.artifact}"/>
     </target>
-    
-    <target name="-newplugin">
+
+    <target name="-skeleton:newplugin">
         <property name="skeleton.org" value="org.apache.easyant.skeletons"/>
         <property name="skeleton.module" value="std-ant-plugin"/>
         <property name="skeleton.rev" value="latest.integration"/>
         <property name="project.default.organisation" value="org.apache.easyant.plugins"/>
     </target>
-    
-    <target name=":newplugin" depends="-newplugin,:generate" description="create a new easyant plugin"/>
 
-    <target name="-newskeleton">
+    <target name="skeleton:newplugin" depends="-skeleton:newplugin,skeleton:generate" description="create a new easyant plugin"/>
+
+    <target name="-skeleton:newskeleton">
         <property name="skeleton.org" value="org.apache.easyant.skeletons"/>
         <property name="skeleton.module" value="std-skeleton"/>
         <property name="skeleton.rev" value="latest.integration"/>
         <property name="project.default.organisation" value="org.apache.easyant.skeletons"/>
     </target>
-    
-    <target name=":newskeleton" depends="-newskeleton,:generate" description="create a new skeleton"/>
-    
-    <target name="doit" depends="validate" />
+
+    <target name="skeleton:newskeleton" depends="-skeleton:newskeleton,skeleton:generate" description="create a new skeleton"/>
+
 </project>

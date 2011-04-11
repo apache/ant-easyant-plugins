@@ -17,20 +17,16 @@
 <project name="org.apache.easyant.plugins#test-testng"
     xmlns:ea="antlib:org.apache.easyant">
 
-    <ea:core-version requiredrevision="[0.8,+]" />
-    
-    <ea:include mrid="org.apache.easyant.plugins#abstract-test;0.1" as=":abstract-testng-test"/>
+    <ea:core-version requiredrevision="[0.9,+]" />
+
+    <ea:import mrid="org.apache.easyant.plugins#abstract-test;0.2" />
 
     <target name="/skip" description="skip tests">
         <property name="skip.test" value="true" />
         <property name="skip.test.integration" value="true" />
     </target>
-    
-    <target name=":init" phase="validate" depends=":abstract-testng-test:init">
-        <ea:parameter phase="validate" />
-        <ea:parameter phase="test" />
-        <ea:parameter phase="integration-test" />
-                
+
+    <target name="test-testng:init" depends="abstract-test:init">
         <ea:parameter property="testng.filename" description="testng configuration filename" default="testng.xml"/>
 
         <ea:path pathid="run.test.classpath" overwrite="append-if-not-exist">
@@ -42,7 +38,7 @@
             <pathelement location="${target.test.integration.classes}" />
             <path refid="compile.test.classpath" />
         </ea:path>
-        
+
         <condition property="skip.test">
             <not><isset property="has.src.test.java"/></not>
         </condition>
@@ -50,20 +46,19 @@
         <condition property="skip.test.integration">
             <not><isset property="has.src.test.integration.java"/></not>
         </condition>
-
     </target>
-    
-    <target name="-load" depends="provision">
+
+    <target name="-test-testng:load">
         <available property="testng.available" classname="org.testng.TestNGAntTask">
-                <classpath refid="run.test.classpath" />
-            </available>
+            <classpath refid="run.test.classpath" />
+        </available>
 
-            <fail unless="testng.available" message="Testng is unavailable, perhaps you forget to add testng in you project dependencies."/>
-            <taskdef name="testng" classname="com.beust.testng.TestNGAntTask">
-                        <classpath refid="run.test.classpath" />
-            </taskdef>
+        <fail unless="testng.available" message="Testng is unavailable, perhaps you forget to add testng in you project dependencies."/>
+        <taskdef name="testng" classname="com.beust.testng.TestNGAntTask">
+             <classpath refid="run.test.classpath" />
+        </taskdef>
     </target>
-    
+
     <macrodef name="testng-test">
         <attribute name="prefix"/>
         <sequential>
@@ -81,31 +76,26 @@
             </testng>
         </sequential>
     </macrodef>
-    
-    <target name="-test" depends="test-compile,-load" unless="skip.test">
+
+    <target name="-test-testng:test" depends="test-compile,-test-testng:load" unless="skip.test">
         <testng-test prefix="test"/>
-        
-    </target>   
+    </target>
 
-    <target name="-integration-test" depends="test-compile,-load" unless="skip.test.integration">
+    <target name="-test-testng:integration-test" depends="test-compile,-load" unless="skip.test.integration">
         <testng-test prefix="test.integration"/>
-    </target>   
+    </target>
 
-    
-    <target name=":run" if="test.mode.run" unless="skip.test" depends="-test"
-             phase="test" description="run testng tests">
+    <target name="test-testng::run" if="test.mode.run" unless="skip.test" depends="-test-testng:test" description="run testng tests">
         <check-test-result propertytocheck="test.failed"
               message="At least one test has failed. See logs in ${target.test.xml} for details or use the report target to run the test with a report" />
-    </target>   
+    </target>
 
-    <target name=":run-integration" if="test.mode.run" unless="skip.test.integration" depends="-integration-test"
-                 phase="integration-test" description="run testng integration tests">
+    <target name="test-testng::run-integration" if="test.mode.run" unless="skip.test.integration" depends="-test-testng:integration-test" description="run testng integration tests">
         <check-test-result propertytocheck="test.integration.failed"
               message="At least one integration test has failed. See logs in ${target.test.xml} for details or use the report target to run the test with a report" />
-    </target>   
-    
-    <target name=":report" if="test.mode.report" unless="skip.test" depends="-test,-integration-test"
-         phase="report" description="generate testng reports">
+    </target>
+
+    <target name="test-testng:report" if="test.mode.report" unless="skip.test" depends="-test-testng:test,-test-testng:integration-test" description="generate testng reports">
         <junitreport todir="${target.test.xml}">
             <fileset dir="${target.test.xml}">
                 <include name="TEST-*.xml" />
@@ -117,6 +107,5 @@
         <fail if="test.integration.failed"
               message="At least one integration test has failed. See logs in ${target.test.xml} or report in ${target.test.html}" />
     </target>
-    
-    <target name=":doit" depends=":run, :run-integration, :report" />
+
 </project>

@@ -17,11 +17,11 @@
 <project name="org.apache.easyant.plugins#compile-test-scala"
     xmlns:ea="antlib:org.apache.easyant">
 
-    <ea:core-version requiredrevision="[0.8,+]" />
-    
-    <ea:include mrid="org.apache.easyant.plugins#abstract-test;0.1" as=":abstract-test"/>
-    
-    <target name="-configure" phase="provision">
+    <ea:core-version requiredrevision="[0.9,+]" />
+
+    <ea:import mrid="org.apache.easyant.plugins#ivy-provisioning;0.2" />
+
+    <target name="-compile-test-scala:configure" depends="ivy-provisioning:resolve-test-confs">
         <ea:findclasspath pathid="resolved.scala.classpath" organisation="org.scala-lang" module="scala-compiler" revision="2.7.7">
             <ea:project-dependency-strategy />
             <ea:environment-strategy env="SCALA_HOME"/>
@@ -34,9 +34,8 @@
         <ea:path pathid="compile.test.classpath" overwrite="prepend">
             <path refid="resolved.scala.classpath"/>
         </ea:path>
-
     </target>
-    
+
     <macrodef name="compile-scala-tests">
         <attribute name="prefix"/>
         <sequential>
@@ -50,16 +49,13 @@
             </scalac>
         </sequential>
     </macrodef>
-    
-    <target name=":compile" depends="validate, compile, test-process-resources" if="has.src.test.java"
-        phase="test-compile">
-            <compile-scala-tests prefix="test"/>
-    </target>
-    
-    <target name=":compile-integration" depends="validate, compile, test-process-resources" if="has.src.test.integration.java"
-        phase="test-compile">
-        <compile-scala-tests prefix="test.integration"/>
+
+    <target name="compile-test-scala:compile" depends="-compile-test-scala:configure" if="has.src.test.java">
+        <compile-scala-tests prefix="test"/>
     </target>
 
+    <target name="compile-test-scala:compile-integration" depends="-compile-test-scala:configure" if="has.src.test.integration.java">
+        <compile-scala-tests prefix="test.integration"/>
+    </target>
 
 </project>

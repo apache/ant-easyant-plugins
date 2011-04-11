@@ -15,7 +15,7 @@
    limitations under the License.
 -->
 <ivy-module version="2.0" xmlns:ea="http://www.easyant.org"> 
-    <info organisation="org.apache.easyant.plugins" module="checkstyle" revision="0.1">
+    <info organisation="org.apache.easyant.plugins" module="checkstyle" revision="0.2">
            <description>This module is used to check code quality.<br/>
 By default this module generates XML report, but you can use a specific target (:report-html) to generate HTML report.<br/>
 This module can breaks the build-process, if code is not conform to a Checkstyle rules.<br/>

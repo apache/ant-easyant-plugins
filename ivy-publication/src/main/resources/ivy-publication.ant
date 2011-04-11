@@ -18,18 +18,18 @@
     xmlns:ivy="antlib:org.apache.ivy.ant"
     xmlns:ac="antlib:net.sf.antcontrib"
     xmlns:ea="antlib:org.apache.easyant">
-    
-    <ea:core-version requiredrevision="[0.8,+]" />
-    
-    <target name=":init" phase="validate">
-        <ea:parameter phase="validate" />
-        <ea:parameter phase="publish-local" />
-        <ea:parameter phase="publish-shared"/>
-        <ea:parameter phase="release" />
-        <ea:parameter phase="generate-local-version"/>
-        <ea:parameter phase="generate-shared-version"/>
-        <ea:parameter phase="generate-release-version"/>
 
+    <ea:core-version requiredrevision="[0.9,+]" />
+
+    <extension-point name="ivy-publication:generate-release-version" />
+
+    <extension-point name="ivy-publication:generate-shared-version" />
+
+    <extension-point name="ivy-publication:generate-local-version" />
+
+    <extension-point name="ivy-publication:publish-ready" />
+
+    <target name="-ivy-publication:init">
         <ea:parameter property="release.resolver" default="shared" 
                 description="the name of the resolver use for release publication"/>
         <ea:parameter property="shared.resolver" default="shared" 
@@ -55,9 +55,8 @@
                 <isreference refid="${project.ivy.instance}"/>
         </condition>
         <fail unless="is.project.ivy.settings.configured" message="project ivy instance is not configured, at least one of the following property must be set : project.ivy.settings.file, project.ivy.settings.url"/>
-
     </target>
-    
+
     <macrodef name="check-version-number">
         <sequential>
             <property name="pub.no.revision.message" value="It seems that you did not specify the revision number of your project, we strongly recommend you to set it through the 'info' tag in your module ivy before any publication"/>
@@ -81,7 +80,7 @@
     <!-- ================================= 
           target: release              
          ================================= -->
-    <target name=":release" phase="release" depends="generate-release-version,verify">
+    <target name="ivy-publication:release" depends="-ivy-publication:init,ivy-publication:generate-release-version,ivy-publication:publish-ready">
         <ea:checkresolver resolver="release.resolver" settingsRef="${project.ivy.instance}" description="name of the repository used to publish releases"/>
         <check-version-number/>
         <ivy:publish artifactspattern="${target.artifacts}/[artifact](-[classifier]).[ext]" 
@@ -98,7 +97,7 @@
     <!-- ================================= 
           target: publish-shared              
          ================================= -->
-    <target name=":publish-shared" phase="publish-shared" depends="generate-shared-version,package">
+    <target name="ivy-publication:publish-shared" depends="-ivy-publication:init,ivy-publication:generate-shared-version,ivy-publication:publish-ready">
         <ea:checkresolver resolver="shared.resolver" settingsRef="${project.ivy.instance}" description="name of the repository used to publish shared integration versions (snapshots)"/>
         <check-version-number/>
         <tstamp>
@@ -120,7 +119,7 @@
     <!-- ================================= 
           target: publish-local              
          ================================= -->
-    <target name=":publish-local" phase="publish-local" depends="generate-local-version,package">
+    <target name="ivy-publication:publish-local" depends="-ivy-publication:init,ivy-publication:generate-local-version,ivy-publication:publish-ready">
         <check-version-number/>
         <ivy:publish artifactspattern="${target.artifacts}/[artifact](-[classifier]).[ext]" 
             resolver="${local.resolver}" 
@@ -137,9 +136,8 @@
     <!-- ================================= 
           target: clean-local              
          ================================= -->
-    <target name=":clean-local" description="cleans the local repository">
+    <target name="ivy-publication:clean-local" description="cleans the local repository">
         <delete dir="${ivy.local.default.root}" />
     </target>
 
-    <target name="doit" depends=":publish-local" />
 </project>

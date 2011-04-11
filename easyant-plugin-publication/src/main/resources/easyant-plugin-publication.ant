@@ -18,25 +18,22 @@
     xmlns:ivy="antlib:org.apache.ivy.ant"
     xmlns:ac="antlib:net.sf.antcontrib"
     xmlns:ea="antlib:org.apache.easyant">
-    
-    <ea:core-version requiredrevision="[0.8,+]" />
-    
-    <ea:import mrid="org.apache.easyant.plugins#ivy-publication;0.1"/>
-    
-    <target name=":init" phase="validate">
-        <ea:parameter phase="validate" />
-        <ea:parameter phase="test" />
+
+    <ea:core-version requiredrevision="[0.9,+]" />
+
+    <ea:import mrid="org.apache.easyant.plugins#ivy-publication;0.2" />
+
+    <target name="easyant-plugin-publication:init">
         <ea:parameter property="publish.plugin.before.test"
                 description="defines if easyant should publish the plugin before running test"/>
     </target>
-        
+
     <!--
         publish in build scoped repository before test 
     -->
-    <target name="-before-test" depends="validate" phase="test" if="publish.plugin.before.test">
+    <target name="easyant-plugin-publication:before-test" depends="easyant-plugin-publication:init" if="publish.plugin.before.test">
         <ea:configure-build-scoped-repository buildScopedRepositoryName="build" settingsRef="easyant.ivy.instance"/>
         <ivy:publish artifactspattern="${target.artifacts}/[artifact](-[classifier]).[ext]" resolver="build"  forcedeliver="true" overwrite="true" settingsRef="easyant.ivy.instance" />
     </target>
 
-    <target name="doit" depends=":init" />
 </project>

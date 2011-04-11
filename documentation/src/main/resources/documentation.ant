@@ -15,16 +15,12 @@
    limitations under the License.
 -->
 <project name="org.apache.easyant.plugins#documentation" xmlns:ea="antlib:org.apache.easyant">
-    
-    <ea:core-version requiredrevision="[0.8,+]" />
+
+    <ea:core-version requiredrevision="[0.9,+]" />
 
     <dirname file="${org.apache.easyant.plugins#documentation.style.css.file}" property="org.apache.easyant.plugins#documentation.style.css.dir" />
 
-    <target name=":init" phase="validate">
-        <ea:parameter phase="validate" />
-        <ea:parameter phase="verify" />
-        <ea:parameter phase="documentation" />
-
+    <target name="documentation:init">
         <ea:parameter property="documentation.xsl.file" default="${org.apache.easyant.plugins#documentation.site.xsl.file}" description="xsl, used to transform XML -> HTML" />
         <ea:parameter property="documentation.css.dir" default="{org.apache.easyant.plugins#documentation.style.css.dir}" description="path where the css are stored, used for nice looking HTML" />
         <ea:parameter property="target.documentation.dir" default="${target}/documentation" description="directory where the documentation will be generated to" />
@@ -46,26 +42,26 @@
         <available file="${documentation.css.dir}" property="has.documentation.css.dir" />
     </target>
 
-    <target name="-warn-src.documentation.dir.missing" unless="has.src.documentation.dir">
+    <target name="-documentation:warn-src.documentation.dir.missing" unless="has.src.documentation.dir">
         <echo>WARN: Your project doesn't match with documentation structure.</echo>
         <echo>  If you want to use the documentation feature you must create ${src.documentation.dir} directory. This directory must have a menu.xml file</echo>
         <echo>  If you want to have more information, you should look at the documentation of this module.</echo>
         <property name="skip.documentation" value="true" />
     </target>
 
-    <target name="-warn-documentation.menu.file.missing" unless="has.documentation.menu.file">
+    <target name="-documentation:warn-documentation.menu.file.missing" unless="has.documentation.menu.file">
         <echo>WARN: Your project doesn't match with documentation structure (documentation menu file is missing).</echo> 
         <echo>  If you want to have more information, you should look at the documentation of this module.</echo>
         <property name="skip.documentation" value="true" />
     </target>
 
-    <target name="-documentation" unless="skip.documentation" 
-        phase="documentation" 
-        depends="validate, -warn-src.documentation.dir.missing, -warn-documentation.menu.file.missing, -copy-css, process-documentation-resources">
+    <target name="-documentation:documentation" unless="skip.documentation" 
+        depends="documentation:init, -documentation:warn-src.documentation.dir.missing, -documentation:warn-documentation.menu.file.missing, -documentation:copy-css">
         <mkdir dir="${target.documentation.dir}" />
 
         <echo message="Transforming the site documents..." />
-        <xslt basedir="${src.documentation.dir}" destdir="${target.documentation.dir}" extension=".html" style="${documentation.xsl.file}" excludes="${documentation.menu.file}" includes="*.xml">          <param name="relative-path" expression="." />
+        <xslt basedir="${src.documentation.dir}" destdir="${target.documentation.dir}" extension=".html" style="${documentation.xsl.file}" excludes="${documentation.menu.file}" includes="*.xml">
+            <param name="relative-path" expression="." />
             <param name="menu-src-path" expression="${src.documentation.dir}" />
             <param name="menu-file" expression="${documentation.menu.file}" />
         </xslt>
@@ -85,7 +81,7 @@
     </target>
 
     <!-- Copy CSS stylesheets -->
-    <target name="-copy-css" if="has.documentation.css.dir" unless="skip.documentation" phase="process-documentation-resources">
+    <target name="-documentation:copy-css" if="has.documentation.css.dir" unless="skip.documentation">
         <echo message="Copying CSS files..." />
         <copy todir="${target.documentation.dir}" filtering="no">
             <fileset dir="${documentation.css.dir}">
@@ -94,10 +90,8 @@
         </copy>
     </target>
 
-    <target name=":documentation" depends="-documentation" unless="skip.documentation" description="generate documentation">
+    <target name="documentation:documentation" depends="-documentation:documentation" unless="skip.documentation" description="generate documentation">
         <fail if="documentation.failure" message="There are documentation violation(s)" />
     </target>
 
-
-    <target name="doit" depends=":documentation" />
 </project>

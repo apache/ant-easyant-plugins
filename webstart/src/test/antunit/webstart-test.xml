@@ -15,17 +15,13 @@
    limitations under the License.
 -->
 <project name="org.apache.easyant.plugins;webstart-test" xmlns:au="antlib:org.apache.ant.antunit">
-    
-    <!-- Mocking required phase --> 
-    <phase name="validate"/>
-    <phase name="package"/>
 
     <!-- disable corerevision checker -->
     <property name="skip.corerevision.checker" value="true"/>
-        
+
     <!-- Import your plugin --> 
     <import file="../../main/resources/webstart.ant"/>
-    
+
     <!-- Defines a setUp / tearDown (before each test) that cleans the environnement --> 
     <target name="clean" description="remove stale build artifacts before / after each test">
         <delete dir="${basedir}" includeemptydirs="true">
@@ -33,17 +29,17 @@
             <include name="**/lib/**"/>
         </delete>
     </target>
-    
+
     <target name="setUp" depends="clean"/>
     <target name="tearDown" depends="clean"/>
-    
-    <!-- init test case -->         
+
+    <!-- init test case -->
     <target name="testInit">
         <au:expectfailure expectedMessage="expected property 'jnlp.file': the jnlp to modify">
-            <antcall target=":init"/>
+            <antcall target="webstart:init"/>
         </au:expectfailure>
     </target>
-    
+
     <!--
         A sample ant unit test case, 
         see the antunit official documentation for more informations

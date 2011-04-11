@@ -16,12 +16,9 @@
 -->
 <project name="org.apache.easyant.plugins#compile-groovy" xmlns:ea="antlib:org.apache.easyant">
 
-    <ea:core-version requiredrevision="[0.8,+]" />
+    <ea:core-version requiredrevision="[0.9,+]" />
 
-    <target name=":init" phase="validate">
-        <ea:parameter phase="validate" />
-        <ea:parameter phase="compile" />
-
+    <target name="compile-groovy:init">
         <ea:parameter property="src.main.groovy" required="true" description="directory where sources to be compiled are" />
         <ea:parameter property="target.main.classes" required="true" description="destination directory for compiled test classes" />
 
@@ -33,8 +30,8 @@
         <ea:path pathid="compile.main.classpath" overwrite="false" />
         
     </target>
-    
-    <target name="-configure" phase="provision">
+
+    <target name="-compile-groovy:configure" depends="compile-groovy:init">
         <ea:findclasspath pathid="resolved.groovy.classpath" organisation="org.codehaus.groovy" module="groovy-all" revision="1.6.0">
             <ea:project-dependency-strategy />
             <ea:environment-strategy env="GROOVY_HOME"/>
@@ -45,7 +42,7 @@
 
     </target>
 
-    <target name=":compile" depends="validate" if="has.src.main.groovy" phase="compile">
+    <target name="compile-groovy:compile" depends="compile-groovy:init" if="has.src.main.groovy">
         <mkdir dir="${target.main.classes}" />
         <!--
         <groovyc> Attributes
@@ -82,6 +79,4 @@
             excludes="${compile.groovy.excludes.pattern}" />
     </target>
 
-
-    <target name="doit" depends=":init" />
 </project>

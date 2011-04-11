@@ -18,14 +18,20 @@
     xmlns:ac="antlib:net.sf.antcontrib"
     xmlns:ea="antlib:org.apache.easyant">
 
-    <ea:core-version requiredrevision="[0.8,+]" />
-    
-    <target name=":init" phase="validate">
-        <ea:parameter phase="validate" />
-        <ea:parameter phase="compile" />
-        <ea:parameter phase="test-compile" />
-        <ea:parameter phase="test" />
+    <ea:core-version requiredrevision="[0.9,+]" />
 
+    <extension-point name="abstract-test:test-ready" />
+
+    <extension-point name="abstract-test:test-run" />
+
+    <ea:import mrid="org.apache.easyant.plugins#ivy-provisioning;0.2" />
+
+    <target name="/skip-tests" description="skip tests">
+        <property name="skip.test" value="true" />
+        <property name="skip.test.integration" value="true" />
+    </target>
+
+    <target name="abstract-test:init" depends="ivy-provisioning:resolve-test-libs">
         <ea:parameter property="src.test.java" required="true" 
             description="directory with unit test source files" />
         <ea:parameter property="src.test.integration.java" default="${basedir}/src/integration-test/java" 
@@ -43,12 +49,11 @@
         <ea:parameter property="target.test.integration.classes" default="${basedir}/target/integration-test/classes" 
                 description="destination directory for compiled integration test classes" />
 
-        
         <ea:parameter property="target.test.xml" required="true" 
             description="destination directory for xml test report" />
         <ea:parameter property="target.test.html" required="true" 
             description="destination directory for html test report" />
-        
+
         <ea:parameter property="test.mode" default="run"
             description="mode to use to execute tests: 'run' to only run tests, 'report' to generate html report" />
         <ea:parameter property="javac.debug.mode" default="true" 
@@ -61,14 +66,13 @@
             description="Pattern describing files included in integration test compilation process" />
         <ea:parameter property="test.integration.compile.excludes.pattern" default="" 
             description="Pattern describing files excluded in integration test compilation process" />
-        
+
         <ea:parameter property="test.run.failonerror" default="true"
             description="specify if the build should be stopped when tests are failed. Typically this property should be set to false in continuous environmnent systems"/>
-                
-        
+
         <ea:parameter path="compile.main.classpath" required="true" 
             description="path used to compile main sources" />
-        
+
         <path id="compile.test.classpath">
                 <pathelement location="${target.main.classes}" />
                 <path refid="compile.main.classpath" />
@@ -76,11 +80,11 @@
 
         <available file="${src.test.java}" property="has.src.test.java" />
         <available file="${src.test.integration.java}" property="has.src.test.integration.java"/>
-        
+
         <condition property="test.mode.run">
             <equals arg1="${test.mode}" arg2="run" />
         </condition>
-        
+
         <condition property="test.mode.report">
             <equals arg1="${test.mode}" arg2="report" />
         </condition>
@@ -92,7 +96,7 @@
             classpathref="org.apache.easyant.plugins#abstract-test.classpath" />
 
     </target>
-    
+
     <macrodef name="check-test-result" description="check test results">
         <attribute name="propertytocheck"/>
         <attribute name="message" />
@@ -112,9 +116,7 @@
                     </ac:if>
                 </ac:else>
             </ac:if>
-        </sequential>       
-        
+        </sequential>
     </macrodef>
-
 
 </project>
