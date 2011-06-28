@@ -17,36 +17,29 @@
 <project name="org.apache.easyant.plugins#deps-lib"
     xmlns:ea="antlib:org.apache.easyant">
     
-    <ea:core-version requiredrevision="[0.8,+]" />
+    <ea:core-version requiredrevision="[0.9,+]" />
+    <ea:import mrid="org.apache.easyant.plugins#abstract-provisioning;0.1" />
     
-    <target name=":init" phase="validate">
-        <ea:parameter phase="validate" />
-        <ea:parameter phase="provision" />
-
-        <ea:parameter property="lib.main" required="true" 
-                description="directory where main libraries are picked up" />
-        <ea:parameter property="lib.test" required="true" 
-                description="directory where test libraries are picked up" />
-        
+    <target name="deps-lib:init" extensionOf="abstract-provisioning:provisioning-ready">
         <fileset id="lib.main.fileset" dir="${lib.main}">
-                    <include name="*.jar" />
-                </fileset>
+            <include name="*.jar" />
+        </fileset>
         
-                <fileset id="lib.test.fileset" dir="${lib.test}">
-                    <include name="*.jar" />
-                </fileset>
+        <fileset id="lib.test.fileset" dir="${lib.test}">
+            <include name="*.jar" />
+        </fileset>
     </target>   
     
-    <target name=":plugin" phase="provision">
+    <target name="deps-lib:plugin" extensionOf="abstract-provisioning:provisioning-finished">
         <ea:parameter path="compile.main.classpath"  
             description="main compilation path" />
         <ea:parameter path="compile.test.classpath"  
             description="test compilation path" />
         <ea:path pathid="compile.main.classpath" overwrite="append">
-                    <fileset refid="lib.main.fileset" />
-            </ea:path>
+            <fileset refid="lib.main.fileset" />
+        </ea:path>
         <ea:path pathid="compile.test.classpath" overwrite="append">
-                    <fileset refid="lib.test.fileset" />
-            </ea:path>
+            <fileset refid="lib.test.fileset" />
+        </ea:path>
     </target>   
 </project>

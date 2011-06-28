@@ -24,14 +24,14 @@
 
     <extension-point name="abstract-test:test-run" />
 
-    <ea:import mrid="org.apache.easyant.plugins#ivy-provisioning;0.2" />
+    <ea:import mrid="org.apache.easyant.plugins#abstract-provisioning;0.1" />
 
     <target name="/skip-tests" description="skip tests">
         <property name="skip.test" value="true" />
         <property name="skip.test.integration" value="true" />
     </target>
 
-    <target name="abstract-test:init" depends="ivy-provisioning:resolve-test-libs">
+    <target name="abstract-test:init" depends="abstract-provisioning:provisioning-finished">
         <ea:parameter property="src.test.java" required="true" 
             description="directory with unit test source files" />
         <ea:parameter property="src.test.integration.java" default="${basedir}/src/integration-test/java" 

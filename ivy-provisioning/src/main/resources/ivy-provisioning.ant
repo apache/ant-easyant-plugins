@@ -20,8 +20,9 @@
     xmlns:ea="antlib:org.apache.easyant">
 
     <ea:core-version requiredrevision="[0.9,+]" />
+    <ea:import mrid="org.apache.easyant.plugins#abstract-provisioning;0.1" />
 
-    <target name="-ivy-provisioning:init">
+    <target name="-ivy-provisioning:init" extensionOf="abstract-provisioning:provisioning-ready">
         <ea:parameter property="lib.main" default="${basedir}/lib/main" description="directory where main libraries are picked up" />
         <ea:parameter property="lib.test" default="${basedir}/lib/test" description="directory where test libraries are picked up" />
         <ea:parameter property="lib.provided" default="${basedir}/lib/provided" description="directory where provided libraries are picked up" />
@@ -59,7 +60,7 @@
     <!-- ================================= 
               target: resolve              
          ================================= -->
-    <target name="-ivy-provisioning:resolve" depends="-ivy-provisioning:init">
+    <target name="-ivy-provisioning:resolve" depends="abstract-provisioning:provisioning-ready">
         <ivy:resolve file="${project.ivy.file}" settingsRef="${project.ivy.instance}" />
         <condition property="project.contains.main.confs">
             <matches string="${ivy.configurations}" pattern="${main.confs}"/>
