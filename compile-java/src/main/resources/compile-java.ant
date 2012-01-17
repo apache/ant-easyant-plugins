@@ -19,16 +19,11 @@
 
     <ea:core-version requiredrevision="[0.9,+]" />
 
-    <ea:import mrid="org.apache.easyant.plugins#abstract-provisioning;0.1" />
-
-    <!-- We expect at this point to have every source available, even the ones which are generated -->
-    <extension-point name="compile-java:compile-ready" />
-
+    <ea:import mrid="org.apache.easyant.plugins#abstract-compile;0.2" />
+	
     <target name="compile-java:init">
         <ea:parameter property="src.main.java" required="true"
             description="directory where sources to be compiled are" />
-        <ea:parameter property="target.main.classes" required="true" 
-            description="destination directory for compiled test classes" />
         <ea:parameter property="javac.debug.mode" default="true" 
             description="javac debug mode, true or false" />
 
@@ -44,10 +39,9 @@
 
         <available file="${src.main.java}" property="has.src.main.java" />
 
-        <ea:path pathid="compile.main.classpath" overwrite="false" />
     </target>
 
-    <target name="compile-java:compile" depends="compile-java:init,abstract-provisioning:provisioning-finished,compile-java:compile-ready" if="has.src.main.java">
+    <target name="compile-java:compile" depends="compile-java:init,abstract-compile:compile-ready" if="has.src.main.java">
         <mkdir dir="${target.main.classes}" />
         <javac  srcdir="${src.main.java}"
                 destdir="${target.main.classes}"

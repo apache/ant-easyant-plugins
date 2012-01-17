@@ -18,20 +18,21 @@
 
     <ea:core-version requiredrevision="[0.9,+]" />
 
+    <ea:import mrid="org.apache.easyant.plugins#abstract-provisioning;0.1" />
+    <ea:import mrid="org.apache.easyant.plugins#abstract-compile;0.2" />
+
+
     <target name="compile-groovy:init">
         <ea:parameter property="src.main.groovy" required="true" description="directory where sources to be compiled are" />
-        <ea:parameter property="target.main.classes" required="true" description="destination directory for compiled test classes" />
 
         <ea:parameter property="compile.groovy.includes.pattern" default="**/*.groovy" description="Pattern describing files included in compilation process" />
         <ea:parameter property="compile.groovy.excludes.pattern" default="" description="Pattern describing files excluded in compilation process" />
 
         <available file="${src.main.groovy}" property="has.src.main.groovy" />
 
-        <ea:path pathid="compile.main.classpath" overwrite="false" />
-        
     </target>
 
-    <target name="-compile-groovy:configure" depends="compile-groovy:init">
+    <target name="-compile-groovy:configure" depends="compile-groovy:init,abstract-compile:compile-ready">
         <ea:findclasspath pathid="resolved.groovy.classpath" organisation="org.codehaus.groovy" module="groovy-all" revision="1.6.0">
             <ea:project-dependency-strategy />
             <ea:environment-strategy env="GROOVY_HOME"/>
@@ -42,7 +43,7 @@
 
     </target>
 
-    <target name="compile-groovy:compile" depends="compile-groovy:init" if="has.src.main.groovy">
+    <target name="compile-groovy:compile" depends="compile-groovy:configure" if="has.src.main.groovy">
         <mkdir dir="${target.main.classes}" />
         <!--
         <groovyc> Attributes

@@ -1,0 +1,37 @@
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<project name="org.apache.easyant.plugins#abstract-compile" xmlns:ea="antlib:org.apache.easyant">
+
+    <ea:core-version requiredrevision="[0.9,+]" />
+
+    <ea:parameter property="target" default="target" description="the target directory" />
+    <ea:parameter property="target.main.classes" required="true" 
+        description="destination directory for compiled classes" />
+    <ea:parameter property="target.main.classes" required="true" 
+        description="destination directory for compiled test classes" />
+	
+    <ea:import mrid="org.apache.easyant.plugins#abstract-provisioning;0.1" />
+
+
+	<!-- We expect at this point to have every source available, even the ones which are generated -->
+	<extension-point name="abstract-compile:compile-ready" depends="abstract-provisioning:provisioning-finished"/>
+	
+	<!-- Creates a empty classpath for compilation if it doesn't exist yet -->
+    <ea:path pathid="compile.main.classpath" overwrite="false" />
+
+
+</project>

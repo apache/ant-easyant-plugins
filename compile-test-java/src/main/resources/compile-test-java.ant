@@ -19,7 +19,7 @@
 
     <ea:core-version requiredrevision="[0.9,+]" />
 
-    <ea:import mrid="org.apache.easyant.plugins#abstract-provisioning;0.1" />
+    <ea:import mrid="org.apache.easyant.plugins#abstract-compile;0.1" />
 
     <macrodef name="compile-java-tests">
         <attribute name="prefix"/>
@@ -38,7 +38,7 @@
         </sequential>
     </macrodef>
 
-    <target name="compile-test-java:compile" depends="abstract-provisioning:provisioning-finished" if="has.src.test.java">
+    <target name="compile-test-java:compile" depends="abstract-compile:compile-ready" if="has.src.test.java">
         <ea:parameter property="test.compile.java.target.version" default="${ant.java.version}" 
             description="Specify a VM version for Generated class files (e.g., 1.1 or 1.2)." />
         <ea:parameter property="test.compile.java.source.version" default="${ant.java.version}" 
@@ -46,7 +46,7 @@
         <compile-java-tests prefix="test"/>
     </target>
 
-    <target name="compile-test-java:compile-integration" depends="abstract-provisioning:provisioning-finished" if="has.src.test.integration.java">
+    <target name="compile-test-java:compile-integration" depends="abstract-compile:compile-ready" if="has.src.test.integration.java">
         <ea:parameter property="test.integration.compile.java.target.version" default="${ant.java.version}" 
             description="Specify a VM version for Generated class files (e.g., 1.1 or 1.2)." />
         <ea:parameter property="test.integration.compile.java.source.version" default="${ant.java.version}" 

@@ -19,12 +19,12 @@
     
     <ea:core-version requiredrevision="[0.9,+]" />
     
+    <ea:import mrid="org.apache.easyant.plugins#abstract-compile;0.2" />
+
     <target name="compile-scala:init">
         <property environment="env"/>
         <ea:parameter property="src.main.scala" required="true"
             description="directory where sources to be compiled are" />
-        <ea:parameter property="target.main.classes" required="true" 
-            description="destination directory for compiled test classes" />
         <ea:parameter property="scalac.debug.mode" default="true" 
             description="scalac debug mode, true or false" />
         <ea:parameter property="scala.home" default="${env.SCALA_HOME}"
@@ -36,10 +36,9 @@
         
         <available file="${src.main.scala}" property="has.src.main.scala" />
 
-        <ea:path pathid="compile.main.classpath" overwrite="false" />
     </target>
 
-    <target name="-compile-scala:configure" depends="compile-scala:init">
+    <target name="compile-scala:configure" depends="compile-scala:init,abstract-compile:compile-ready">
         <ea:findclasspath pathid="resolved.scala.classpath" organisation="org.scala-lang" module="scala-compiler" revision="2.7.7">
             <ea:project-dependency-strategy />
             <ea:environment-strategy env="SCALA_HOME"/>
@@ -55,7 +54,7 @@
         </ea:path>
     </target>
 
-    <target name="compile-scala:compile" depends="-compile-scala:configure" if="has.src.main.scala">
+    <target name="compile-scala:compile" depends="compile-scala:configure" if="has.src.main.scala">
         <mkdir dir="${target.main.classes}" />
         <scalac  srcdir="${src.main.scala}"
                 destdir="${target.main.classes}"
