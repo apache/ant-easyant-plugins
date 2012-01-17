@@ -17,7 +17,7 @@
 <ivy-module version="2.0" xmlns:ea="http://www.easyant.org"> 
     <info organisation="org.apache.easyant.plugins" module="abstract-test" revision="0.2">
            <description>This module provides tests compilation feature.<br/>
-This module initialize compile.test.classpath and run.test.classpath.<br/>
+It initialize compile.test.classpath and run.test.classpath.<br/>
 Tests can be skipped using skip.test property.</description>
            <ea:build organisation="org.apache.easyant.buildtypes" module="build-std-ant-plugin" revision="0.1"/>
         </info>
