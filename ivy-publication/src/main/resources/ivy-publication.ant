@@ -91,7 +91,7 @@
             overwrite="${publish.overwrite}"
             haltonmissing="${ivy.haltonmissing}" 
             update="true"/>
-        <echo message="project ${module.name} released with version ${version}" />
+        <echo message="project ${module.name} released with version ${version} on ${release.resolver}" />
     </target>
 
     <!-- ================================= 
@@ -112,7 +112,7 @@
             overwrite="${publish.overwrite}"
             settingsRef="${project.ivy.instance}" 
             haltonmissing="${ivy.haltonmissing}"/>
-        <echo message="project ${module.name} published with version ${version}" />
+        <echo message="project ${module.name} published with version ${version} on ${shared.resolver}" />
     </target>
 
     

@@ -18,11 +18,7 @@
 
     <ea:core-version requiredrevision="[0.8,+]" />
 
-    <target name=":init" phase="validate">
-        <ea:parameter phase="validate" />
-        <ea:parameter phase="provision" />
-        <ea:parameter phase="prepare-publication" />
-
+    <target name="maven-publication:init">
         <ea:parameter property="target.artifacts" default="${basedir}/target/artifacts" description="destination directory for target artifacts" />
 
 
@@ -40,7 +36,7 @@
         
     </target>
 
-    <target name=":make-pom" depends="provision" phase="prepare-publication">
+    <target name="maven-publication:make-pom" depends="provision" phase="prepare-publication">
         <!--ask  MavenIvy Adapters to convert global information (groupId,artifactId,version, packaging) and to inject them in the POM instance referenced by "maven.instance" id -->
         <mavenivy:infoAdapter pomRefId="maven.instance" settingsRef="${project.ivy.instance}">
             <scopeMappings refid="maven.scope.mappings.ref"/>
@@ -60,21 +56,19 @@
 
     </target>
 
-    <target name="-trigger-publish-shared" phase="generate-shared-version">
+    <target name="-maven-publication:trigger-publish-shared" phase="generate-shared-version">
         <augment id="maven.instance" version="${version}" />
     </target>
 
-    <target name="-trigger-release" phase="generate-release-version">
+    <target name="-maven-publication:trigger-release" phase="generate-release-version">
         <augment id="maven.instance" version="${version}" />
     </target>
 
-    <target name=":publish-shared" phase="publish-shared">
+    <target name="-maven-publication:publish-shared" phase="publish-shared">
         <mavenivy:deploy pomRefId="maven.instance">
             <remoteRepository refid="maven.remote.repository" />
             <typeMappings refid="maven.type.mappings.ref"/>
         </mavenivy:deploy>
     </target>
 
-    <!-- define a generic default target for this plugin -->
-    <target name="doit" depends="validate" />
 </project>

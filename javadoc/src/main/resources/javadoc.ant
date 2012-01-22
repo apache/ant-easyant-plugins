@@ -18,10 +18,7 @@
 
     <ea:core-version requiredrevision="[0.8,+]" />
 
-    <target name=":init" phase="validate">
-        <ea:parameter phase="validate" />
-        <ea:parameter phase="report" />
-
+    <target name="javadoc:init">
         <ea:parameter property="src.main.java" required="true" description="directory where sources to be compiled are" />
         <ea:parameter property="src.test.java" required="true" description="directory where test sources to be compiled are" />
         <ea:parameter path="compile.main.classpath" required="true" description="path used to compile main sources" />
@@ -58,21 +55,21 @@
         </condition>
     </target>
 
-    <target name="-main" unless="empty.src.main.java.dir">
+    <target name="-javadoc:main" depends="javadoc:init" unless="empty.src.main.java.dir">
         <path id="java.source.path">
             <dirset dir="${src.main.java}" />
         </path>
         <javadoc encoding="${javadoc.file.encoding}" docencoding="${javadoc.file.encoding}" destdir="${target.javadoc.main}" sourcepathref="java.source.path" classpathref="compile.main.classpath" />
     </target>
 
-    <target name="-test" unless="empty.src.test.java.dir">
+    <target name="-javadoc:test" depends="javadoc:init" unless="empty.src.test.java.dir">
         <path id="java.source.path">
             <dirset dir="${src.test.java}" />
         </path>
         <javadoc encoding="${javadoc.file.encoding}" docencoding="${javadoc.file.encoding}" destdir="${target.javadoc.test}" sourcepathref="java.source.path" classpathref="compile.test.classpath" />
     </target>
 
-    <target name=":package" depends=":javadoc" description="generate a package containing javadoc" unless="skip.javadoc.package">
+    <target name="javadoc:package" depends="javadoc:javadoc" description="generate a package containing javadoc" unless="skip.javadoc.package">
         <mkdir dir="${target.artifacts}"/>
         <zip destfile="${target.artifacts}/${ivy.module}-javadoc.zip">
             <fileset dir="${target.javadoc}" erroronmissingdir="false"/>
@@ -80,6 +77,5 @@
         <ea:registerartifact type="javadoc" ext="zip" classifier="javadoc" settingsRef="${project.ivy.instance}"/>
     </target>
 
-    <target name=":javadoc" depends="validate,-main,-test" phase="report" description="generate javadoc report for main classes and test classes" />
-    <target name="doit" depends=":javadoc" />
+    <target name="javadoc:javadoc" depends="javadoc:main,javadoc:test" description="generate javadoc report for main classes and test classes" />
 </project>
