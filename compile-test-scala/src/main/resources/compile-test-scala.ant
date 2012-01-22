@@ -21,7 +21,7 @@
 
 	<ea:import mrid="org.apache.easyant.plugins#abstract-compile;0.1" />
 
-    <target name="compile-test-scala:configure" depends="abstract-compile:compile-ready">
+    <target name="-configure" depends="abstract-compile:compile-ready">
         <ea:findclasspath pathid="resolved.scala.classpath" organisation="org.scala-lang" module="scala-compiler" revision="2.7.7">
             <ea:project-dependency-strategy />
             <ea:environment-strategy env="SCALA_HOME"/>
@@ -50,11 +50,11 @@
         </sequential>
     </macrodef>
 
-    <target name="compile-test-scala:compile" depends="compile-test-scala:configure" if="has.src.test.java">
+    <target name=":compile" depends="-configure" if="has.src.test.java">
         <compile-scala-tests prefix="test"/>
     </target>
 
-    <target name="compile-test-scala:compile-integration" depends="compile-test-scala:configure" if="has.src.test.integration.java">
+    <target name=":compile-integration" depends="-configure" if="has.src.test.integration.java">
         <compile-scala-tests prefix="test.integration"/>
     </target>
 

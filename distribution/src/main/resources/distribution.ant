@@ -82,7 +82,7 @@
 
     </macrodef>
 
-    <target name="distribution:init">
+    <target name="-init">
         <ea:parameter property="target.distributions" default="${target}/distributions" description="directory where distribution packages will be generated" />
         <ea:parameter property="project.basedir" default="${basedir}" description="defines the project base directory" />
         <ea:parameter property="project.prefix" default="" description="defines the project prefix, used as distribution root directory" />
@@ -118,15 +118,15 @@
         <mkdir dir="${target.distributions}" />
     </target>
 
-    <target name="distribution:clean" description="clean distribution dir">
+    <target name=":clean" description="clean distribution dir">
         <delete dir="${target.distributions}"/>
     </target>
 
-    <target name="-distribution:force-retrieve" depends="distribution:init">
+    <target name="-force-retrieve" depends="-init">
         <property name="retrieve.dependencies" value="true"/>
     </target>
 
-    <target name="distribution:bin" depends="-distribution:force-retrieve" description="create a binary distribution">
+    <target name=":bin" depends="-force-retrieve" description="create a binary distribution">
         <bundle destfile="${target.distributions}/${module.name}-bin">
             <!-- project artifacts -->
             <zipfileset refid="project.artifacts.zipfileset" />
@@ -141,7 +141,7 @@
         </bundle>
     </target>
 
-    <target name="distribution:jar-with-dependencies" depends="-distribution:force-retrieve" description="create a jar archive which contains the binary output of your project, along its the unpacked dependencies (only works on jar projects)">
+    <target name=":jar-with-dependencies" depends="-force-retrieve" description="create a jar archive which contains the binary output of your project, along its the unpacked dependencies (only works on jar projects)">
         <condition property="target.main.artifact.exist">
             <and>
                 <isset property="target.main.artifact"/>
@@ -161,7 +161,7 @@
         </bundle>
     </target>
 
-    <target name="distribution:source" description="create a source distribution">
+    <target name=":source" description="create a source distribution">
         <bundle destfile="${target.distributions}/${module.name}-source">
             <!-- project artifacts -->
             <zipfileset refid="project.artifacts.zipfileset" />
