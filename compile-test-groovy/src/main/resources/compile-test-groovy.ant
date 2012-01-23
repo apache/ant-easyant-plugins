@@ -33,7 +33,7 @@
         </sequential>
     </macrodef>
 
-    <target name="-configure" depends="abstract-compile:compile-ready">
+    <target name="compile-test-groovy:configure" depends="abstract-compile:compile-ready">
         <ea:findclasspath pathid="resolved.groovy.classpath" organisation="org.codehaus.groovy" module="groovy-all" revision="1.6.0">
             <ea:project-dependency-strategy />
             <ea:environment-strategy env="GROOVY_HOME"/>
@@ -43,11 +43,11 @@
         <taskdef name="groovyc" classname="org.codehaus.groovy.ant.Groovyc" classpathref="resolved.groovy.classpath" />
     </target>
 
-    <target name=":compile" depends="-configure" if="has.src.test.java">
+    <target name="compile-test-groovy:compile" depends="compile-test-groovy:configure" if="has.src.test.java">
         <compile-groovy-tests prefix="test"/>
     </target>
 
-    <target name=":compile-integration" depends="-configure" if="has.src.test.integration.java">
+    <target name="compile-test-groovy:compile-integration" depends="compile-test-groovy:configure" if="has.src.test.integration.java">
         <compile-groovy-tests prefix="test.integration"/>
     </target>
 

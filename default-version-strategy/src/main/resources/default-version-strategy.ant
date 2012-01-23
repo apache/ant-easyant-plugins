@@ -23,7 +23,7 @@
 
     <ea:import mrid="org.apache.easyant.plugins#ivy-publication;0.2" />
 
-    <target name="-init">
+    <target name="default-version-strategy:init">
         <ea:parameter property="release.resolver" default="shared" 
                 description="the name of the resolver use for release publication"/>
         <ea:parameter property="shared.resolver" default="shared" 
@@ -71,7 +71,7 @@
     </macrodef>
 
     <!-- version numbers -->
-    <target name=":local" depends="-init" extensionOf="ivy-publication:generate-local-version">
+    <target name="default-version-strategy:local" depends="default-version-strategy:init" extensionOf="ivy-publication:generate-local-version">
         <check-version-number/>
         <tstamp>
             <format property="now" pattern="yyyyMMddHHmmss" />
@@ -79,14 +79,14 @@
         <property name="version" value="${ivy.revision}-local-${now}" />
     </target>
 
-    <target name=":shared" depends="-init" unless="ivy.new.revision" extensionOf="ivy-publication:generate-shared-version">
+    <target name="default-version-strategy:shared" depends="default-version-strategy:init" unless="ivy.new.revision" extensionOf="ivy-publication:generate-shared-version">
         <ea:checkresolver resolver="shared.resolver" settingsRef="${project.ivy.instance}" description="name of the repository used to publish shared integration versions (snapshots)"/>
         <check-version-number/>
         <ivy:buildnumber organisation="${ivy.organisation}" module="${ivy.module}" revision="${ivy.revision}" defaultBuildNumber="${default.build.number}" revSep="${revision.separator}" settingsRef="${project.ivy.instance}" resolver="${shared.resolver}"/>
         <property name="version" value="${ivy.new.revision}" />
     </target>
 
-    <target name=":release" depends="-init" unless="ivy.new.revision" extensionOf="ivy-publication:generate-release-version">
+    <target name="default-version-strategy:release" depends="default-version-strategy:init" unless="ivy.new.revision" extensionOf="ivy-publication:generate-release-version">
         <check-version-number/>
         <property name="version" value="${ivy.revision}" />
     </target>

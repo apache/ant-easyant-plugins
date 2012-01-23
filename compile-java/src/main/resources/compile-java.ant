@@ -21,7 +21,7 @@
 
     <ea:import mrid="org.apache.easyant.plugins#abstract-compile;0.2" />
 	
-    <target name="-init">
+    <target name="compile-java:init">
         <ea:parameter property="src.main.java" required="true"
             description="directory where sources to be compiled are" />
         <ea:parameter property="javac.debug.mode" default="true" 
@@ -41,7 +41,7 @@
 
     </target>
 
-    <target name=":compile" depends="-init,abstract-compile:compile-ready" if="has.src.main.java">
+    <target name="compile-java:compile" depends="compile-java:init,abstract-compile:compile-ready" if="has.src.main.java">
         <mkdir dir="${target.main.classes}" />
         <javac  srcdir="${src.main.java}"
                 destdir="${target.main.classes}"

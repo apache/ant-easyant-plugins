@@ -20,7 +20,7 @@
 
     <ea:parameter property="target" required="true" description="the target directory to clean" />
 
-    <target name=":clean" description="clean project">
+    <target name="clean-std:clean" description="clean project">
         <echo message="Cleaning ${target}..." />
         <delete dir="${target}" />
     </target>
