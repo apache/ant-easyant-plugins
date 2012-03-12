@@ -20,7 +20,7 @@
     xmlns:ea="antlib:org.apache.easyant">
 
     <ea:core-version requiredrevision="[0.9,+]" />
-    <ea:import mrid="org.apache.easyant.plugins#abstract-provisioning;0.1" />
+    <ea:import mrid="org.apache.easyant.plugins#abstract-provisioning;0.9" />
 
     <target name="-ivy-provisioning:init" extensionOf="abstract-provisioning:provisioning-ready">
         <ea:parameter property="lib.main" default="${basedir}/lib/main" description="directory where main libraries are picked up" />
@@ -75,7 +75,7 @@
 
     <target name="ivy-provisioning:resolve" depends="-ivy-provisioning:resolve,-ivy-provisioning:resolve-main-confs,-ivy-provisioning:resolve-test-confs,-ivy-provisioning:resolve-provided-confs" description="resolve and retrieve dependencies with ivy" unless="skip.resolve" />
 
-    <target name="ivy-provisioning:resolve-main-confs" depends="-ivy-provisioning:resolve" if="project.contains.main.confs">
+    <target name="-ivy-provisioning:resolve-main-confs" depends="-ivy-provisioning:resolve" if="project.contains.main.confs">
         <ivy:cachepath pathid="cache.main.classpath" conf="${main.confs}" settingsRef="${project.ivy.instance}"/>
         <ea:path pathid="compile.main.classpath" overwrite="append-if-not-exist">
             <path refid="cache.main.classpath"/>
@@ -92,7 +92,7 @@
         </ac:if>
     </target>
 
-    <target name="ivy-provisioning:resolve-test-confs" depends="-ivy-provisioning:resolve" if="project.contains.test.confs">
+    <target name="-ivy-provisioning:resolve-test-confs" depends="-ivy-provisioning:resolve" if="project.contains.test.confs">
         <ivy:cachepath pathid="cache.test.classpath" conf="${test.confs}" settingsRef="${project.ivy.instance}"/>
         <ea:path pathid="compile.test.classpath" overwrite="append-if-not-exist">
                     <path refid="cache.test.classpath"/>
@@ -110,7 +110,7 @@
         </ac:if>
     </target>
     
-    <target name="ivy-provisioning:resolve-provided-confs" depends="-ivy-provisioning:resolve" if="project.contains.provided.confs">
+    <target name="-ivy-provisioning:resolve-provided-confs" depends="-ivy-provisioning:resolve" if="project.contains.provided.confs">
         <ivy:cachepath pathid="cache.provided.classpath" conf="${provided.confs}" settingsRef="${project.ivy.instance}"/>
         <ea:path pathid="compile.main.classpath" overwrite="append-if-not-exist">
             <path refid="cache.provided.classpath"/>

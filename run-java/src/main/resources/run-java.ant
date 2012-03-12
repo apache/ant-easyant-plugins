@@ -19,7 +19,7 @@
     <ea:core-version requiredrevision="[0.9,+]" />
 
     <!-- we may want some better abstraction to know that a project is ready to be run -->
-    <ea:import mrid="org.apache.easyant.plugins#package-jar;0.2" />
+    <ea:import mrid="org.apache.easyant.plugins#package-jar;0.9" />
 
     <target name="run-java:init">
         <ea:parameter property="target.main.classes" required="true" description="directory where main compiled classes are" />

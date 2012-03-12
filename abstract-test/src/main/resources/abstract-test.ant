@@ -28,7 +28,7 @@
 
     <extension-point name="abstract-test:integration-test-run" />
 	
-    <ea:import mrid="org.apache.easyant.plugins#abstract-provisioning;0.1" />
+    <ea:import mrid="org.apache.easyant.plugins#abstract-provisioning;0.9" />
 
     <target name="/skip-tests" description="skip tests">
         <property name="skip.test" value="true" />

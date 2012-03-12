@@ -15,7 +15,7 @@
    limitations under the License.
 -->
 <ivy-module version="2.0" xmlns:ea="http://www.easyant.org"> 
-    <info organisation="org.apache.easyant.plugins" module="xooki" revision="0.2">
+    <info organisation="org.apache.easyant.plugins" module="xooki" revision="0.9">
         <description>
             This module provides functionalities for setting up a xooki-based documentation structure in your project.
         </description>

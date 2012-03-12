@@ -19,7 +19,7 @@
 
     <ea:core-version requiredrevision="[0.9,+]" />
 
-	<ea:import mrid="org.apache.easyant.plugins#abstract-compile;0.1" />
+	<ea:import mrid="org.apache.easyant.plugins#abstract-compile;0.9" />
 
     <target name="compile-test-scala:configure" depends="abstract-compile:compile-ready">
         <ea:findclasspath pathid="resolved.scala.classpath" organisation="org.scala-lang" module="scala-compiler" revision="2.7.7">

@@ -24,7 +24,7 @@
     <ea:parameter property="target.main.classes" required="true" 
         description="destination directory for compiled test classes" />
 	
-    <ea:import mrid="org.apache.easyant.plugins#abstract-provisioning;0.1" />
+    <ea:import mrid="org.apache.easyant.plugins#abstract-provisioning;0.9" />
 
 
 	<!-- We expect at this point to have every source available, even the ones which are generated -->

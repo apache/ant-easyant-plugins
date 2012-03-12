@@ -19,8 +19,8 @@
 
     <ea:core-version requiredrevision="[0.9,+]" />
 
-    <ea:import mrid="org.apache.easyant.plugins#abstract-test;0.2" />
-    <ea:import mrid="org.apache.easyant.plugins#antcontrib-activator;0.2" />
+    <ea:import mrid="org.apache.easyant.plugins#abstract-test;0.9" />
+    <ea:import mrid="org.apache.easyant.plugins#antcontrib-activator;0.9" />
 
     <target name="test-junit:init" depends="abstract-test:init">
         <ea:parameter property="test.run.includes.pattern" 

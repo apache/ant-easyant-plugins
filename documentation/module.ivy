@@ -15,7 +15,7 @@
    limitations under the License.
 -->
 <ivy-module version="2.0" xmlns:ea="http://www.easyant.org"> 
-    <info organisation="org.apache.easyant.plugins" module="documentation" revision="0.2">
+    <info organisation="org.apache.easyant.plugins" module="documentation" revision="0.9">
            <description><p>This module is used to generate documentation (out of XDOC files).<br/>
             Your project must have the following structure:<br/>
                 src--<br/>

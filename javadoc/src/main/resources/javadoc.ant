@@ -77,5 +77,5 @@
         <ea:registerartifact type="javadoc" ext="zip" classifier="javadoc" settingsRef="${project.ivy.instance}"/>
     </target>
 
-    <target name="javadoc:javadoc" depends="javadoc:main,javadoc:test" description="generate javadoc report for main classes and test classes" />
+    <target name="javadoc:javadoc" depends="-javadoc:main,-javadoc:test" description="generate javadoc report for main classes and test classes" />
 </project>

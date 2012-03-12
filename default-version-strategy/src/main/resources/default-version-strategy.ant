@@ -21,7 +21,7 @@
 
     <ea:core-version requiredrevision="[0.9,+]" />
 
-    <ea:import mrid="org.apache.easyant.plugins#ivy-publication;0.2" />
+    <ea:import mrid="org.apache.easyant.plugins#ivy-publication;0.9" />
 
     <target name="default-version-strategy:init">
         <ea:parameter property="release.resolver" default="shared" 
