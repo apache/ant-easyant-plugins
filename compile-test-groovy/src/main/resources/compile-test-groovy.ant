@@ -21,11 +21,19 @@
 
     <ea:import mrid="org.apache.easyant.plugins#abstract-compile;0.9" />
 
+    <ea:parameter property="src.test.groovy" default="${basedir}/src/test/groovy"
+        description="directory where test sources to be compiled are" />
+    <ea:parameter property="src.test.integration.groovy" default="${basedir}/src/integration-test/groovy"
+        description="directory where integration test sources to be compiled are" />
+
+    <available file="${src.test.groovy}" property="has.src.test.groovy" />
+    <available file="${src.test.integration.groovy}" property="has.src.test.integration.groovy" />
+
     <macrodef name="compile-groovy-tests">
         <attribute name="prefix"/>
         <sequential>
             <mkdir dir="${target.@{test}.classes}" />
-            <groovyc  srcdir="${src.@{test}.java}"
+            <groovyc  srcdir="${src.@{test}.groovy}"
                 destdir="${target.@{test}.classes}"
                 classpathref="compile.test.classpath"
                 includes="${@{test}.compile.includes.pattern}"
@@ -43,12 +51,22 @@
         <taskdef name="groovyc" classname="org.codehaus.groovy.ant.Groovyc" classpathref="resolved.groovy.classpath" />
     </target>
 
-    <target name="compile-test-groovy:compile" depends="compile-test-groovy:configure" if="has.src.test.java">
-        <compile-groovy-tests prefix="test"/>
+    <target name="compile-test-groovy:compile" depends="compile-test-groovy:configure" if="has.src.test.groovy">
+        <ea:parameter property="test.compile.includes.pattern" default="**/*.groovy" 
+            description="Pattern describing files included in test compilation process" />
+        <ea:parameter property="test.compile.excludes.pattern" default="" 
+            description="Pattern describing files excluded in test compilation process" />
+
+    	<compile-groovy-tests prefix="test"/>
     </target>
 
-    <target name="compile-test-groovy:compile-integration" depends="compile-test-groovy:configure" if="has.src.test.integration.java">
-        <compile-groovy-tests prefix="test.integration"/>
+    <target name="compile-test-groovy:compile-integration" depends="compile-test-groovy:configure" if="has.src.test.integration.groovy">
+        <ea:parameter property="test.integration.compile.includes.pattern" default="**/*.groovy" 
+            description="Pattern describing files included in integration test compilation process" />
+        <ea:parameter property="test.integration.compile.excludes.pattern" default="" 
+            description="Pattern describing files excluded in integration test compilation process" />
+
+    	<compile-groovy-tests prefix="test.integration"/>
     </target>
 
 </project>

@@ -36,22 +36,11 @@
     </target>
 
     <target name="abstract-test:init" depends="abstract-provisioning:provisioning-finished">
-        <ea:parameter property="src.test.java" required="true" 
-            description="directory with unit test source files" />
-        <ea:parameter property="src.test.integration.java" default="${basedir}/src/integration-test/java" 
-                description="directory for integration test source files" />
 
         <ea:parameter property="src.test.resources" default="${basedir}/src/test/resources"
             description="directory with unit test resource files (configuration files, data files, etc)" />
         <ea:parameter property="src.test.integration.resources" default="${basedir}/src/integration-test/resources"
                 description="directory for integration test resources (configuration files, data files, etc)"/>
-
-        <ea:parameter property="target.main.classes" required="true" 
-            description="directory where main compiled classes are" />
-        <ea:parameter property="target.test.classes" required="true" 
-            description="destination directory for compiled unit test classes" />
-        <ea:parameter property="target.test.integration.classes" default="${basedir}/target/integration-test/classes" 
-                description="destination directory for compiled integration test classes" />
 
         <ea:parameter property="target.test.xml" required="true" 
             description="destination directory for xml test report" />
@@ -61,30 +50,9 @@
         <ea:parameter property="test.mode" default="run"
             description="mode to use to execute tests: 'run' to only run tests, 'report' to generate html report" />
         
-    	<ea:parameter property="javac.debug.mode" default="true" 
-            description="javac debug mode, true or false" />
-        
-    	<ea:parameter property="test.compile.includes.pattern" default="**/*.java" 
-            description="Pattern describing files included in test compilation process" />
-        <ea:parameter property="test.compile.excludes.pattern" default="" 
-            description="Pattern describing files excluded in test compilation process" />
-        
-    	<ea:parameter property="test.integration.compile.includes.pattern" default="**/*.java" 
-            description="Pattern describing files included in integration test compilation process" />
-        <ea:parameter property="test.integration.compile.excludes.pattern" default="" 
-            description="Pattern describing files excluded in integration test compilation process" />
-
         <ea:parameter property="test.run.failonerror" default="true"
             description="specify if the build should be stopped when tests are failed. Typically this property should be set to false in continuous environmnent systems"/>
 
-        <ea:parameter path="compile.main.classpath" required="true" 
-            description="path used to compile main sources" />
-
-        <path id="compile.test.classpath">
-                <pathelement location="${target.main.classes}" />
-                <path refid="compile.main.classpath" />
-        </path>
-    	
 	    <ea:parameter property="test.run.dir"
             default="${basedir}" description="working directory for unit test process, defaults to the project basedir"/>
         <ea:parameter property="test.integration.run.dir"
@@ -110,6 +78,11 @@
         <ea:parameter property="test.integration.run.excludes.pattern" 
             default="" description="Pattern describing class files excluded in integration test run" />
 
+    	<ea:parameter property="target.test.classes" default="${target}/test/classes" 
+            description="destination directory for compiled test classes" />
+        <ea:parameter property="target.test.integration.classes" default="${target}/integration-test/classes" 
+            description="destination directory for compiled integration test classes" />
+    	
         <ea:path pathid="run.test.classpath" overwrite="append-if-not-exist">
             <pathelement location="${target.test.classes}" />
             <path refid="compile.test.classpath" />
@@ -120,9 +93,6 @@
             <path refid="compile.test.classpath" />
         </ea:path>
 
-
-        <available file="${src.test.java}" property="has.src.test.java" />
-        <available file="${src.test.integration.java}" property="has.src.test.integration.java"/>
 
         <condition property="test.mode.run">
             <equals arg1="${test.mode}" arg2="run" />

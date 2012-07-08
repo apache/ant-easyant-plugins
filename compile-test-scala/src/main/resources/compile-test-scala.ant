@@ -21,6 +21,14 @@
 
 	<ea:import mrid="org.apache.easyant.plugins#abstract-compile;0.9" />
 
+    <ea:parameter property="src.test.scala" default="${basedir}/src/test/scala"
+        description="directory where test sources to be compiled are" />
+    <ea:parameter property="src.test.integration.scala" default="${basedir}/src/integration-test/scala"
+        description="directory where integration test sources to be compiled are" />
+
+    <available file="${src.test.scala}" property="has.src.test.scala" />
+    <available file="${src.test.integration.scala}" property="has.src.test.integration.scala" />
+
     <target name="compile-test-scala:configure" depends="abstract-compile:compile-ready">
         <ea:findclasspath pathid="resolved.scala.classpath" organisation="org.scala-lang" module="scala-compiler" revision="2.7.7">
             <ea:project-dependency-strategy />
@@ -51,11 +59,21 @@
     </macrodef>
 
     <target name="compile-test-scala:compile" depends="compile-test-scala:configure" if="has.src.test.java">
-        <compile-scala-tests prefix="test"/>
+        <ea:parameter property="test.compile.includes.pattern" default="**/*.scala" 
+            description="Pattern describing files included in test compilation process" />
+        <ea:parameter property="test.compile.excludes.pattern" default="" 
+            description="Pattern describing files excluded in test compilation process" />
+
+    	<compile-scala-tests prefix="test"/>
     </target>
 
     <target name="compile-test-scala:compile-integration" depends="compile-test-scala:configure" if="has.src.test.integration.java">
-        <compile-scala-tests prefix="test.integration"/>
+        <ea:parameter property="test.integration.compile.includes.pattern" default="**/*.groovy" 
+            description="Pattern describing files included in integration test compilation process" />
+        <ea:parameter property="test.integration.compile.excludes.pattern" default="" 
+            description="Pattern describing files excluded in integration test compilation process" />
+
+    	<compile-scala-tests prefix="test.integration"/>
     </target>
 
 </project>

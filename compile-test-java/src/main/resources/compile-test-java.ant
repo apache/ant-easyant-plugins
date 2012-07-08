@@ -21,7 +21,19 @@
 
     <ea:import mrid="org.apache.easyant.plugins#abstract-compile;0.9" />
 
-    <macrodef name="compile-java-tests">
+    <ea:parameter property="src.test.java" default="${basedir}/src/test/java"
+        description="directory where test sources to be compiled are" />
+    <ea:parameter property="src.test.integration.java" default="${basedir}/src/integration-test/java"
+        description="directory where integration test sources to be compiled are" />
+
+    <ea:parameter property="javac.debug.mode" default="true" 
+        description="javac debug mode, true or false" />
+    
+    <available file="${src.test.java}" property="has.src.test.java" />
+    <available file="${src.test.integration.java}" property="has.src.test.integration.java" />
+
+	
+	<macrodef name="compile-java-tests">
         <attribute name="prefix"/>
         <sequential>
             <mkdir dir="${target.@{prefix}.classes}" />
@@ -37,21 +49,31 @@
             </javac>
         </sequential>
     </macrodef>
-
+	
     <target name="compile-test-java:compile" depends="abstract-compile:compile-ready" if="has.src.test.java">
-        <ea:parameter property="test.compile.java.target.version" default="${ant.java.version}" 
+    	<ea:parameter property="test.compile.java.target.version" default="${ant.java.version}" 
             description="Specify a VM version for Generated class files (e.g., 1.1 or 1.2)." />
         <ea:parameter property="test.compile.java.source.version" default="${ant.java.version}" 
             description="Specify a value of the -source command-line switch; will be ignored by all implementations prior to javac1.4 (or modern when Ant is not running in a 1.3 VM) and jikes" />
-        <compile-java-tests prefix="test"/>
+        <ea:parameter property="test.compile.includes.pattern" default="**/*.java" 
+            description="Pattern describing files included in test compilation process" />
+        <ea:parameter property="test.compile.excludes.pattern" default="" 
+            description="Pattern describing files excluded in test compilation process" />
+
+    	<compile-java-tests prefix="test"/>
     </target>
 
     <target name="compile-test-java:compile-integration" depends="abstract-compile:compile-ready" if="has.src.test.integration.java">
-        <ea:parameter property="test.integration.compile.java.target.version" default="${ant.java.version}" 
+    	<ea:parameter property="test.integration.compile.java.target.version" default="${ant.java.version}" 
             description="Specify a VM version for Generated class files (e.g., 1.1 or 1.2)." />
         <ea:parameter property="test.integration.compile.java.source.version" default="${ant.java.version}" 
             description="Specify a value of the -source command-line switch; will be ignored by all implementations prior to javac1.4 (or modern when Ant is not running in a 1.3 VM) and jikes" />
-        <compile-java-tests prefix="test.integration"/> 
+        <ea:parameter property="test.integration.compile.includes.pattern" default="**/*.java" 
+            description="Pattern describing files included in integration test compilation process" />
+        <ea:parameter property="test.integration.compile.excludes.pattern" default="" 
+            description="Pattern describing files excluded in integration test compilation process" />
+
+    	<compile-java-tests prefix="test.integration"/> 
     </target>
 
 </project>

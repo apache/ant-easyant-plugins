@@ -27,9 +27,8 @@
             description="directory where sources to be compiled are" />
         <ea:parameter property="scalac.debug.mode" default="true" 
             description="scalac debug mode, true or false" />
-        <ea:parameter property="scala.home" default="${env.SCALA_HOME}"
-            description="scala home directory"/>
-        <ea:parameter property="compile.scala.includes.pattern" default="**/*.scala"
+
+    	<ea:parameter property="compile.scala.includes.pattern" default="**/*.scala"
                     description="Pattern describing files included in compilation process"/>
         <ea:parameter property="compile.scala.excludes.pattern" default=""
                             description="Pattern describing files excluded in compilation process"/>
