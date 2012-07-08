@@ -85,12 +85,12 @@
         <testng-test prefix="test.integration"/>
     </target>
 
-    <target name="test-testng::run" if="test.mode.run" unless="skip.test" depends="-test-testng:test" description="run testng tests">
+    <target name="test-testng:run" if="test.mode.run" unless="skip.test" depends="-test-testng:test" description="run testng tests">
         <check-test-result propertytocheck="test.failed"
               message="At least one test has failed. See logs in ${target.test.xml} for details or use the report target to run the test with a report" />
     </target>
 
-    <target name="test-testng::run-integration" if="test.mode.run" unless="skip.test.integration" depends="-test-testng:integration-test" description="run testng integration tests">
+    <target name="test-testng:run-integration" if="test.mode.run" unless="skip.test.integration" depends="-test-testng:integration-test" description="run testng integration tests">
         <check-test-result propertytocheck="test.integration.failed"
               message="At least one integration test has failed. See logs in ${target.test.xml} for details or use the report target to run the test with a report" />
     </target>
