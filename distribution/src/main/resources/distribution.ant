@@ -126,7 +126,7 @@
         <property name="retrieve.dependencies" value="true"/>
     </target>
 
-    <target name="distribution:bin" depends="-distribution:force-retrieve" description="create a binary distribution">
+    <target name="distribution:bin" depends="distribution:init,-distribution:force-retrieve" description="create a binary distribution">
         <bundle destfile="${target.distributions}/${module.name}-bin">
             <!-- project artifacts -->
             <zipfileset refid="project.artifacts.zipfileset" />
@@ -141,7 +141,7 @@
         </bundle>
     </target>
 
-    <target name="distribution:jar-with-dependencies" depends="-distribution:force-retrieve" description="create a jar archive which contains the binary output of your project, along its the unpacked dependencies (only works on jar projects)">
+    <target name="distribution:jar-with-dependencies" depends="distribution:init,-distribution:force-retrieve" description="create a jar archive which contains the binary output of your project, along its the unpacked dependencies (only works on jar projects)">
         <condition property="target.main.artifact.exist">
             <and>
                 <isset property="target.main.artifact"/>
@@ -161,7 +161,7 @@
         </bundle>
     </target>
 
-    <target name="distribution:source" description="create a source distribution">
+    <target name="distribution:source" depends="distribution:init" description="create a source distribution">
         <bundle destfile="${target.distributions}/${module.name}-source">
             <!-- project artifacts -->
             <zipfileset refid="project.artifacts.zipfileset" />
