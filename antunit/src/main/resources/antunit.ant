@@ -1,0 +1,108 @@
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<project name="org.apache.easyant.plugins#antunit" xmlns:ac="antlib:net.sf.antcontrib" xmlns:ea="antlib:org.apache.easyant" xmlns:au="antlib:org.apache.ant.antunit">
+
+	<ea:core-version requiredrevision="[0.9,+]" />
+
+	<ea:import mrid="org.apache.easyant.plugins#abstract-test;0.9" />
+
+	<dirname property="antunit.plugin.dir" file="${org.apache.easyant.plugins#antunit.junit-frames.xsl.file}" />
+
+	<target name="antunit:init" description="load parameters, antunit tasks, and create report directories">
+		<ea:parameter property="target.antunit.xml" default="${target.test.xml}" description="destination directory for xml test report" />
+		<ea:parameter property="target.antunit.html" default="${target.test.html}" description="destination directory for html test report" />
+
+		<ea:parameter property="src.test.antunit" default="src/test/antunit" description="directory where antunit test scripts are stored" />
+		<ea:parameter property="antunit.testcase" description="specify a list of testcase that you want to run, if no one is specified includes pattern will be used" />
+		<ea:parameter property="test.antunit.log.level" default="error" description="Verbosity level of messages from the antunit test:  none, info, warn, error, debug, verbose" />
+		<ea:parameter property="test.antunit.includes.pattern" description="Pattern describing files included in antunit test process" />
+		<ea:parameter property="test.antunit.excludes.pattern" default="" description="Pattern describing files excluded in antunit test process" />
+
+		<ea:parameter property="src.test.integration.antunit" default="src/integration-test/antunit" description="directory where antunit integration tests are stored.  Integration tests are run after packaging, in the integration-test phase." />
+		<ea:parameter property="test.integration.antunit.includes.pattern" description="Pattern describing files included in antunit integration test process" />
+		<ea:parameter property="test.integration.antunit.excludes.pattern" default="" description="Pattern describing files excluded in antunit integration test process" />
+
+		<condition property="test.antunit.includes.pattern" value="${antunit.testcase}" else="**/test.xml,**/*-test.xml">
+			<isset property="antunit.testcase" />
+		</condition>
+
+		<condition property="test.integration.antunit.includes.pattern" value="${antunit.testcase}" else="**/test.xml,**/*-test.xml">
+			<isset property="antunit.testcase" />
+		</condition>
+
+		<!--Load antunit tasks -->
+		<taskdef uri="antlib:org.apache.ant.antunit" resource="org/apache/ant/antunit/antlib.xml" classpathref="org.apache.easyant.plugins#antunit.classpath" />
+
+		<mkdir dir="${target.antunit.xml}" />
+		<mkdir dir="${target.antunit.html}" />
+
+		<available file="${src.test.antunit}" property="has.src.test.antunit" />
+		<available file="${src.test.integration.antunit}" property="has.src.test.integration.antunit" />
+
+		<condition property="skip.antunit.test">
+			<not>
+				<isset property="has.src.test.antunit" />
+			</not>
+		</condition>
+
+		<condition property="skip.antunit.integration">
+			<not>
+				<isset property="has.src.test.integration.antunit" />
+			</not>
+		</condition>
+
+	</target>
+
+	<macrodef name="antunit-test">
+		<attribute name="prefix" />
+		<sequential>
+			<au:antunit failOnError="false" errorProperty="antunit.@{prefix}.failed">
+				<fileset dir="${src.@{prefix}.antunit}" includes="${@{prefix}.antunit.includes.pattern}" excludes="${@{prefix}.antunit.excludes.pattern}" />
+				<au:plainlistener logLevel="${test.antunit.log.level}" />
+				<au:xmllistener toDir="${target.antunit.xml}" logLevel="${test.antunit.log.level}" />
+			</au:antunit>
+		</sequential>
+	</macrodef>
+
+	<target name="-antunit:test" depends="antunit:init" unless="skip.antunit.test">
+		<antunit-test prefix="test" />
+	</target>
+
+	<target name="-antunit:integration-test" depends="antunit:init" unless="skip.antunit.integration">
+		<antunit-test prefix="test.integration" />
+	</target>
+
+	<target name="antunit:run" depends="-antunit:test" if="test.mode.run" unless="skip.antunit.test" description="run all antunit tests">
+		<check-test-result propertytocheck="antunit.test.failed" message="At least one test has failed. See logs in ${target.test.xml} for details or use the report target to run the test with a report" />
+	</target>
+
+	<target name="antunit:run-integration" depends="-antunit:integration-test" if="test.mode.run" unless="skip.antunit.integration" description="run antunit integration tests">
+		<check-test-result propertytocheck="antunit.test.integration.failed" message="At least one integration test has failed. See logs in ${target.test.xml} for details or use the report target to run the test with a report" />
+	</target>
+
+	<target name="antunit:report" if="test.mode.report" unless="skip.antunit.test" depends="-antunit:test,-antunit:integration-test" description="generate junit report">
+		<junitreport todir="${target.antunit.xml}">
+			<fileset dir="${target.antunit.html}">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report format="frames" todir="${target.test.html}" />
+		</junitreport>
+		<fail if="antunit.test.failed" message="At least one test has failed. See logs in ${target.test.xml} or report in ${target.test.html}" />
+		<fail if="antunit.test.integration.failed" message="At least one integration test has failed. See logs in ${target.test.xml} or report in ${target.test.html}" />
+	</target>
+
+</project>
