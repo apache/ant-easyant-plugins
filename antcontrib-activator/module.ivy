@@ -30,6 +30,6 @@
         <artifact type="ant"/>
     </publications>
     <dependencies>
-        <dependency org="ant-contrib" name="ant-contrib" rev="1.0b2"/>
+        <dependency org="ant-contrib" name="ant-contrib" rev="1.0b2" conf="default->default"/>
     </dependencies>
 </ivy-module>
