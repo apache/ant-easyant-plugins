@@ -70,11 +70,11 @@
         </sequential>
     </macrodef>
 
-    <target name="-test-junit:test" depends="abstract-test:compute-test-sets" unless="skip.test">
+    <target name="-test-junit:test" depends="test-junit:init,abstract-test:compute-test-sets" unless="skip.test">
         <junit-test prefix="test"/>
     </target>
 
-    <target name="-test-junit:integration-test" depends="abstract-test:compute-test-sets" unless="skip.test.integration">
+    <target name="-test-junit:integration-test" depends="test-junit:init,abstract-test:compute-test-sets" unless="skip.test.integration">
         <junit-test prefix="test.integration"/>
     </target>
 
