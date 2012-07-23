@@ -169,15 +169,14 @@
                             </if>
                         </sequential>
                     </for>
+                    <condition property="skip.@{prefix}">
+                        <resourcecount refid="target.@{prefix}.set" when="equal" count="0"/>
+                    </condition>
                 </then>
                 <else>
                     <echo level="verbose">Test path scanning disabled by property @{prefix}.scan.path</echo>
                 </else>
             </if>
-
-            <condition property="skip.@{prefix}">
-                <resourcecount refid="target.@{prefix}.set" when="equal" count="0"/>
-            </condition>
 
         </sequential>
     </macrodef>
