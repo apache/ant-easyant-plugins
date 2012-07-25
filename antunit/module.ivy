@@ -28,6 +28,6 @@
         <artifact type="ant"/>
     </publications>
     <dependencies>
-        <dependency org="org.apache.ant" name="ant-antunit" rev="1.2alpha" conf="default->default"/>
+        <dependency org="org.apache.ant" name="ant-antunit" rev="1.2" conf="default->default"/>
     </dependencies>
 </ivy-module>
