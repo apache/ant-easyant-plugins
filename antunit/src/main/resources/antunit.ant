@@ -71,10 +71,6 @@
 		<attribute name="prefix" />
 		<sequential>
 			<au:antunit failOnError="false" errorProperty="antunit.@{prefix}.failed">
-                                <referenceSet>
-                                    <!--copy easyant.ivy.instance, then antunit test would be able to invoke ivy to resolve dependencies -->
-                                    <reference refid="easyant.ivy.instance"/>
-                                </referenceSet>
 				<fileset dir="${src.@{prefix}.antunit}" includes="${@{prefix}.antunit.includes.pattern}" excludes="${@{prefix}.antunit.excludes.pattern}" />
 				<au:plainlistener logLevel="${test.antunit.log.level}" />
 				<au:xmllistener toDir="${target.antunit.xml}" logLevel="${test.antunit.log.level}" />
