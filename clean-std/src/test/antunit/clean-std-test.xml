@@ -19,10 +19,12 @@
     xmlns:ivy="antlib:org.apache.ivy.ant"
     xmlns:ea="antlib:org.apache.easyant">
     
-    <!-- Import your plugin --> 
-    <property name="skip.corerevision.checker" value="true"/>
     <property name="target" value="target/test-antunit"/>
-    <import file="../../main/resources/clean-std.ant"/>
+    <!-- configure easyant in current project -->
+    <ea:configure-easyant-ivy-instance />
+    <!-- import our local plugin -->
+    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources"/>
+
     
     <!-- Defines a setUp / tearDown (before each test) that cleans the environnement --> 
     <target name="clean" description="remove stale build artifacts before / after each test">
@@ -37,9 +39,7 @@
     </target>
     <target name="tearDown" depends="clean"/>
     
-    <target name="test-clean-std:clean">
-	<echo>${target}</echo>
-        <antcall target="clean-std:clean"/>
+    <target name="test-clean-std:clean" depends="clean-std:clean">
         <au:assertLogContains level="info" text="Cleaning ${target}..."/>
     </target>
     
