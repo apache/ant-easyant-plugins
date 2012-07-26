@@ -30,6 +30,7 @@
 
         <ea:parameter property="src.main.resources" required="true" description="directory where main resources files are stored" />
         <ea:parameter property="src.test.resources" required="true" description="directory where test resources files are stored" />
+        <ea:parameter property="src.publish.conf" default="source" description="default configuration for source artifacts" />
 
         <condition property="has.src.main">
             <or>
@@ -54,7 +55,7 @@
             <fileset dir="${src.main.resources}" erroronmissingdir="false" />
             <fileset dir="${src.main.java}" erroronmissingdir="false" />
         </jar>
-        <ea:registerartifact type="source" ext="jar" classifier="sources" settingsRef="${project.ivy.instance}"/>
+        <ea:registerartifact type="source" ext="jar" classifier="sources" settingsRef="${project.ivy.instance}" conf="${src.publish.conf}"/>
     </target>
 
     <!-- Test sources -->
@@ -65,7 +66,7 @@
             <fileset dir="${src.test.resources}" erroronmissingdir="false" />
             <fileset dir="${src.test.java}" erroronmissingdir="false" />
         </jar>
-        <ea:registerartifact type="test-source" ext="jar" classifier="test-sources" settingsRef="${project.ivy.instance}"/>
+        <ea:registerartifact type="test-source" ext="jar" classifier="test-sources" settingsRef="${project.ivy.instance}" conf="${src.publish.conf}"/>
     </target>
 
 </project>
