@@ -30,6 +30,8 @@
         <ea:parameter property="target.javadoc.main" default="${target.javadoc}/main" description="directory where javadoc will be generated" />
         <ea:parameter property="target.javadoc.test" default="${target.javadoc}/test" description="directory where javadoc for tests will be generated" />
 
+        <ea:parameter property="javadoc.publish.conf" default="documentation" description="default configuration for javadoc artifacts" />
+
         <!-- javadoc task seems to be sensible to empty directory -->
         <!-- if src.test.java does not exit OR is an empty dir we set the empty.src.test.java.dir property that will skip the javadoc generation -->
         <condition property="empty.src.test.java.dir">
@@ -74,7 +76,7 @@
         <zip destfile="${target.artifacts}/${ivy.module}-javadoc.zip">
             <fileset dir="${target.javadoc}" erroronmissingdir="false"/>
         </zip>
-        <ea:registerartifact type="javadoc" ext="zip" classifier="javadoc" settingsRef="${project.ivy.instance}"/>
+        <ea:registerartifact type="javadoc" ext="zip" classifier="javadoc" settingsRef="${project.ivy.instance}" conf="${javadoc.publish.conf}"/>
     </target>
 
     <target name="javadoc:javadoc" depends="-javadoc:main,-javadoc:test" description="generate javadoc report for main classes and test classes" />
