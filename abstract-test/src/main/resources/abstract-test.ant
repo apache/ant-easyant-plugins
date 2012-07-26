@@ -42,9 +42,9 @@
         <ea:parameter property="src.test.integration.resources" default="${basedir}/src/integration-test/resources"
                 description="directory for integration test resources (configuration files, data files, etc)"/>
 
-        <ea:parameter property="target.test.xml" required="true" 
+        <ea:parameter property="target.test.xml" default="${target}/test/xml" 
             description="destination directory for xml test report" />
-        <ea:parameter property="target.test.html" required="true" 
+        <ea:parameter property="target.test.html" default="${target}/test/html"
             description="destination directory for html test report" />
 
         <ea:parameter property="test.mode" default="run"
