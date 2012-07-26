@@ -1,0 +1,69 @@
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<project name="org.apache.easyant.plugins;default-version-strategy-test" 
+    xmlns:au="antlib:org.apache.ant.antunit" 
+    xmlns:ivy="antlib:org.apache.ivy.ant"
+    xmlns:ea="antlib:org.apache.easyant">
+    
+    <!-- Import your plugin --> 
+    <property name="target" value="target/test-antunit"/>
+    <!-- configure easyant in current project -->
+    <ea:configure-easyant-ivy-instance />
+    <!-- import our local plugin -->
+    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources"/>
+
+    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement --> 
+    <target name="clean" description="remove stale build artifacts before / after each test">
+        <delete dir="${basedir}" includeemptydirs="true">
+            <include name="**/target/**"/>
+            <include name="**/lib/**"/>
+        </delete>
+    </target>
+    
+    <target name="setUp" depends="clean,configure-ivy-project"/>
+    <target name="tearDown" depends="clean"/>
+
+    <target name="configure-ivy-project">
+       <property name="project.ivy.file" value="sample-module.ivy"/>
+       <ivy:settings id="project.ivy.instance"/>
+       <ivy:info file="sample-module.ivy" settingsRef="project.ivy.instance"/>
+    </target>
+    <target name="test-default-version-strategy:init" depends="default-version-strategy:init">
+        <au:assertPropertyEquals name="release.resolver" value="shared"/>
+        <au:assertPropertyEquals name="shared.resolver" value="shared"/>
+        <au:assertPropertyEquals name="project.ivy.instance" value="project.ivy.instance"/>
+        <au:assertPropertyEquals name="project.ivy.file" value="sample-module.ivy"/>
+        <au:assertPropertyEquals name="default.build.number" value="1"/>
+        <au:assertPropertyEquals name="revision.separator" value="-dev-build"/>
+        <au:assertPropertyEquals name="fail.publication.if.no.revision" value="true"/>
+        <au:assertPropertyEquals name="is.project.ivy.settings.configured" value="true"/>
+
+    </target>
+
+    <target name="test-default-version-strategy:local" depends="default-version-strategy:local">
+        <au:assertPropertyEquals name="version" value="${ivy.revision}-local-${now}" />
+    </target>
+
+    <target name="test-default-version-strategy:shared" depends="default-version-strategy:shared">
+        <au:assertPropertyEquals name="version" value="${ivy.new.revision}" />
+    </target>
+
+    <target name="test-default-version-strategy:release" depends="default-version-strategy:release">
+        <au:assertPropertyEquals name="version" value="${ivy.revision}" />
+    </target>
+
+</project>
