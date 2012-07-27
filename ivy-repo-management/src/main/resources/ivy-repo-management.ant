@@ -25,7 +25,7 @@
         <ea:parameter property="install.override" default="false" description="specify if the install targets should override an artifact on a repository if it already exists" />
         <ea:parameter property="install.ivy.template" default="${org.apache.easyant.plugins#ivy-repo-management.ivy.xml.tpl.file}" description="specify a template ivy file used when you call install-artifact" />
         <ea:parameter property="install.temp.directory" default="${target}/install" description="specify a temporary directory used to make replacement in the template ivy file" />
-        <ea:parameter property="install.status" default="integration" description="specify the status of the artifact that will be installed with the install-artifact target" />
+        <ea:parameter property="install.status" default="release" description="specify the status of the artifact that will be installed with the install-artifact target" />
         <ea:parameter property="install.interactive.mode" default="true" description="specify if easyant should ask questions instead of using -Dproperties" />
         <condition property="install.is.interactive">
             <istrue value="${install.interactive.mode}"/>
@@ -116,7 +116,7 @@
         <echo message="Creating ivy temp directory in ${install.temp.directory}" />
         <mkdir dir="${install.temp.directory}" />
 
-        <echo message="Copying ${artifact} in  the ivy temp directory" />
+        <echo message="Copying ${artifact} in the ivy temp directory" />
         <copy file="${artifact}" tofile="${install.temp.directory}/${artifact.to.install.file}" overwrite="true" />
 
         <echo message="Generating ivy file for ${artifact}" />
