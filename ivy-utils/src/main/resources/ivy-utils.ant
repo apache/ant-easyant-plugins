@@ -22,9 +22,7 @@
     <target name="ivy-utils:init">
         <ea:parameter property="project.ivy.instance" default="project.ivy.instance" 
             description="the ivy instance name for your project" />
-        <ea:parameter property="target.report.ivy" default="${target.report}/deps-report" 
-            description="the directory where ivy report will be generated" />
-
+        
         <!-- is project ivy settings configured ? -->
         <ea:parameter property="project.ivy.settings.file" description="the ivysettings file used by your project" />
         <ea:parameter property="project.ivy.settings.url" description="the ivysettings url used by your project" />
@@ -40,7 +38,12 @@
     <!-- ================================= 
               target: clean-report              
          ================================= -->
-    <target name="ivy-utils:report" depends="abstract-provisioning:provisioning-finished" description="generate dependencies report">
+    <target name="ivy-utils:report" depends="abstract-provisioning:provisioning-finished,ivy-utils:init" description="generate dependencies report">
+       <ea:parameter property="target.reports" default="${target}/reports" description="directory where report will be generated"/>
+        <ea:parameter property="target.report.ivy" default="${target.reports}/dependencies" 
+            description="the directory where ivy report will be generated" />
+
+        <mkdir dir="${target.report.ivy}"/>
         <ivy:report todir="${target.report.ivy}" settingsRef="${project.ivy.instance}" />
     </target>
 
@@ -55,7 +58,7 @@
     <!-- ================================= 
               target: clean-eacache              
          ================================= -->
-    <target name="ivy-utils:clean-eacache" description="clean the ivy cache used by easyant to resolve plugins/ buildtypes">
+    <target name="ivy-utils:clean-eacache" depends="ivy-utils:init" description="clean the ivy cache used by easyant to resolve plugins/ buildtypes">
         <!-- clean easyant cache -->
         <ivy:cleancache settingsRef="easyant.ivy.instance"/>
     </target>
@@ -65,6 +68,7 @@
           target: clean-lib              
          ================================= -->
     <target name="ivy-utils:clean-lib" description="clean the project libraries directory">
+        <ea:parameter property="lib.dir" default="lib" description="library directory"/>
         <delete includeemptydirs="true" dir="${lib.dir}" />
     </target>
 
