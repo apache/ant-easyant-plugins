@@ -86,7 +86,7 @@
         <ea:parameter property="target.distributions" default="${target}/distributions" description="directory where distribution packages will be generated" />
         <ea:parameter property="project.basedir" default="${basedir}" description="defines the project base directory" />
         <ea:parameter property="project.prefix" default="" description="defines the project prefix, used as distribution root directory" />
-        <ea:parameter property="target.artifacts" default="${basedir}/target/artifacts" description="destination directory for target artifacts"/>
+        <ea:parameter property="target.artifacts" default="${target}/artifacts" description="destination directory for target artifacts"/>
         <ea:parameter property="project.bin.dir" default="${basedir}/bin" description="directory of project binaries (scripts, executables, etc...)"/>
         <ea:parameter property="lib.main" default="${basedir}/lib/main" description="directory where main libraries are picked up" />       
 
@@ -142,22 +142,16 @@
     </target>
 
     <target name="distribution:jar-with-dependencies" depends="distribution:init,-distribution:force-retrieve" description="create a jar archive which contains the binary output of your project, along its the unpacked dependencies (only works on jar projects)">
+        <ea:parameter property="target.main.artifact" required="true" description="location of main artifact"/>
         <condition property="target.main.artifact.exist">
-            <and>
-                <isset property="target.main.artifact"/>
-                <available file="${target.main.artifact}"/>
-            </and>
+            <available file="${target.main.artifact}"/>
         </condition>
         <fail unless="${target.main.artifact.exist}" message="${target.main.artifact} not found"/>
         <ea:parameter property="bundle.withdependencies.excludes.pattern" default="META-INF/MANIFEST.MF" 
                     description="Pattern describing files excluded in the bundle jar with dependencies" />
         <bundle destfile="${target.distributions}/${module.name}-with-dependencies" archivetype="jar">
-            <zipfileset excludes="${bundle.withdependencies.excludes.pattern}" >
-                <fileset dir="${lib.main}" includes="**/*.jar"/>
-            </zipfileset>
-            <zipfileset>
-                <fileset file="${target.main.artifact}"/>
-            </zipfileset>
+            <zipgroupfileset dir="${lib.main}" includes="**/*.jar"/>
+            <zipgroupfileset file="${target.main.artifact}"/>
         </bundle>
     </target>
 

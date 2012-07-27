@@ -1,0 +1,90 @@
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<project name="org.apache.easyant.plugins;distribution-test" 
+    xmlns:au="antlib:org.apache.ant.antunit" 
+    xmlns:ivy="antlib:org.apache.ivy.ant"
+    xmlns:ea="antlib:org.apache.easyant">
+    
+    <!-- Import your plugin --> 
+    <property name="target" value="target/test-antunit"/>
+    <!-- configure easyant in current project -->
+    <ea:configure-easyant-ivy-instance />
+    <!-- import our local plugin -->
+    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources"/>
+   
+    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement --> 
+    <target name="clean" description="remove stale build artifacts before / after each test">
+        <delete dir="${basedir}" includeemptydirs="true">
+            <include name="**/target/**"/>
+            <include name="**/lib/**"/>
+        </delete>
+    </target>
+    
+    <target name="setUp" depends="clean">
+       <property name="target.main.artifact" value="${target}/artifacts/foobar.jar"/>
+       <mkdir dir="${target}/artifacts"/>
+       <jar destfile="${target.main.artifact}"/>
+       <mkdir dir="lib/main"/>
+    </target>
+
+    <target name="tearDown" depends="clean"/>
+    
+    <target name="test-distribution:init" depends="distribution:init">
+        <au:assertPropertyEquals name="target.distributions" value="${target}/distributions"/>
+        <au:assertPropertyEquals name="project.basedir" value="${basedir}"/>
+        <au:assertPropertyEquals name="project.prefix" value=""/>
+        <au:assertPropertyEquals name="target.artifacts" value="${target}/artifacts"/>
+        <au:assertPropertyEquals name="project.bin.dir" value="${basedir}/bin"/>
+        <au:assertPropertyEquals name="lib.main" value="${basedir}/lib/main"/>
+        <au:assertReferenceSet refid="project.artifacts.zipfileset"/>
+        <au:assertReferenceSet refid="project.dependencies.zipfileset"/>
+        <au:assertReferenceSet refid="project.executables.zipfileset"/>
+        <au:assertReferenceSet refid="project.documentation.zipfileset"/>
+        <au:assertReferenceSet refid="project.additionalfiles.zipfileset"/>
+        <au:assertReferenceSet refid="project.allfiles.zipfileset"/>
+        <au:assertFileExists file="${target.distributions}"/>
+    </target>
+
+    <target name="prepare-clean" depends="distribution:init">
+        <mkdir dir="${target.distributions}"/>
+    </target>
+
+    <target name="test-distribution:clean" depends="prepare-clean,distribution:clean">
+        <au:assertFileDoesntExist file="${target.distributions}"/>
+    </target>
+    
+    <target name="test-distribution:force-retrieve" depends="-distribution:force-retrieve">
+        <au:assertPropertyEquals name="retrieve.dependencies" value="true"/>
+    </target>
+    
+    <target name="test-distribution:bin" depends="distribution:bin">
+        <au:assertFileExists file="${target.distributions}/${module.name}-bin.zip"/>
+        <au:assertFileExists file="${target.distributions}/${module.name}-bin.zip.MD5"/>
+    </target>
+
+    <target name="test-distribution:jar-with-dependencies" depends="distribution:jar-with-dependencies">
+        <au:assertFileExists file="${target.distributions}/${module.name}-with-dependencies.jar"/>
+        <au:assertFileExists file="${target.distributions}/${module.name}-with-dependencies.jar.MD5"/>
+ 
+    </target>
+
+    <target name="test-distribution:source" depends="distribution:source">
+        <au:assertFileExists file="${target.distributions}/${module.name}-source.zip"/>
+        <au:assertFileExists file="${target.distributions}/${module.name}-source.zip.MD5"/>
+    </target>
+
+</project>
