@@ -40,6 +40,8 @@
     <target name="test-abstract-provisioning">
         <au:assertPropertyEquals name="lib.main" value="${basedir}/lib/main"/>
         <au:assertPropertyEquals name="lib.test" value="${basedir}/lib/test"/>
+        <au:assertPropertyEquals name="lib.provided" value="${basedir}/lib/provided"/>
+        <au:assertPropertyEquals name="target.artifacts" value="${target}/artifacts"/>
     </target>
 
 </project>
