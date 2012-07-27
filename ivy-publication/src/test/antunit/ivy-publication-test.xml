@@ -1,0 +1,85 @@
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<project name="org.apache.easyant.plugins;ivy-publication-test" 
+    xmlns:au="antlib:org.apache.ant.antunit" 
+    xmlns:ivy="antlib:org.apache.ivy.ant"
+    xmlns:ea="antlib:org.apache.easyant">
+    
+    <!-- Import your plugin --> 
+    <property name="target" value="${basedir}/target/test-antunit"/>
+    <!-- configure easyant in current project -->
+    <ea:configure-easyant-ivy-instance />
+    <!-- import our local plugin -->
+    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources"/>
+   
+    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement --> 
+    <target name="clean" description="remove stale build artifacts before / after each test">
+        <delete dir="${basedir}" includeemptydirs="true">
+            <include name="**/target/**"/>
+            <include name="**/lib/**"/>
+        </delete>
+    </target>
+    
+    <target name="setUp" depends="clean">
+      <property name="ivy.local.default.root" value="${target}/local-repo"/>
+      <property name="ivy.shared.default.root" value="${target}/shared-repo"/>
+      <property name="project.ivy.file" value="sample-module.ivy"/>
+      <ivy:settings id="project.ivy.instance"/>
+      <ivy:resolve file="${project.ivy.file}" settingsRef="project.ivy.instance"/>
+      <mkdir dir="${target}/artifacts"/>
+      <echo file="${target}/artifacts/standard-java-app.jar"/>
+    </target>
+    <target name="tearDown" depends="clean"/>
+    
+    <target name="test-ivy-publication:init" depends="-ivy-publication:init">
+        <au:assertPropertyEquals name="release.resolver" value="shared"/>
+        <au:assertPropertyEquals name="shared.resolver" value="shared"/>
+        <au:assertPropertyEquals name="local.resolver" value="local"/>
+        <au:assertPropertyEquals name="project.ivy.instance" value="project.ivy.instance"/>
+        <au:assertPropertyEquals name="publish.overwrite" value="false"/>
+        <au:assertPropertyEquals name="ivy.haltonmissing" value="true"/>
+        <au:assertPropertyEquals name="target.artifacts" value="${target}/artifacts"/>
+        <au:assertPropertyEquals name="is.project.ivy.settings.configured" value="true"/>
+    </target>
+
+
+    <target name="common-publish-assert">
+        <au:assertLogContains text=":: publishing :: org.apache.easyant#standard-java-app"/>
+        <au:assertLogContains text=":: publishing :: org.apache.easyant#standard-java-app"/>
+        <au:assertLogContains text="published standard-java-app to"/>
+        <au:assertLogContains text="published ivy to"/>
+
+        <au:assertPropertyEquals name="module.name" value="standard-java-app"/>
+    </target>
+
+    <target name="test-ivy-publication:release" depends="ivy-publication:release,common-publish-assert">
+        <au:assertLogContains text="project standard-java-app released with version 0.1 on shared"/>
+    </target>
+    <target name="test-ivy-publication:publish-shared" depends="ivy-publication:publish-shared,common-publish-assert">
+        <au:assertLogContains text="project standard-java-app published with version 0.1 on shared"/>
+    </target>
+    <target name="test-ivy-publication:publish-local" depends="ivy-publication:publish-local,common-publish-assert">
+        <au:assertLogContains text="project standard-java-app published locally with version 0.1"/>
+    </target>
+
+    <target name="test-ivy-publication:clean-local" depends="ivy-publication:clean-local">
+        <au:assertFileDoesntExist file="${ivy.local.default.root}"/>
+    </target>
+
+
+
+</project>

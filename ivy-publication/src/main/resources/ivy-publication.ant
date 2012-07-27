@@ -49,6 +49,7 @@
         <!-- is project ivy settings configured ? -->
         <ea:parameter property="project.ivy.settings.file" description="the ivysettings file used by your project" />
         <ea:parameter property="project.ivy.settings.url" description="the ivysettings url used by your project" />
+        <ea:parameter property="target.artifacts" default="${target}/artifacts" description="destination directory for target artifacts"/>
         
         <ea:parameter property="fail.publication.if.no.revision" default="true" description="fail build if current module has no revision in 'info' tag of the module.ivy"/>
         <condition property="is.project.ivy.settings.configured">
@@ -74,6 +75,10 @@
                     </ac:if>
                 </ac:then>
             </ac:if>
+            <!-- at this point if no version was set use the one in ivy file -->
+            <property name="version" value="${ivy.revision}"/>
+            <property name="module.name" value="${ivy.module}"/>
+ 
         </sequential>
     </macrodef>
     
@@ -121,6 +126,10 @@
          ================================= -->
     <target name="ivy-publication:publish-local" depends="-ivy-publication:init,ivy-publication:generate-local-version,ivy-publication:publish-ready">
         <check-version-number/>
+        <tstamp>
+            <format property="now" pattern="yyyyMMddHHmmss" />
+        </tstamp>
+
         <ivy:publish artifactspattern="${target.artifacts}/[artifact](-[classifier]).[ext]" 
             resolver="${local.resolver}" 
             pubrevision="${version}" 
