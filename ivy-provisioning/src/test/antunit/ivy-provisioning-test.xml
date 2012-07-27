@@ -1,0 +1,96 @@
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<project name="org.apache.easyant.plugins;ivy-provisioning-test" 
+    xmlns:au="antlib:org.apache.ant.antunit" 
+    xmlns:ivy="antlib:org.apache.ivy.ant"
+    xmlns:ea="antlib:org.apache.easyant">
+    
+    <!-- Import your plugin --> 
+    <property name="target" value="target/test-antunit"/>
+    <!-- configure easyant in current project -->
+    <ea:configure-easyant-ivy-instance />
+    <!-- import our local plugin -->
+    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources"/>
+   
+    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement --> 
+    <target name="clean" description="remove stale build artifacts before / after each test">
+        <delete dir="${basedir}" includeemptydirs="true">
+            <include name="**/target/**"/>
+            <include name="**/lib/**"/>
+        </delete>
+    </target>
+    
+    <target name="setUp" depends="clean">
+       <property name="project.ivy.instance" value="project.ivy.instance"/>
+       <ivy:settings id="${project.ivy.instance}"/>
+       <property name="project.ivy.file" value="sample-module.ivy"/>
+    </target>
+
+    <target name="tearDown" depends="clean"/>
+    
+    <target name="test-ivy-provisioning:init" depends="-ivy-provisioning:init">
+        <au:assertPropertyEquals name="main.confs" value="default"/>
+        <au:assertPropertyEquals name="test.confs" value="test"/>
+        <au:assertPropertyEquals name="provided.confs" value="provided"/>
+        <au:assertPropertyEquals name="project.ivy.instance" value="project.ivy.instance"/>
+        <au:assertPropertyEquals name="project.ivy.file" value="sample-module.ivy"/>
+        <au:assertPropertyEquals name="retrieve.dependencies" value="false"/>
+        <au:assertPropertyEquals name="retrieve.pattern.lib.main" value="${lib.main}/[artifact]-[revision].[ext]"/>
+        <au:assertPropertyEquals name="retrieve.pattern.lib.test" value="${lib.test}/[artifact]-[revision].[ext]"/>
+        <au:assertPropertyEquals name="retrieve.pattern.lib.provided" value="${lib.provided}/[artifact]-[revision].[ext]"/>
+        <au:assertPropertyEquals name="sync.lib.dir" value="true"/>
+        <au:assertPropertyEquals name="is.project.ivy.settings.configured" value="true"/>
+        <au:assertReferenceSet refid="lib.main.fileset"/>
+        <au:assertReferenceSet refid="lib.test.fileset"/>
+        <au:assertReferenceSet refid="lib.provided.fileset"/>
+        <au:assertReferenceSet refid="project.lib.main.classpath"/>
+        <au:assertReferenceSet refid="project.lib.test.classpath"/>
+        <au:assertReferenceSet refid="project.lib.provided.classpath"/>
+    </target>
+
+    <target name="test-ivy-provisioning:resolve" depends="-ivy-provisioning:resolve">
+        <au:assertLogContains text=":: resolving dependencies :: org.apache.easyant#standard-java-app;0.1"/>
+        <au:assertPropertyEquals name="project.contains.main.confs" value="true"/>
+        <au:assertPropertyEquals name="project.contains.test.confs" value="true"/>
+        <au:assertPropertyEquals name="project.contains.provided.confs" value="true"/>
+    </target>
+
+    <target name="prepare-resolve">
+                <property name="retrieve.dependencies" value="true"/>
+    </target>
+
+    <target name="test-ivy-provisioning:resolve-main-confs" depends="prepare-resolve,-ivy-provisioning:resolve-main-confs">
+        <au:assertReferenceSet refid="cache.main.classpath"/>
+        <au:assertReferenceSet refid="compile.main.classpath"/>
+        <au:assertFileExists file="${lib.main}"/>
+    </target>
+
+    <target name="test-ivy-provisioning:resolve-test-confs" depends="prepare-resolve,-ivy-provisioning:resolve-test-confs">
+        <au:assertReferenceSet refid="cache.test.classpath"/>
+        <au:assertReferenceSet refid="compile.test.classpath"/>
+        <au:assertFileExists file="${lib.test}"/>
+    </target>
+
+    <target name="test-ivy-provisioning:resolve-provided-confs" depends="prepare-resolve,-ivy-provisioning:resolve-provided-confs">
+        <au:assertReferenceSet refid="cache.provided.classpath"/>
+        <au:assertReferenceSet refid="compile.main.classpath"/>
+        <au:assertFileExists file="${lib.provided}"/>
+    </target>
+
+
+
+</project>
