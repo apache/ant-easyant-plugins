@@ -30,7 +30,7 @@
         </fileset>
     </target>   
     
-    <target name="deps-lib:plugin" extensionOf="abstract-provisioning:provisioning-finished">
+    <target name="deps-lib:plugin" depends="deps-lib:init">
         <ea:parameter path="compile.main.classpath"  
             description="main compilation path" />
         <ea:parameter path="compile.test.classpath"  
