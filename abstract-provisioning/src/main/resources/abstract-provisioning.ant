@@ -26,7 +26,6 @@
     <ea:parameter property="lib.main" default="${basedir}/lib/main" description="directory where main libraries are picked up" />
     <ea:parameter property="lib.test" default="${basedir}/lib/test" description="directory where test libraries are picked up" />
     <ea:parameter property="lib.provided" default="${basedir}/lib/provided" description="directory where provided libraries are picked up" />
-    <ea:parameter property="target.artifacts" required="true" description="destination directory for target artifacts"/>
 
 
 </project>
