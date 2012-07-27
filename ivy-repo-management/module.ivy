@@ -39,6 +39,7 @@
            </p>
            </description>
            <ea:build organisation="org.apache.easyant.buildtypes" module="build-std-ant-plugin" revision="0.1"/>
+<ea:plugin module="antunit" revision="0.9"/>
         </info>
         <configurations>
                 <conf name="default" description="runtime dependencies artifact can be used with this conf"/>

@@ -72,27 +72,25 @@
     </target>
 
     <target name="prepare-install-artifact">
-        <property name="org" value="junit"/>
-        <property name="module" value="junit"/>
-        <property name="rev" value="4.4"/>
-        <property name="artifact" value="../../../module.ivy"/>
+        <property name="org" value="org.foobar"/>
+        <property name="module" value="foobar-core"/>
+        <property name="rev" value="1.0"/>
+        <echo file="myartifact"/>
+        <property name="artifact" value="myartifact"/>
          
     </target>
 
 
     <target name="test-ivy-repo-management:install-artifact" depends="prepare-install-artifact, ivy-repo-management:install-artifact">
-        <!-- workaround since assertLogContains doesn't seems to support text containing properties -->
-        <property name="antunit.log" value="${target}/antunit.log"/>
-        <copy tofile="${target}/antunit.log" outputencoding="UTF-8">
-            <au:logcontent/>
-        </copy>
-        <au:assertResourceContains resource="${antunit.log}" value="Creating ivy temp directory in ${install.temp.directory}"/>
+       <au:assertLogContains text="Creating ivy temp directory in ${install.temp.directory}"/>
         <au:assertFileExists file="${install.temp.directory}"/>
-        <au:assertResourceContains resource="${antunit.log}" value="Copying ${artifact} in the ivy temp directory"/>
-        <au:assertResourceContains resource="${antunit.log}" value="Generating ivy file for ${artifact}"/>
-        <au:assertResourceContains resource="${antunit.log}" value="Publishing artifact in ${to.resolver} repository"/>
-        <au:assertResourceContains resource="${antunit.log}" value="Cleaning ${install.temp.directory}"/>
-        <au:assertResourceContains resource="${antunit.log}" value="${artifact.to.install.file} succefully installed in your ${to.resolver} repository"/>
+        <au:assertLogContains text="Copying ${artifact} in the ivy temp directory"/>
+        <au:assertLogContains text="Generating ivy file for ${artifact}"/>
+        <au:assertLogContains text="Publishing artifact in ${to.resolver} repository"/>
+        <au:assertLogContains text="Cleaning ${install.temp.directory}"/>
+        <au:assertLogContains text="${artifact.to.install.file} succefully installed in your ${to.resolver} repository"/>
+        <au:assertLogContains text=":: publishing :: org.foobar#foobar-core"/>
+        <au:assertLogContains text="publish commited"/>
 
     </target>
 </project>
