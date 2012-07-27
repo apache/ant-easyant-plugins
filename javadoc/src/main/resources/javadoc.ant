@@ -19,14 +19,12 @@
     <ea:core-version requiredrevision="[0.8,+]" />
 
     <target name="javadoc:init">
-        <ea:parameter property="src.main.java" required="true" description="directory where sources to be compiled are" />
-        <ea:parameter property="src.test.java" required="true" description="directory where test sources to be compiled are" />
-        <ea:parameter path="compile.main.classpath" required="true" description="path used to compile main sources" />
-        <ea:parameter path="compile.test.classpath" required="true" description="path used to compile test sources" />
-        <ea:parameter property="javadoc.file.encoding" default="UTF-8" description="encoding used for generated javadoc" />
+        <ea:parameter property="src.main.java" default="${basedir}/src/main/java" description="directory where sources to be compiled are" />
+        <ea:parameter property="src.test.java" default="${basedir}/src/test/java" description="directory where test sources to be compiled are" />
+       <ea:parameter property="javadoc.file.encoding" default="UTF-8" description="encoding used for generated javadoc" />
     
-        <ea:parameter property="target.report" default="${target}/report" description="base directory for reports"/>
-        <ea:parameter property="target.javadoc" default="${target.report}/javadoc" description="base directory where javadoc will be generated" />
+        <ea:parameter property="target.reports" default="${target}/reports" description="base directory for reports"/>
+        <ea:parameter property="target.javadoc" default="${target.reports}/javadoc" description="base directory where javadoc will be generated" />
         <ea:parameter property="target.javadoc.main" default="${target.javadoc}/main" description="directory where javadoc will be generated" />
         <ea:parameter property="target.javadoc.test" default="${target.javadoc}/test" description="directory where javadoc for tests will be generated" />
 
@@ -58,25 +56,28 @@
     </target>
 
     <target name="-javadoc:main" depends="javadoc:init" unless="empty.src.main.java.dir">
-        <path id="java.source.path">
+        <path id="java.main.source.path">
             <dirset dir="${src.main.java}" />
         </path>
-        <javadoc encoding="${javadoc.file.encoding}" docencoding="${javadoc.file.encoding}" destdir="${target.javadoc.main}" sourcepathref="java.source.path" classpathref="compile.main.classpath" />
+        <javadoc encoding="${javadoc.file.encoding}" docencoding="${javadoc.file.encoding}" destdir="${target.javadoc.main}" sourcepathref="java.main.source.path" />
     </target>
 
     <target name="-javadoc:test" depends="javadoc:init" unless="empty.src.test.java.dir">
-        <path id="java.source.path">
+        <path id="java.test.source.path">
             <dirset dir="${src.test.java}" />
         </path>
-        <javadoc encoding="${javadoc.file.encoding}" docencoding="${javadoc.file.encoding}" destdir="${target.javadoc.test}" sourcepathref="java.source.path" classpathref="compile.test.classpath" />
+        <javadoc encoding="${javadoc.file.encoding}" docencoding="${javadoc.file.encoding}" destdir="${target.javadoc.test}" sourcepathref="java.test.source.path" />
     </target>
 
     <target name="javadoc:package" depends="javadoc:javadoc" description="generate a package containing javadoc" unless="skip.javadoc.package">
+        <ea:parameter property="target.artifacts" default="${target}/artifacts" description="destination directory for target artifacts"/>
+        <ea:parameter property="project.ivy.instance" default="project.ivy.instance" description="the ivy instance name for your project" />
+
         <mkdir dir="${target.artifacts}"/>
         <zip destfile="${target.artifacts}/${ivy.module}-javadoc.zip">
             <fileset dir="${target.javadoc}" erroronmissingdir="false"/>
         </zip>
-        <ea:registerartifact type="javadoc" ext="zip" classifier="javadoc" settingsRef="${project.ivy.instance}" conf="${javadoc.publish.conf}"/>
+        <ea:registerartifact type="javadoc" ext="zip" classifier="javadoc" settingsRef="${project.ivy.instance}" confs="${javadoc.publish.conf}"/>
     </target>
 
     <target name="javadoc:javadoc" depends="-javadoc:main,-javadoc:test" description="generate javadoc report for main classes and test classes" />
