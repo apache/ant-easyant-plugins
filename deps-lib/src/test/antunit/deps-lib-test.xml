@@ -44,19 +44,6 @@
     </target>
     <target name="tearDown" depends="clean"/>
 
-
-    <target name="test-deps-lib">
-        <property name="main.classpath" refid="compile.main.classpath"/>
-        <property name="test.classpath" refid="compile.test.classpath"/>
-        <au:assertPropertyEquals name="main.classpath" value=""/>
-        <au:assertPropertyEquals name="test.classpath" value=""/>
-    </target>
-    
-    <target name="test-deps-lib:init" depends="deps-lib:init">
-        <au:assertReferenceSet refid="lib.main.fileset"/>
-        <au:assertReferenceSet refid="lib.test.fileset"/>
-    </target>
-
     <target name="test-deps-lib:plugin" depends="deps-lib:plugin">
         <property name="main.classpath" refid="compile.main.classpath"/>
         <property name="test.classpath" refid="compile.test.classpath"/>

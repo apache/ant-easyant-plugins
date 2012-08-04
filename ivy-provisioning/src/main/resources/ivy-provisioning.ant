@@ -44,10 +44,6 @@
             <isreference refid="${project.ivy.instance}"/>
         </condition>
         <fail unless="is.project.ivy.settings.configured" message="project ivy instance is not configured, at least one of the following property must be set : project.ivy.settings.file, project.ivy.settings.url"/>
-        <!-- define empty *.lib.fileset that will be override by configuration classpath -->
-        <fileset id="lib.main.fileset" dir="${lib.main}" erroronmissingdir="false"/>
-        <fileset id="lib.test.fileset" dir="${lib.test}" erroronmissingdir="false"/>
-        <fileset id="lib.provided.fileset" dir="${lib.provided}" erroronmissingdir="false"/>
 
         <path id="project.lib.main.classpath"/>
         <path id="project.lib.test.classpath"/>

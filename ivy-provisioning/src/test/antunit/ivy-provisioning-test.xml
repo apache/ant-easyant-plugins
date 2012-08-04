@@ -54,9 +54,6 @@
         <au:assertPropertyEquals name="retrieve.pattern.lib.provided" value="${lib.provided}/[artifact]-[revision].[ext]"/>
         <au:assertPropertyEquals name="sync.lib.dir" value="true"/>
         <au:assertPropertyEquals name="is.project.ivy.settings.configured" value="true"/>
-        <au:assertReferenceSet refid="lib.main.fileset"/>
-        <au:assertReferenceSet refid="lib.test.fileset"/>
-        <au:assertReferenceSet refid="lib.provided.fileset"/>
         <au:assertReferenceSet refid="project.lib.main.classpath"/>
         <au:assertReferenceSet refid="project.lib.test.classpath"/>
         <au:assertReferenceSet refid="project.lib.provided.classpath"/>
