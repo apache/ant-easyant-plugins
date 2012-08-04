@@ -22,9 +22,10 @@
     <extension-point name="package-war:war-ready" />
 
     <target name="package-war:init">
-        <ea:parameter property="target.artifacts.main.war.name" required="true"
-            description="main artifact file name" />
-        <ea:parameter property="target.artifacts" required="true" description="destination directory for target artifacts"/>
+        <ea:parameter property="target.artifacts.main.war.name" default="${module.name}.war" description="main artifact file name" />
+        <ea:parameter property="target.artifacts" default="${target}/artifacts" description="destination directory for target artifacts"/>
+        <ea:parameter property="target.main.artifact" default="${target.artifacts}/${target.artifacts.main.war.name}" description="the location of the main artifact"/>
+
 
         <ea:parameter property="target.main.classes" required="true" 
             description="directory where compiled classes that should be packaged are" />
@@ -40,8 +41,7 @@
         <ea:parameter property="package.war.needxmlfile" default="false"
             description="Flag to indicate whether or not the web.xml file is needed. Iit should be set to false when generating servlet 2.5+ WAR files without a web.xml file."/>
 
-        <ea:parameter property="src.main.webapp" required="true"
-            description="directory where web resources files are stored (like pages, images, etc...)"/>
+        <ea:parameter property="src.main.webapp" default="${basedir}/src/main/webapp" description="directory where web resources files are stored (like pages, images, etc...)"/>
 
         <ea:parameter property="package.war.webxml.file" required="${package.war.needxmlfile}" 
             description="The servlet configuration descriptor to use (WEB-INF/web.xml)."/>
@@ -55,9 +55,6 @@
 
         <ea:parameter property="target.webinf.lib.dir" default="${target}/war/WEB-INF/lib" 
                 description="temp directory used to store artifacts that will be included in the WEB-INF lib directory"/>
-        <ea:parameter property="target.main.artifact" required="false" description="the location of the main artifact" 
-            default="${target.artifacts}/${target.artifacts.main.war.name}"/>
-
         <fileset id="package.metainf.fileset" dir="${package.metainf.basedir}" includes="${package.metainf.includes.pattern}" excludes="${package.metainf.excludes.pattern}"/>
 
         <mkdir dir="${target.artifacts}" />
@@ -72,7 +69,7 @@
         <fileset id="webinf.lib.fileset" dir="${target.webinf.lib.dir}"/>
     </target>
 
-    <target name="package-war:war" depends="package-war:init,package-war:prepare-package" description="package project as a WAR">
+    <target name="package-war:war" depends="package-war:init,-package-war:prepare-war" description="package project as a WAR">
         <war destfile="${target.main.artifact}"
                 manifest="${manifest.file}"
                 needxmlfile="false"
