@@ -17,6 +17,7 @@
 <project name="org.apache.easyant.plugins#manifest" xmlns:ea="antlib:org.apache.easyant">
 
     <ea:core-version requiredrevision="[0.9,+]" />
+    <ea:import mrid="org.apache.easyant.plugins#abstract-provisioning;0.9" />
 
     <target name="manifest:init">
         <ea:parameter property="project.main.classname" description="Used to define the project main class. The mainclass will then be used by many plugins (manifest, run-java, etc...)"/>
@@ -26,6 +27,8 @@
     If you are looking for a way to reference your mainclass one time for all plugins you should set project.main.classname instead.
         </ea:parameter>
         <ea:parameter property="manifest.classpath" required="false" description="If manifest.main.classname is defined, this will be used for the Class-Path attribute.  by default this will be automatically computed from the Ivy dependencies of the target artifact." />
+        <ea:parameter property="target.main.classes" default="${target}/main/classes"
+        description="destination directory for compiled classes" />
         <mkdir dir="${target.main.classes}/META-INF"/>
         <ea:parameter property="manifest.file" default="${target}/MANIFEST.MF" description="the manifest-file to create/update." />
         <ea:parameter property="version.properties.file" default="${target.main.classes}/META-INF/version.properties" description="the version.properties file to create/update." />
@@ -79,12 +82,17 @@
             <istrue value="${retrieve.dependencies}"/>
         </condition>
         <fail unless="is.retrieve.dependencies.enabled" message="manifest runnable feature can only be used if your the property retrieve.dependencies is enabled"/>
+        <path id="manifest.main.classpath">
+            <fileset id="lib.main.fileset" dir="${lib.main}">
+                <include name="*.jar" />
+            </fileset>
+        </path>
 
         <!-- create the target artifact dir if it does not exists -->
         <dirname file="${target.main.artifact}" property="target.artifacts"/>
         <mkdir dir="${target.artifacts}"/>
         <manifestclasspath property="manifest.classpath" jarfile="${target.main.artifact}">
-            <classpath refid="project.lib.main.classpath"/>
+            <classpath refid="manifest.main.classpath"/>
         </manifestclasspath>
         <manifest file="${manifest.file}" mode="update">
             <attribute name="Main-Class" value="${manifest.main.classname}" />

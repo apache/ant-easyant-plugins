@@ -1,0 +1,80 @@
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<project name="org.apache.easyant.plugins;manifest-test" 
+    xmlns:au="antlib:org.apache.ant.antunit" 
+    xmlns:ivy="antlib:org.apache.ivy.ant"
+    xmlns:ea="antlib:org.apache.easyant">
+    
+    <!-- Import your plugin --> 
+    <property name="target" value="target/test-antunit"/>
+    <!-- configure easyant in current project -->
+    <ea:configure-easyant-ivy-instance />
+    <!-- import our local plugin -->
+    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources"/>
+
+    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement --> 
+    <target name="clean" description="remove stale build artifacts before / after each test">
+        <delete dir="${basedir}" includeemptydirs="true">
+            <include name="**/target/**"/>
+            <include name="**/lib/**"/>
+        </delete>
+    </target>
+    
+    <target name="setUp" depends="clean">
+        <property name="ivy.module" value="mytest"/>
+        <property name="ivy.organisation" value="myorg"/>
+        <property name="ivy.revision" value="1.0"/>
+<!--
+        <property name="version" value="1.0"/>
+-->
+    </target>
+    <target name="tearDown" depends="clean"/>
+    
+    <target name="test-manifest:init" depends="manifest:init">
+<!-- FIXME: check unset properties
+        <au:assertPropertyNotSet name="project.main.classname" />
+        <au:assertPropertyNotSet name="manifest.main.classname" />
+        <au:assertPropertyNotSet name="manifest.classpath" />
+-->
+        <au:assertPropertyEquals name="target.main.classes" value="${target}/main/classes"/>
+        <au:assertFileExists file="${target.main.classes}/META-INF"/>
+        <au:assertPropertyEquals name="manifest.file" value="${target}/MANIFEST.MF"/>
+        <au:assertPropertyEquals name="version.properties.file" value="${target.main.classes}/META-INF/version.properties"/>
+    </target>
+
+    <target name="test-manifest:generate-version-number" depends="-manifest:generate-version-number">
+        <au:assertPropertyEquals name="version" value="${ivy.revision}-build-${now}"/>
+    </target>
+
+    <target name="test-manifest:manifest" depends="manifest:manifest">
+        <au:assertFileExists file="${manifest.file}"/>
+        <au:assertFileExists file="${version.properties.file}"/>
+    </target> 
+
+    <target name="prepare-manifest-runnable">
+       <property name="retrieve.dependencies" value="true"/>
+       <property name="project.main.classname" value="foobar"/>
+       <mkdir dir="${lib.main}"/>
+       <echo file="${lib.main}/myjar.jar"/>
+    </target>
+    <target name="test-manifest:manifest-runnable" depends="prepare-manifest-runnable, manifest:manifest-runnable">
+        <!--FIXME: manifest-runable fails if ${lib.main} doesn't exists -->
+        <au:assertReferenceSet refid="manifest.main.classpath"/>
+        <au:assertPropertyEquals name="manifest.classpath" value="lib/main/myjar.jar"/>
+
+    </target>
+</project>
