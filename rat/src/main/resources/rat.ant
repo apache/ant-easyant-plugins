@@ -24,7 +24,8 @@
         <typedef resource="org/apache/rat/anttasks/antlib.xml"
                  uri="antlib:org.apache.rat.anttasks"
                  classpathref="org.apache.easyant.plugins#rat.classpath" />
-        <ea:parameter property="rat.report.dir" description="directory where rat report will be generated" default="${target.report}/rat"/>
+        <ea:parameter property="target.reports" default="${target}/reports" description="directory where report will be generated"/>
+        <ea:parameter property="rat.report.dir" description="directory where rat report will be generated" default="${target.reports}/rat"/>
         <ea:parameter property="rat.failOnError" description="specify if rat report should fail build if unknown licenses are found" default="true"/> 
         <fileset id="rat.fileset" dir="${basedir}">
             <exclude name=".classpath" />
@@ -38,9 +39,9 @@
     <target name="rat:rat" description="generate rat report" depends="rat:init">
         <mkdir dir="${rat.report.dir}"/>
         <echo>Generating rat report ...</echo>
-        <property name="rat.report" value="${rat.report.dir}/rat-report.txt"/>
+        <ea:parameter property="rat.report.filename" default="rat-report.txt" description="rat report filename"/>
 
-        <rat:report xmlns:rat="antlib:org.apache.rat.anttasks" reportFile="${rat.report}">
+        <rat:report xmlns:rat="antlib:org.apache.rat.anttasks" reportFile="${rat.report.dir}/${rat.report.filename}">
             <fileset refid="rat.fileset"/>
         </rat:report>
 
