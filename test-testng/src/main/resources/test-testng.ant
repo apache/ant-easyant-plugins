@@ -21,34 +21,8 @@
 
     <ea:import mrid="org.apache.easyant.plugins#abstract-test;0.9" />
 
-    <target name="/skip" description="skip tests">
-        <property name="skip.test" value="true" />
-        <property name="skip.test.integration" value="true" />
-    </target>
-
     <target name="test-testng:init" depends="abstract-test:init">
         <ea:parameter property="testng.filename" description="testng configuration filename" default="testng.xml"/>
-
-        <ea:path pathid="run.test.classpath" overwrite="append-if-not-exist">
-            <pathelement location="${target.test.classes}" />
-            <path refid="compile.test.classpath" />
-        </ea:path>
-
-        <ea:path pathid="run.test.integration.classpath" overwrite="append-if-not-exist">
-            <pathelement location="${target.test.integration.classes}" />
-            <path refid="compile.test.classpath" />
-        </ea:path>
-
-        <condition property="skip.test">
-            <not><isset property="has.src.test.java"/></not>
-        </condition>
-
-        <condition property="skip.test.integration">
-            <not><isset property="has.src.test.integration.java"/></not>
-        </condition>
-    </target>
-
-    <target name="-test-testng:load">
         <available property="testng.available" classname="org.testng.TestNGAntTask">
             <classpath refid="run.test.classpath" />
         </available>
@@ -77,11 +51,11 @@
         </sequential>
     </macrodef>
 
-    <target name="-test-testng:test" depends="test-compile,-test-testng:load" unless="skip.test">
+    <target name="-test-testng:test" depends="test-testng:init,abstract-test:compute-test-sets" unless="skip.test">
         <testng-test prefix="test"/>
     </target>
 
-    <target name="-test-testng:integration-test" depends="test-compile,-load" unless="skip.test.integration">
+    <target name="-test-testng:integration-test" depends="test-testng:init,abstract-test:compute-test-sets" unless="skip.test.integration">
         <testng-test prefix="test.integration"/>
     </target>
 

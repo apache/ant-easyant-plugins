@@ -1,0 +1,77 @@
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<project name="org.apache.easyant.plugins;test-testng-test" 
+    xmlns:au="antlib:org.apache.ant.antunit" 
+    xmlns:ivy="antlib:org.apache.ivy.ant"
+    xmlns:ea="antlib:org.apache.easyant">
+    
+    <!-- Import your plugin --> 
+    <property name="target" value="target/test-antunit"/>
+    <!-- configure easyant in current project -->
+    <ea:configure-easyant-ivy-instance />
+    <!-- import our local plugin -->
+    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources"/>
+   
+    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement --> 
+    <target name="clean" description="remove stale build artifacts before / after each test">
+        <delete dir="${basedir}" includeemptydirs="true">
+            <include name="**/target/**"/>
+            <include name="**/lib/**"/>
+        </delete>
+    </target>
+    
+    <!--TODO: add a testng sample -->
+    <!--FIXME: test-testng targets get executed as they are prefixed by "test" -->
+    <target name="setUp" depends="clean"/>
+    <target name="tearDown" depends="clean"/>
+    
+    <target name="test-test-testng:init" depends="test-testng:init">
+        <au:assertPropertyEquals name="testng.filename" value="testng.xml"/>
+    </target>
+
+    <target name="test-test-testng:test" depends="-test-testng:test">
+        <au:assertFileExists file="${target.test.xml}"/>
+    </target>
+
+    <target name="test-test-testng:integration-test" depends="-test-testng:integration-test">
+        <au:assertFileExists file="${target.test.xml}"/>
+    </target>
+    
+    <target name="test-test-testng:run">
+        <au:expectfailure message="At least one test has failed. See logs in ${target.test.xml} for details or use the report target to run the test with a report">
+            <antcall target="test-testng:run">
+                <param name="test.mode.run" value="true"/>
+                <param name="test.failed" value="true"/>
+            </antcall>
+        </au:expectfailure>
+        
+    </target>
+
+    <target name="test-test-testng:run-integration">
+        <au:expectfailure message="At least one integration test has failed. See logs in ${target.test.xml} for details or use the report target to run the test with a report">
+            <antcall target="test-testng:run-integration">
+                <param name="test.mode.run" value="true"/>
+                <param name="test.integration.failed" value="true"/>
+            </antcall>
+        </au:expectfailure>
+
+    </target>
+
+    <target name="test-test-testng:report" depends="test-testng:report">
+        <!--TODO: add this missing test case -->
+    </target>
+</project>
