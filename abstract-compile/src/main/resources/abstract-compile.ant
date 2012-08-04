@@ -30,6 +30,7 @@
 
 	<!-- We expect at this point to have every source available, even the ones which are generated -->
 	<extension-point name="abstract-compile:compile-ready" depends="abstract-provisioning:provisioning-finished"/>
+	<extension-point name="abstract-compile:compile-finished" depends="abstract-compile:compile-ready"/>
 	
 	<!-- Creates a empty classpath for compilation if it doesn't exist yet -->
     <ea:path pathid="compile.main.classpath" overwrite="false" />
