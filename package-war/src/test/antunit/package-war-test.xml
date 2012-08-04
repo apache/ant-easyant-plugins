@@ -39,6 +39,7 @@
        <mkdir dir="${target.main.classes}"/>
        <property name="manifest.file" value="${target}/MANIFEST.MF"/>
        <echo file="${manifest.file}"/>
+       <!--FIXME: this doesn't seems extensible-->
        <path id="cache.main.classpath"/>
        <property name="project.ivy.instance" value="project.ivy.instance"/>
        <ivy:settings id="project.ivy.instance"/>
@@ -48,7 +49,6 @@
 
     <target name="test-package-war:init" depends="package-war:init">
         <au:assertPropertyEquals name="target.artifacts.main.war.name" value="${module.name}.war"/>
-        <au:assertPropertyEquals name="target.artifacts" value="${target}/artifacts"/>
         <au:assertPropertyEquals name="target.main.artifact" value="${target.artifacts}/${target.artifacts.main.war.name}"/>
         <au:assertPropertyEquals name="package.war.includes.pattern" value="**/*"/>
         <au:assertPropertyEquals name="package.war.excludes.pattern" value=""/>
@@ -57,11 +57,7 @@
 <!--TODO:Test this property 
         <au:assertPropertyNotSet name="package.war.webxml.file" />
 -->
-        <au:assertPropertyEquals name="package.metainf.basedir" value="${basedir}"/>
-        <au:assertPropertyEquals name="package.metainf.includes.pattern" value="NOTICE,LICENSE"/>
-        <au:assertPropertyEquals name="package.metainf.excludes.pattern" value=""/>
         <au:assertPropertyEquals name="target.webinf.lib.dir" value="${target}/war/WEB-INF/lib"/>
-        <au:assertReferenceSet refid="package.metainf.fileset"/>
         <au:assertFileExists file="${target.artifacts}"/>
     </target>
 
