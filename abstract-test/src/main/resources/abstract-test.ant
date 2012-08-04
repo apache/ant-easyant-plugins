@@ -134,49 +134,49 @@
                          erroronmissingdir="false"/>
             </resources>
 
-            <if>
+            <ac:if>
                 <istrue value="${@{prefix}.scan.path}"/>
-                <then>
-                    <for param="test.collection">
+                <ac:then>
+                    <ac:for param="test.collection">
                         <test-path/>
                         <sequential>
                             <echo level="verbose">Examining @{test.collection} for test cases</echo>
-                            <if>
+                            <ac:if>
                                 <and>
                                     <available file="@{test.collection}" type="file"/>
                                     <matches string="@{test.collection}" pattern="${@{prefix}.jar.pattern}"/>
                                 </and>
-                                <then>
+                                <ac:then>
                                     <echo level="verbose">Adding test cases from test jar @{test.collection}</echo>
                                     <augment id="target.@{prefix}.set">
                                         <zipfileset src="@{test.collection}" includes="${@{prefix}.run.includes.pattern}" excludes="${@{prefix}.run.excludes.pattern}"/>
                                     </augment>
-                                </then>
-                                <else>
-                                    <if>
+                                </ac:then>
+                                <ac:else>
+                                    <ac:if>
                                         <available file="@{test.collection}" type="dir"/>
-                                        <then>
+                                        <ac:then>
                                             <echo level="verbose">Adding test cases from test class directory @{test.collection}</echo>
                                             <augment id="target.@{prefix}.set">
                                                 <fileset dir="@{test.collection}" includes="${@{prefix}.run.includes.pattern}" excludes="${@{prefix}.run.excludes.pattern}"/>
                                             </augment>
-                                        </then>
-                                        <else>
+                                        </ac:then>
+                                        <ac:else>
                                             <echo level="verbose">Test path entry @{test.collection} does not appear to be a directory or a test jar, skipping</echo>
-                                        </else>
-                                    </if>
-                                </else>
-                            </if>
+                                        </ac:else>
+                                    </ac:if>
+                                </ac:else>
+                            </ac:if>
                         </sequential>
-                    </for>
+                    </ac:for>
                     <condition property="skip.@{prefix}">
                         <resourcecount refid="target.@{prefix}.set" when="equal" count="0"/>
                     </condition>
-                </then>
-                <else>
+                </ac:then>
+                <ac:else>
                     <echo level="verbose">Test path scanning disabled by property @{prefix}.scan.path</echo>
-                </else>
-            </if>
+                </ac:else>
+            </ac:if>
 
         </sequential>
     </macrodef>
