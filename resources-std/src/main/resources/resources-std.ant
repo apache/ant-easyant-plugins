@@ -32,7 +32,7 @@
         <ea:parameter property="target.test.classes" required="true" 
                 description="destination directory where test resources should be put" />
     
-        <ea:parameter property="target.test.integration.classes" default="${basedir}/target/integration-test/classes"
+        <ea:parameter property="target.test.integration.classes" default="${target}/integration-test/classes"
                 description="destination directory where integration test resources should be put" />
 
 
@@ -58,7 +58,7 @@
         <filterset id="src.test.integration.resources.filter"/>
     </target>
 
-    <target name="-resources-std:check-resources">
+    <target name="-resources-std:check-resources" depends="resources-std:init">
         <available file="${src.main.resources}" property="has.src.main.resources" />
         <available file="${src.test.resources}" property="has.src.test.resources" />
         <available file="${src.test.integration.resources}" property="has.src.test.integration.resources" />

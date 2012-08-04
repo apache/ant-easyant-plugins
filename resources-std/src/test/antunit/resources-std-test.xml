@@ -1,0 +1,83 @@
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<project name="org.apache.easyant.plugins;resources-std-test" 
+    xmlns:au="antlib:org.apache.ant.antunit" 
+    xmlns:ivy="antlib:org.apache.ivy.ant"
+    xmlns:ea="antlib:org.apache.easyant">
+    
+    <!-- Import your plugin --> 
+    <property name="target" value="target/test-antunit"/>
+    <!-- configure easyant in current project -->
+    <ea:configure-easyant-ivy-instance />
+    <!-- import our local plugin -->
+    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources"/>
+   
+    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement --> 
+    <target name="clean" description="remove stale build artifacts before / after each test">
+        <delete dir="${basedir}" includeemptydirs="true">
+            <include name="**/target/**"/>
+            <include name="**/lib/**"/>
+        </delete>
+    </target>
+    
+    <target name="setUp" depends="clean">
+        <property name="target.main.classes" value="${target}/classes"/>
+        <property name="target.test.classes" value="${target}/test-classes"/>
+<!--
+        <property name="target.test.integration.classes" value="${target}/test-classes"/>
+-->
+
+    </target>
+    <target name="tearDown" depends="clean"/>
+    
+    <target name="test-resources-std:init" depends="resources-std:init">
+        <au:assertPropertyEquals name="src.main.resources" value="${basedir}/src/main/resources"/>
+        <au:assertPropertyEquals name="src.test.resources" value="${basedir}/src/test/resources"/>
+        <au:assertPropertyEquals name="src.test.integration.resources" value="${basedir}/src/integration-test/resources"/>
+        <au:assertPropertyEquals name="resources.std.includes.pattern" value="**/*"/>
+        <au:assertPropertyEquals name="resources.std.excludes.pattern" value=""/>
+        <au:assertPropertyEquals name="resources.std.include.emptydir" value="true"/>
+        <au:assertPropertyEquals name="resources.std.test.includes.pattern" value="**/*"/>
+        <au:assertPropertyEquals name="resources.std.test.excludes.pattern" value=""/>
+        <au:assertPropertyEquals name="resources.std.test.integration.includes.pattern" value="**/*"/>
+        <au:assertPropertyEquals name="resources.std.test.integration.excludes.pattern" value=""/>
+ 
+        <au:assertReferenceSet refid="src.main.resources.filter"/>
+        <au:assertReferenceSet refid="src.test.resources.filter"/>
+        <au:assertReferenceSet refid="src.test.integration.resources.filter"/>
+    </target>
+
+    <target name="test-resources-std:check-resources" depends="-resources-std:check-resources">
+        <au:assertPropertyEquals name="has.src.main.resources" value="true"/>
+        <au:assertPropertyEquals name="has.src.test.resources" value="true"/>
+        <au:assertPropertyEquals name="has.src.test.integration.resources" value="true"/>
+    </target>
+
+    <target name="test-resources-std:copy-resources" depends="resources-std:copy-resources" >
+        <au:assertFileExists file="${target.main.classes}"/>
+    </target>
+
+    <target name="test-resources-std:copy-test-resources" depends="resources-std:copy-test-resources" >
+        <au:assertFileExists file="${target.test.classes}"/>
+    </target>
+
+    <target name="test-resources-std:copy-test-integration-resources" depends="resources-std:copy-test-integration-resources" >
+        <au:assertFileExists file="${target.test.integration.classes}"/>
+    </target>
+
+
+</project>
