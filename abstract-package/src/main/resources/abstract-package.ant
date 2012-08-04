@@ -40,7 +40,7 @@
     </target>
 
 
-    <target name="abstract-package:register-artifact" extensionOf="abstract-package:package-finished">
+    <target name="abstract-package:register-main-artifact" extensionOf="abstract-package:package-finished">
          <ea:parameter property="target.main.artifact" required="true" description="the location of the main artifact"/>
          <ea:parameter property="publish.main.type" default="jar" description="default type for main artifacts"/>
          <ea:parameter property="publish.main.confs" default="default" description="default configurations for main artifacts"/>

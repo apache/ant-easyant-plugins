@@ -47,6 +47,20 @@
         <au:assertPropertyEquals name="package.metainf.excludes.pattern" value=""/>
         <au:assertReferenceSet refid="package.metainf.fileset"/>
     </target>
+    
+    <target name="prepare-register-artifact">
+        <property name="project.ivy.instance" value="project.ivy.instance"/>
+        <ivy:settings id="project.ivy.instance"/>
+        <ivy:resolve file="sample-module.ivy" settingsRef="project.ivy.instance"/>
+        <echo file="${target}/myartifact.jar"/>
+        <property name="target.main.artifact" value="${target}/myartifact.jar"/>
+    </target>
+
+    <target name="test-abstract-package:register-main-artifact" depends="prepare-register-artifact,abstract-package:register-main-artifact">
+        <au:assertPropertyEquals name="publish.main.type" value="jar"/>
+        <au:assertPropertyEquals name="publish.main.confs" value="default"/>
+        <au:assertPropertyEquals name="project.ivy.instance" value="project.ivy.instance"/>
+    </target>
 
 
 </project>
