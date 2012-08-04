@@ -1,0 +1,58 @@
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<project name="org.apache.easyant.plugins;run-java-test" 
+    xmlns:au="antlib:org.apache.ant.antunit" 
+    xmlns:ivy="antlib:org.apache.ivy.ant"
+    xmlns:ea="antlib:org.apache.easyant">
+    
+    <!-- Import your plugin --> 
+    <property name="target" value="target/test-antunit"/>
+    <!-- configure easyant in current project -->
+    <ea:configure-easyant-ivy-instance />
+    <!-- import our local plugin -->
+    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources"/>
+   
+    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement --> 
+    <target name="clean" description="remove stale build artifacts before / after each test">
+        <delete dir="${basedir}" includeemptydirs="true">
+            <include name="**/target/**"/>
+            <include name="**/lib/**"/>
+        </delete>
+    </target>
+    
+    <target name="setUp" depends="clean">
+        <property name="target.main.classes" value="${target}/main/classes"/>
+        <property name="project.main.classname" value="org.apache.easyant.example.Example"/>
+        <mkdir dir="${target.main.classes}"/>
+
+        <javac srcdir="src/main/java" destdir="${target.main.classes}"/>
+    </target>
+    <target name="tearDown" depends="clean"/>
+    
+    <target name="test-run-java:init" depends="run-java:init">
+        <au:assertPropertyEquals name="target.main.classes" value="target/test-antunit/main/classes"/>
+        <au:assertPropertyEquals name="project.main.classname" value="org.apache.easyant.example.Example"/>
+        <au:assertPropertyEquals name="run.main.classname" value="org.apache.easyant.example.Example"/>
+        <au:assertReferenceSet refid="run.main.classpath"/>
+    </target>
+
+    <target name="test-run-java:run" depends="run-java:run">
+       <au:assertPropertyEquals name="is.run.main.classname.configured" value="true"/>
+       <au:assertLogContains text="Hello World !"/>
+    </target>
+
+</project>
