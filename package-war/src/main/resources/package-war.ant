@@ -15,6 +15,7 @@
    limitations under the License.
 -->
 <project name="org.apache.easyant.plugins#package-war"
+    xmlns:ac="antlib:net.sf.antcontrib"
     xmlns:ea="antlib:org.apache.easyant">
 
     <ea:core-version requiredrevision="[0.9,+]" />
@@ -49,11 +50,21 @@
     </target>
 
     <target name="-package-war:prepare-war" depends="package-war:init">
-        <!-- copy cache main classpath to a temp directory and build the corresponding fileset -->
         <mkdir dir="${target.webinf.lib.dir}"/>
-        <copy todir="${target.webinf.lib.dir}" flatten="true">
-            <path refid="cache.main.classpath"/>
-        </copy>
+        <!-- check if cache.main.classpath is defined otherwise use lib.main.fileset -->
+        <ac:if>
+            <isreference refid="cache.main.classpath"/>
+            <ac:then>
+                <copy todir="${target.webinf.lib.dir}" flatten="true">
+                    <path refid="cache.main.classpath"/>
+                </copy>
+            </ac:then>
+            <ac:else>
+                <copy todir="${target.webinf.lib.dir}" flatten="true">
+                    <fileset refid="lib.main.fileset"/>
+                </copy>
+            </ac:else>
+        </ac:if>
         <fileset id="webinf.lib.fileset" dir="${target.webinf.lib.dir}"/>
     </target>
 

@@ -39,8 +39,6 @@
        <mkdir dir="${target.main.classes}"/>
        <property name="manifest.file" value="${target}/MANIFEST.MF"/>
        <echo file="${manifest.file}"/>
-       <!--FIXME: this doesn't seems extensible-->
-       <path id="cache.main.classpath"/>
        <property name="project.ivy.instance" value="project.ivy.instance"/>
        <ivy:settings id="project.ivy.instance"/>
        <ivy:resolve file="sample-module.ivy" settingsRef="project.ivy.instance"/>
