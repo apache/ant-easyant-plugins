@@ -51,7 +51,7 @@
         <taskdef name="groovyc" classname="org.codehaus.groovy.ant.Groovyc" classpathref="resolved.groovy.classpath" />
     </target>
 
-    <target name="compile-test-groovy:compile" depends="compile-test-groovy:configure" if="has.src.test.groovy">
+    <target name="compile-test-groovy:compile" depends="compile-test-groovy:configure" if="has.src.test.groovy" extensionOf="abstract-compile:compile-finished">
         <ea:parameter property="test.compile.includes.pattern" default="**/*.groovy" 
             description="Pattern describing files included in test compilation process" />
         <ea:parameter property="test.compile.excludes.pattern" default="" 
@@ -60,7 +60,7 @@
     	<compile-groovy-tests prefix="test"/>
     </target>
 
-    <target name="compile-test-groovy:compile-integration" depends="compile-test-groovy:configure" if="has.src.test.integration.groovy">
+    <target name="compile-test-groovy:compile-integration" depends="compile-test-groovy:configure" if="has.src.test.integration.groovy" extensionOf="abstract-compile:compile-finished">
         <ea:parameter property="test.integration.compile.includes.pattern" default="**/*.groovy" 
             description="Pattern describing files included in integration test compilation process" />
         <ea:parameter property="test.integration.compile.excludes.pattern" default="" 

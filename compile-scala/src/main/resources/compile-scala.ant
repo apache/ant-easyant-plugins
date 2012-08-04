@@ -53,7 +53,7 @@
         </ea:path>
     </target>
 
-    <target name="compile-scala:compile" depends="compile-scala:configure" if="has.src.main.scala">
+    <target name="compile-scala:compile" depends="compile-scala:configure" if="has.src.main.scala" extensionOf="abstract-compile:compile-finished">
         <mkdir dir="${target.main.classes}" />
         <scalac  srcdir="${src.main.scala}"
                 destdir="${target.main.classes}"
