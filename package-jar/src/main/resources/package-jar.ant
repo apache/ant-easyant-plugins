@@ -22,10 +22,9 @@
     <extension-point name="package-jar:jar-ready" />
 
     <target name="package-jar:init">
-        <ea:parameter property="target.artifacts.main.jar.name" required="true"
-            description="main artifact file name" />
+        <ea:parameter property="target.artifacts.main.jar.name" default="${module.name}.jar" description="main artifact file name" />
 
-        <ea:parameter property="target.artifacts" required="true" description="destination directory for target artifacts"/>
+        <ea:parameter property="target.artifacts" default="${target}/artifacts" description="destination directory for target artifacts"/>
 
         <ea:parameter property="target.main.artifact" required="false" description="the location of the main artifact" 
             default="${target.artifacts}/${target.artifacts.main.jar.name}"/>
