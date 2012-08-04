@@ -14,7 +14,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project name="org.apache.easyant.plugins;package-jar-test" 
+<project name="org.apache.easyant.plugins;abstract-package-test" 
     xmlns:au="antlib:org.apache.ant.antunit" 
     xmlns:ivy="antlib:org.apache.ivy.ant"
     xmlns:ea="antlib:org.apache.easyant">
@@ -25,7 +25,7 @@
     <ea:configure-easyant-ivy-instance />
     <!-- import our local plugin -->
     <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources"/>
-
+   
     <!-- Defines a setUp / tearDown (before each test) that cleans the environnement --> 
     <target name="clean" description="remove stale build artifacts before / after each test">
         <delete dir="${basedir}" includeemptydirs="true">
@@ -34,24 +34,19 @@
         </delete>
     </target>
     
-    <target name="setUp" depends="clean">
-       <property name="target.main.classes" value="${target}/classes"/>
-       <mkdir dir="${target.main.classes}"/>
-       <property name="manifest.file" value="${target}/MANIFEST.MF"/>
-       <echo file="${manifest.file}"/>
- 
-    </target>
+    <target name="setUp" depends="clean"/>
     <target name="tearDown" depends="clean"/>
     
-    <target name="test-package-jar:init" depends="package-jar:init">
-        <au:assertPropertyEquals name="target.artifacts.main.jar.name" value="${module.name}.jar"/>
-        <au:assertPropertyEquals name="target.main.artifact" value="${target.artifacts}/${target.artifacts.main.jar.name}"/>
-        <au:assertPropertyEquals name="package.jar.includes.pattern" value="**/*"/>
-        <au:assertPropertyEquals name="package.jar.excludes.pattern" value=""/>
+    <target name="test-abstract-package:init" depends="abstract-package:init">
+        <au:assertPropertyEquals name="target.artifacts" value="${target}/artifacts"/>
     </target>
 
-    <target name="test-package-jar:jar" depends="package-jar:jar">
-        <au:assertFileExists file="${target.artifacts}"/>
-        <au:assertFileExists file="${target.main.artifact}"/>
+    <target name="test-abstract-package:compute-metainf" depends="abstract-package:compute-metainf">
+        <au:assertPropertyEquals name="package.metainf.basedir" value="${basedir}"/>
+        <au:assertPropertyEquals name="package.metainf.includes.pattern" value="NOTICE,LICENSE"/>
+        <au:assertPropertyEquals name="package.metainf.excludes.pattern" value=""/>
+        <au:assertReferenceSet refid="package.metainf.fileset"/>
     </target>
+
+
 </project>
