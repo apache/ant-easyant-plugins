@@ -1,0 +1,68 @@
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<project name="org.apache.easyant.plugins;javadoc-test" 
+    xmlns:au="antlib:org.apache.ant.antunit" 
+    xmlns:ivy="antlib:org.apache.ivy.ant"
+    xmlns:ea="antlib:org.apache.easyant">
+    
+    <!-- Import your plugin --> 
+    <property name="target" value="${basedir}/target/test-antunit"/>
+    <!-- configure easyant in current project -->
+    <ea:configure-easyant-ivy-instance />
+    <!-- import our local plugin -->
+    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources"/>
+   
+    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement --> 
+    <target name="clean" description="remove stale build artifacts before / after each test">
+        <delete dir="${basedir}" includeemptydirs="true">
+            <include name="**/target/**"/>
+            <include name="**/lib/**"/>
+        </delete>
+    </target>
+    
+    <target name="setUp" depends="clean">
+       <ivy:settings id="project.ivy.instance"/>
+       <ivy:resolve file="sample-module.ivy" settingsRef="project.ivy.instance"/>
+    </target>
+    <target name="tearDown" depends="clean"/>
+    
+    <target name="test-javadoc:init" depends="javadoc:init">
+        <au:assertPropertyEquals name="src.main.java" value="${basedir}/src/main/java"/>
+        <au:assertPropertyEquals name="src.test.java" value="${basedir}/src/test/java"/>
+        <au:assertPropertyEquals name="javadoc.file.encoding" value="UTF-8"/>
+        <au:assertPropertyEquals name="target.reports" value="${target}/reports"/>
+        <au:assertPropertyEquals name="target.javadoc" value="${target.reports}/javadoc"/>
+        <au:assertPropertyEquals name="target.javadoc.main" value="${target.javadoc}/main"/>
+        <au:assertPropertyEquals name="target.javadoc.test" value="${target.javadoc}/test"/>
+        <au:assertPropertyEquals name="javadoc.publish.conf" value="documentation"/>
+    </target>
+
+    <target name="test-javadoc:main" depends="-javadoc:main">
+       <au:assertReferenceSet refid="java.main.source.path"/>
+       <au:assertFileExists file="${target.javadoc.main}"/>
+    </target>
+
+    <target name="test-javadoc:test" depends="-javadoc:test">
+       <au:assertReferenceSet refid="java.test.source.path"/>
+       <au:assertFileExists file="${target.javadoc.test}"/>
+    </target>
+
+    <target name="test-javadoc:package" depends="javadoc:package">
+        <au:assertFileExists file="${target.artifacts}"/>
+        <au:assertFileExists file="${target.artifacts}/${ivy.module}-javadoc.zip"/>
+    </target>
+</project>
