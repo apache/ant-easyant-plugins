@@ -34,9 +34,15 @@
         </delete>
     </target>
     
-    <!--TODO: add a testng sample -->
     <!--FIXME: test-testng targets get executed as they are prefixed by "test" -->
-    <target name="setUp" depends="clean"/>
+    <target name="setUp" depends="clean">
+        <ivy:settings id="project.ivy.instance"/>
+        <ivy:cachepath pathid="compile.test.classpath" file="sample-module.ivy" settingsRef="project.ivy.instance"/>
+        <mkdir dir="${target}/test/classes"/>
+        <mkdir dir="${target}/integration-test/classes"/>
+        <javac srcdir="src/test/java" destdir="${target}/test/classes" classpathref="compile.test.classpath"/>
+        <javac srcdir="src/integration-test/java" destdir="${target}/integration-test/classes" classpathref="compile.test.classpath"/>
+    </target>
     <target name="tearDown" depends="clean"/>
     
     <target name="test-test-testng:init" depends="test-testng:init">
@@ -50,24 +56,19 @@
     <target name="test-test-testng:integration-test" depends="-test-testng:integration-test">
         <au:assertFileExists file="${target.test.xml}"/>
     </target>
-    
-    <target name="test-test-testng:run">
-        <au:expectfailure message="At least one test has failed. See logs in ${target.test.xml} for details or use the report target to run the test with a report">
-            <antcall target="test-testng:run">
-                <param name="test.mode.run" value="true"/>
-                <param name="test.failed" value="true"/>
-            </antcall>
-        </au:expectfailure>
-        
+
+    <target name="configure-plugin">
+       <property name="test.mode.run" value="true"/>
+       <property name="test.run.failonerror" value="false"/>
     </target>
 
-    <target name="test-test-testng:run-integration">
-        <au:expectfailure message="At least one integration test has failed. See logs in ${target.test.xml} for details or use the report target to run the test with a report">
-            <antcall target="test-testng:run-integration">
-                <param name="test.mode.run" value="true"/>
-                <param name="test.integration.failed" value="true"/>
-            </antcall>
-        </au:expectfailure>
+    
+    <target name="test-test-testng:run" depends="configure-plugin,test-testng:run">
+        <au:assertLogContains text="At least one test has failed. See logs in ${target.test.xml} for details or use the report target to run the test with a report" level="error"/>
+    </target>
+
+    <target name="test-test-testng:run-integration" depends="configure-plugin,test-testng:run-integration">
+        <au:assertLogContains text="At least one integration test has failed. See logs in ${target.test.xml} for details or use the report target to run the test with a report" level="error"/>
 
     </target>
 

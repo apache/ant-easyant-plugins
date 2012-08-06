@@ -44,9 +44,7 @@
                 <classpath refid="run.@{prefix}.classpath" />
                 <xmlfileset dir="${target.@{prefix}.classes}" includes="${testng.filename}" />
                 <!-- Alternative way to launch testng, maybe this could be an alternative target? -->
-                <!--
-                            <classfileset dir="${build.test.dir}" includes="**/*.class" />
-                -->
+                            <classfileset dir="${target.@{prefix}.classes}" includes="**/*.class" />
             </testng>
         </sequential>
     </macrodef>
