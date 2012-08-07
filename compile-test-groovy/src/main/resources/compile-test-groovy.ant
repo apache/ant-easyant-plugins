@@ -32,12 +32,12 @@
     <macrodef name="compile-groovy-tests">
         <attribute name="prefix"/>
         <sequential>
-            <mkdir dir="${target.@{test}.classes}" />
-            <groovyc  srcdir="${src.@{test}.groovy}"
-                destdir="${target.@{test}.classes}"
+            <mkdir dir="${target.@{prefix}.classes}" />
+            <groovyc  srcdir="${src.@{prefix}.groovy}"
+                destdir="${target.@{prefix}.classes}"
                 classpathref="compile.test.classpath"
-                includes="${@{test}.compile.includes.pattern}"
-                excludes="${@{test}.compile.excludes.pattern}"/>
+                includes="${@{prefix}.compile.includes.pattern}"
+                excludes="${@{prefix}.compile.excludes.pattern}"/>
         </sequential>
     </macrodef>
 
