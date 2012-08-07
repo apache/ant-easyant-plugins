@@ -48,17 +48,17 @@
         <attribute name="prefix"/>
         <sequential>
             <mkdir dir="${target.@{prefix}.classes}" />
-            <scalac  srcdir="${src.@{prefix}.java}"
+            <scalac  srcdir="${src.@{prefix}.scala}"
                     destdir="${target.@{prefix}.classes}"
                     classpathref="compile.test.classpath"
                     includes="${@{prefix}.compile.includes.pattern}"
                     excludes="${@{prefix}.compile.excludes.pattern}"
-                    scalacdebugging="${javac.debug.mode}">
+                    scalacdebugging="${scalac.debug.mode}">
             </scalac>
         </sequential>
     </macrodef>
 
-    <target name="compile-test-scala:compile" depends="compile-test-scala:configure" if="has.src.test.java" extensionOf="abstract-compile:compile-finished">
+    <target name="compile-test-scala:compile" depends="compile-test-scala:configure" if="has.src.test.scala" extensionOf="abstract-compile:compile-finished">
         <ea:parameter property="test.compile.includes.pattern" default="**/*.scala" 
             description="Pattern describing files included in test compilation process" />
         <ea:parameter property="test.compile.excludes.pattern" default="" 
@@ -67,8 +67,8 @@
     	<compile-scala-tests prefix="test"/>
     </target>
 
-    <target name="compile-test-scala:compile-integration" depends="compile-test-scala:configure" if="has.src.test.integration.java" extensionOf="abstract-compile:compile-finished">
-        <ea:parameter property="test.integration.compile.includes.pattern" default="**/*.groovy" 
+    <target name="compile-test-scala:compile-integration" depends="compile-test-scala:configure" if="has.src.test.integration.scala" extensionOf="abstract-compile:compile-finished">
+        <ea:parameter property="test.integration.compile.includes.pattern" default="**/*.scala" 
             description="Pattern describing files included in integration test compilation process" />
         <ea:parameter property="test.integration.compile.excludes.pattern" default="" 
             description="Pattern describing files excluded in integration test compilation process" />
