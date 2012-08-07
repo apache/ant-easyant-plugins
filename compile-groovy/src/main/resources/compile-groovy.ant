@@ -33,6 +33,9 @@
     </target>
 
     <target name="-compile-groovy:configure" depends="compile-groovy:init,abstract-compile:compile-ready">
+         <ea:parameter property="project.ivy.instance" default="project.ivy.instance"
+            description="the ivy instance name for your project" />
+
         <ea:findclasspath pathid="resolved.groovy.classpath" organisation="org.codehaus.groovy" module="groovy-all" revision="1.6.0">
             <ea:project-dependency-strategy />
             <ea:environment-strategy env="GROOVY_HOME"/>
@@ -43,7 +46,7 @@
 
     </target>
 
-    <target name="compile-groovy:compile" depends="compile-groovy:configure" if="has.src.main.groovy" extensionOf="abstract-compile:compile-finished">
+    <target name="compile-groovy:compile" depends="-compile-groovy:configure" if="has.src.main.groovy" extensionOf="abstract-compile:compile-finished">
         <mkdir dir="${target.main.classes}" />
         <!--
         <groovyc> Attributes
