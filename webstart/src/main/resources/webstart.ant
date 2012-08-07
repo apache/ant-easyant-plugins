@@ -20,8 +20,10 @@
 
     <ea:core-version requiredrevision="[0.9,+]" />
 
+    <ea:import mrid="org.apache.easyant.plugins#abstract-package;0.9"/>
+
     <macrodef name="signJars">
-       <attribute name="alias"   description="the alias signer" />
+        <attribute name="alias"   description="the alias signer" />
         <attribute name="storepass"  description="the keystore password"/>
         <attribute name="keypass"  default="@{storepass}" description="the key password"/>
         <attribute name="keystore"  description="the path to the keystore"/>
@@ -33,7 +35,9 @@
             <isset property="@{keystore}"/>
             <then>
                 <signjar alias="@{alias}" keypass="@{keypass}" keystore="@{keystore}" storepass="@{storepass}" lazy="@{replaceSign}">
-                    <signFolder/>
+                    <path>
+                    	<signFolder/>
+                    </path>
                 </signjar>
             </then>
             <else>
@@ -47,60 +51,53 @@
     </macrodef>
 
     <target name="webstart:init">
-        <ea:parameter property="jnlp.file" required="true" description="the jnlp to modify" />
-        <ea:parameter property="signJar" required="false" default="false" description="tell if the jars has to be signed" />
-        <ea:parameter property="flat.path" required="false" description="tell if the path resources have to be declared in relative or absolute" />
+        <ea:parameter property="webstart.jnlp.file" required="true" description="the jnlp to modify" />
+        <ea:parameter property="webstart.sign.jar" default="false" description="tell if the jars has to be signed" />
+        <ea:parameter property="webstart.flat.path" description="Force the resources path in the jnlp file. If the path resources have to be declared in relative or absolute" />
+        <ea:parameter property="target.main.artifact" required="true" description="the location of the main artifact"/>
 
-        <ea:parameter property="alias" required="false" description="the alias signer" />
-        <ea:parameter property="storepass" required="false" description="the keystore password" />
-        <ea:parameter property="keypass" required="false" default="${storepass}" description="the key password" />
-        <ea:parameter property="keystore" required="false" default=" " description="the path to the keystore" />
-        <ea:parameter property="lazy" required="false" default="false" description="tell if the already signed jars have to be signed a second time" />
-        <taskdef name="partial-jnlp" classname="org.apache.easyant.tasks.JNLPTask" 
-            classpathref="org.apache.easyant.plugins#webstart.classpath" />
+        <taskdef name="partial-jnlp" classname="org.apache.easyant.tasks.JNLPTask" classpathref="org.apache.easyant.plugins#webstart.classpath" />
     </target>
 
-    <target name="webstart:editJnlp" depends="webstart:init" description="edit an existing jnlp file">
-        <echo message="[Library directory]: ${lib.main}" />
-        <echo message="[libArtifact]: ${target.artifacts}/${target.artifacts.main.jar.name}" />
+    <target name="webstart:edit-jnlp" depends="webstart:init" description="edit an existing jnlp file">
+        <echo message="[Library directory]: ${lib.main}" level="debug"/>
+        <echo message="[libArtifact]: ${target.main.artifact}" level="debug"/>
         <if>
-            <equals arg1="${flat.path}" arg2="$${flat.path}" />
-                <then>
-                    <partial-jnlp mainJar="${target.artifacts}/${target.artifacts.main.jar.name}" jnlpFile="${jnlp.file}">
-                    <fileset dir="${lib.main}">
-                        <include name="*.jar" />
-                    </fileset>
-                    </partial-jnlp>
-                </then>
-                <else>
-                    <partial-jnlp mainJar="${target.artifacts}/${target.artifacts.main.jar.name}" jnlpFile="${jnlp.file}" flatPathResources="${flat.path}">
-                    <fileset dir="${lib.main}">
-                        <include name="*.jar" />
-                    </fileset>
-                    </partial-jnlp>
-                </else>
+            <isset property="webstart.flat.path" />
+            <then>
+                <partial-jnlp mainJar="${target.main.artifact}" jnlpFile="${webstart.jnlp.file}">
+                    <fileset refid="lib.main.fileset"/>
+                </partial-jnlp>
+            </then>
+            <else>
+                <partial-jnlp mainJar="${target.main.artifact}" jnlpFile="${webstart.jnlp.file}" flatPathResources="${webstart.flat.path}">
+                    <fileset refid="lib.main.fileset"/>
+                </partial-jnlp>
+            </else>
         </if>
     </target>
 
-    <target name="webstart:sign" depends="package">
-        <if>
-            <equals arg1="${signJar}" arg2="true" />
-                <then>
-                    <signJars alias="${alias}" storepass="${storepass}" keypass="${keypass}" keystore="${keystore}" lazy="${lazy}" >
-                        <signfolder>
-                            <fileset dir="${lib.main}" includes="*.jar"/>
-                            <fileset dir="${target.artifacts}" includes="*.jar"/>
-                        </signfolder>
-                    </signJars>
-                </then>
-        </if>
+    <target name="webstart:sign" depends="abstract-package:package-finished" if="webstart.sign.jar">
+        <ea:parameter property="webstart.alias" description="the alias signer" />
+        <ea:parameter property="webstart.storepass" description="the keystore password" />
+        <ea:parameter property="webstart.keypass" default="${webstart.storepass}" description="the key password" />
+        <ea:parameter property="keystore" default=" " description="the path to the keystore" />
+        <ea:parameter property="lazy" default="false" description="tell if the already signed jars have to be signed a second time" />
+        <signJars alias="${webstart.alias}" storepass="${webstart.storepass}" keypass="${webstart.keypass}" keystore="${webstart.keystore}" lazy="${webstart.lazy}" >
+             <signfolder>
+                 <fileset refid="lib.main.fileset"/>
+                 <filelist>
+                    <file name="${target.main.artifact}" />
+                 </filelist>
+             </signfolder>
+        </signJars>
     </target>
 
-    <target name="webstart:prepare" depends="webstart:editJnlp,webstart:sign" description="edit the jnlp file and sign as necessary" />
+    <target name="webstart:prepare" depends="webstart:edit-jnlp,webstart:sign" description="edit the jnlp file and sign as necessary" />
 
     <target name="webstart:run" depends="webstart:prepare" description="run the application in java webstart">
         <exec executable="javaws">
-            <arg value="${jnlp.file}" />
+            <arg value="${webstart.jnlp.file}" />
         </exec>
     </target>
 
