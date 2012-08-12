@@ -48,6 +48,7 @@
         <au:assertPropertyEquals name="compile.groovy.includes.pattern" value="**/*.groovy"/>
         <au:assertPropertyEquals name="compile.groovy.excludes.pattern" value=""/>
         <au:assertPropertyEquals name="has.src.main.groovy" value="true"/>
+        <au:assertPropertyEquals name="compile.groovy.indy" value="false"/>
     </target>
     
     <target name="test-compile-groovy:configure" depends="-compile-groovy:configure">

@@ -27,6 +27,7 @@
 
         <ea:parameter property="compile.groovy.includes.pattern" default="**/*.groovy" description="Pattern describing files included in compilation process" />
         <ea:parameter property="compile.groovy.excludes.pattern" default="" description="Pattern describing files excluded in compilation process" />
+        <ea:parameter property="compile.groovy.indy" default="false" description="Enable compilation with the invoke dynamic support when using Groovy 2.0 and beyond and running on JDK 7"/>
 
         <available file="${src.main.groovy}" property="has.src.main.groovy" />
 
@@ -36,7 +37,7 @@
          <ea:parameter property="project.ivy.instance" default="project.ivy.instance"
             description="the ivy instance name for your project" />
 
-        <ea:findclasspath pathid="resolved.groovy.classpath" organisation="org.codehaus.groovy" module="groovy-all" revision="1.6.0">
+        <ea:findclasspath pathid="resolved.groovy.classpath" organisation="org.codehaus.groovy" module="groovy-all" revision="2.0.0">
             <ea:project-dependency-strategy />
             <ea:environment-strategy env="GROOVY_HOME"/>
             <ea:basic-configuration-strategy />
@@ -78,7 +79,7 @@
         -->
         <groovyc srcdir="${src.main.groovy}" destdir="${target.main.classes}" 
             classpathref="compile.main.classpath" 
-            includeantruntime="no" 
+            indy="${compile.groovy.indy}"
             includes="${compile.groovy.includes.pattern}" 
             excludes="${compile.groovy.excludes.pattern}" />
     </target>
