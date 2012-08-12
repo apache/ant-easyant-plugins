@@ -38,7 +38,7 @@
     </target>
 
     <target name="compile-scala:configure" depends="compile-scala:init,abstract-compile:compile-ready">
-        <ea:findclasspath pathid="resolved.scala.classpath" organisation="org.scala-lang" module="scala-compiler" revision="2.7.7">
+        <ea:findclasspath pathid="resolved.scala.classpath" organisation="org.scala-lang" module="scala-compiler" revision="2.9.2">
             <ea:project-dependency-strategy />
             <ea:environment-strategy env="SCALA_HOME"/>
             <ea:basic-configuration-strategy />
