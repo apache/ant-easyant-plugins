@@ -36,13 +36,14 @@
             <groovyc  srcdir="${src.@{prefix}.groovy}"
                 destdir="${target.@{prefix}.classes}"
                 classpathref="compile.test.classpath"
+                indy="${@{prefix}.compile.indy}"
                 includes="${@{prefix}.compile.includes.pattern}"
                 excludes="${@{prefix}.compile.excludes.pattern}"/>
         </sequential>
     </macrodef>
 
     <target name="compile-test-groovy:configure" depends="abstract-compile:compile-ready">
-        <ea:findclasspath pathid="resolved.groovy.classpath" organisation="org.codehaus.groovy" module="groovy-all" revision="1.6.0">
+        <ea:findclasspath pathid="resolved.groovy.classpath" organisation="org.codehaus.groovy" module="groovy-all" revision="2.0.0">
             <ea:project-dependency-strategy />
             <ea:environment-strategy env="GROOVY_HOME"/>
             <ea:basic-configuration-strategy />
@@ -56,7 +57,8 @@
             description="Pattern describing files included in test compilation process" />
         <ea:parameter property="test.compile.excludes.pattern" default="" 
             description="Pattern describing files excluded in test compilation process" />
-
+        <ea:parameter property="test.compile.indy" default="false" 
+            description="Enable compilation with the invoke dynamic support when using Groovy 2.0 and beyond and running on JDK 7"/>
     	<compile-groovy-tests prefix="test"/>
     </target>
 
@@ -65,7 +67,9 @@
             description="Pattern describing files included in integration test compilation process" />
         <ea:parameter property="test.integration.compile.excludes.pattern" default="" 
             description="Pattern describing files excluded in integration test compilation process" />
-
+        <ea:parameter property="test.integration.compile.indy" default="false" 
+            description="Enable compilation with the invoke dynamic support when using Groovy 2.0 and beyond and running on JDK 7"/>
+ 
     	<compile-groovy-tests prefix="test.integration"/>
     </target>
 
