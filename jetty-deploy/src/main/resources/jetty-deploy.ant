@@ -29,7 +29,7 @@
 
         <fail unless="jetty.available" message="Jetty is unavailable!" />
 
-        <taskdef name="jetty" classname="org.mortbay.jetty.ant.JettyRunTask" classpathref="org.apache.easyant.plugins#jetty-deploy.classpath" />
+        <taskdef resource="tasks.properties" classpathref="org.apache.easyant.plugins#jetty-deploy.classpath" loaderref="jetty.loader"/>
     </target>
 
     <!-- default way jetty will be run:
@@ -37,8 +37,8 @@
         jetty configuration xml: jetty.xml shipped with this module (standard 6.1.4 jetty.xml shipped with jetty) 
         webapplication context: root (/)
     -->
-    <target name="jetty-deploy:run" depends="package-war:war" description="run your webapp inside a jetty application server">
-        <echo message="Deploying ${module.name} on Jetty .." />
+    <target name="jetty-deploy:run" depends="jetty-deploy:init,package-war:war" description="run your webapp inside a jetty application server">
+        <echo message="Deploying ${module.name} on Jetty ..." />
         <jetty tempDirectory="${jetty.temp.dir}" jettyXml="${jetty.xml}">
             <webApp name="${module.name}" warfile="${target.artifacts}/${target.artifacts.main.war.name}" contextpath="${jetty.context}" />
         </jetty>
