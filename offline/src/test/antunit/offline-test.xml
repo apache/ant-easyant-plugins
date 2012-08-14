@@ -28,10 +28,12 @@
    
     <!-- Defines a setUp / tearDown (before each test) that cleans the environnement --> 
     <target name="clean" description="remove stale build artifacts before / after each test">
+<!--
         <delete dir="${basedir}" includeemptydirs="true">
             <include name="**/target/**"/>
             <include name="**/lib/**"/>
         </delete>
+-->
     </target>
     
     <target name="setUp" depends="clean">
@@ -53,16 +55,26 @@
         <!--TODO: check if buildscope repository are registered -->
         <au:assertLogContains text=":: installing junit#junit;4.4 ::" />
         <au:assertLogContains text=":: installing in project.buildscope.repository ::" />
-        <au:assertLogContains text=":: installing org.apache.easyant.plugins#abstract-test;0.9 ::" />
         <au:assertLogContains text=":: installing in easyant.buildscope.repository ::" />
-        <au:assertLogContains text=":: installing org.apache.easyant.plugins#antunit;0.9 ::" />
+        <au:assertLogContains text=":: installing org.apache.easyant.plugins#rat;0.9 ::" />
+<!--
+        <au:assertLogContains text=":: installing org.apache.rat#apache-rat-tasks;0.7 ::" />
+-->
 
         <property name="ea.repo" value="${target}/repository/easyant.buildscope.repository"/>
         <property name="project.repo" value="${target}/repository/project.buildscope.repository"/>
+        <au:assertLogContains text="Registering build scope repository : ${easyant.buildscope.resolver} in ${ea.repo}" level="debug"/>
+        <au:assertLogContains text="Registering build scope repository : ${project.buildscope.resolver} in ${project.repo}" level="debug"/>
+        <au:assertLogContains text="${easyant.buildscope.resolver} registration succeeded" level="debug"/>
+        <au:assertLogContains text="${project.buildscope.resolver} registration succeeded" level="debug"/>
         <au:assertFileExists file="${ea.repo}"/>
         <au:assertFileExists file="${project.repo}"/>
-        <au:assertFileExists file="${ea.repo}/org.apache.easyant.plugins/antunit/0.9/antunit.ant"/>
-        <au:assertFileExists file="${ea.repo}/org.apache.easyant.plugins/antunit/0.9/antunit.ivy"/>
+        <au:assertFileExists file="${ea.repo}/org.apache.easyant.plugins/rat/0.9/rat.ant"/>
+        <au:assertFileExists file="${ea.repo}/org.apache.easyant.plugins/rat/0.9/rat.ivy"/>
+<!--
+        <au:assertFileExists file="${ea.repo}/org.apache.rat/apache-rat-tasks/0.7/rat.jar"/>
+        <au:assertFileExists file="${ea.repo}/org.apache.rat/apache-rat-tasks/0.7/rat.ivy"/>
+-->
         <au:assertFileExists file="${project.repo}/junit/junit/4.4/junit.ivy"/>
         <au:assertFileExists file="${project.repo}/junit/junit/4.4/junit.jar"/>
     </target>
