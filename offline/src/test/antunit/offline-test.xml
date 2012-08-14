@@ -1,0 +1,71 @@
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<project name="org.apache.easyant.plugins;offline-test" 
+    xmlns:au="antlib:org.apache.ant.antunit" 
+    xmlns:ivy="antlib:org.apache.ivy.ant"
+    xmlns:ea="antlib:org.apache.easyant">
+    
+    <!-- Import your plugin --> 
+    <property name="target" value="${basedir}/target/test-antunit"/>
+    <!-- configure easyant in current project -->
+    <ea:configure-easyant-ivy-instance />
+    <!-- import our local plugin -->
+    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources"/>
+   
+    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement --> 
+    <target name="clean" description="remove stale build artifacts before / after each test">
+        <delete dir="${basedir}" includeemptydirs="true">
+            <include name="**/target/**"/>
+            <include name="**/lib/**"/>
+        </delete>
+    </target>
+    
+    <target name="setUp" depends="clean">
+      <ivy:settings id="project.ivy.instance"/>
+      <property name="easyant.file" value="${basedir}/sample-module.ivy"/>
+    </target>
+    <target name="tearDown" depends="clean"/>
+    
+    <target name="test-offline:init" >
+        <au:assertPropertyEquals name="project.ivy.instance" value="project.ivy.instance"/>
+        <au:assertPropertyEquals name="project.buildscope.resolver" value="project.buildscope.repository"/>
+        <au:assertPropertyEquals name="easyant.buildscope.resolver" value="easyant.buildscope.repository"/>
+        <au:assertPropertyEquals name="easyant.offline" value="false"/>
+        <!--TODO: check if buildscope repository are registered -->
+    </target>
+
+
+    <target name="test-offline:offline:go-offline" depends="offline:go-offline">
+        <!--TODO: check if buildscope repository are registered -->
+        <au:assertLogContains text=":: installing junit#junit;4.4 ::" />
+        <au:assertLogContains text=":: installing in project.buildscope.repository ::" />
+        <au:assertLogContains text=":: installing org.apache.easyant.plugins#abstract-test;0.9 ::" />
+        <au:assertLogContains text=":: installing in easyant.buildscope.repository ::" />
+        <au:assertLogContains text=":: installing org.apache.easyant.plugins#antunit;0.9 ::" />
+
+        <property name="ea.repo" value="${target}/repository/easyant.buildscope.repository"/>
+        <property name="project.repo" value="${target}/repository/project.buildscope.repository"/>
+        <au:assertFileExists file="${ea.repo}"/>
+        <au:assertFileExists file="${project.repo}"/>
+        <au:assertFileExists file="${ea.repo}/org.apache.easyant.plugins/antunit/0.9/antunit.ant"/>
+        <au:assertFileExists file="${ea.repo}/org.apache.easyant.plugins/antunit/0.9/antunit.ivy"/>
+        <au:assertFileExists file="${project.repo}/junit/junit/4.4/junit.ivy"/>
+        <au:assertFileExists file="${project.repo}/junit/junit/4.4/junit.jar"/>
+    </target>
+
+    
+</project>
