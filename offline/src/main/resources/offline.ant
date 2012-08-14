@@ -29,8 +29,8 @@
     <macrodef name="configure-build-repository">
          <attribute name="dictator" default="true"/>
          <sequential>
-             <ea:configure-build-scoped-repository dictator="@{dictator}" name="${project.buildscope.resolver}" settingsRef="${project.ivy.instance}"/>
-             <ea:configure-build-scoped-repository dictator="@{dictator}" name="${easyant.buildscope.resolver}" settingsRef="easyant.ivy.instance"/>
+             <ea:configure-build-scoped-repository generateWrapperResoler="false" dictator="@{dictator}" name="${project.buildscope.resolver}" settingsRef="${project.ivy.instance}"/>
+             <ea:configure-build-scoped-repository generateWrapperResoler="false" dictator="@{dictator}" name="${easyant.buildscope.resolver}" settingsRef="easyant.ivy.instance"/>
         </sequential>
     </macrodef>
     <ac:if>
