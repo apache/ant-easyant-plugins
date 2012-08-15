@@ -22,11 +22,11 @@
 
     <extension-point name="abstract-test:test-ready" />
 
-    <extension-point name="abstract-test:test-run" />
+    <extension-point name="abstract-test:test-run" depends="abstract-test:test-ready"/>
 
     <extension-point name="abstract-test:integration-test-ready" />
 
-    <extension-point name="abstract-test:integration-test-run" />
+    <extension-point name="abstract-test:integration-test-run" depends="abstract-test:integration-test-ready"/>
 	
     <ea:import mrid="org.apache.easyant.plugins#abstract-provisioning;0.9" />
 
