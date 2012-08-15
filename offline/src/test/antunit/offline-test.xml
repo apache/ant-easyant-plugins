@@ -31,12 +31,15 @@
         <delete dir="${basedir}" includeemptydirs="true">
             <include name="**/target/**"/>
             <include name="**/lib/**"/>
+            <include name="**/offline/**"/>
         </delete>
     </target>
     
     <target name="setUp" depends="clean">
-      <ivy:settings id="project.ivy.instance"/>
       <property name="easyant.file" value="${basedir}/sample-module.ivy"/>
+      <ea:loadmodule buildModule="${easyant.file}"/>
+<!--<ea:configure-build-scoped-repository generateWrapperResoler="false" dictator="@{dictator}" name="${project.buildscope.resolver}" settingsRef="${project.ivy.instance}"/>
+-->
     </target>
     <target name="tearDown" depends="clean"/>
     
@@ -45,7 +48,7 @@
         <au:assertPropertyEquals name="project.buildscope.resolver" value="project.buildscope.repository"/>
         <au:assertPropertyEquals name="easyant.buildscope.resolver" value="easyant.buildscope.repository"/>
         <au:assertPropertyEquals name="easyant.offline" value="false"/>
-        <!--TODO: check if buildscope repository are registered -->
+        <au:assertPropertyEquals name="offline.base.directory" value="${basedir}/offline/"/>
     </target>
 
 
@@ -56,12 +59,8 @@
         <au:assertLogContains text=":: installing org.apache.easyant.plugins#rat;0.9 ::" />
         <au:assertLogContains text=":: installing org.apache.rat#apache-rat-tasks;0.7 ::" />
 
-        <property name="ea.repo" value="${target}/repository/easyant.buildscope.repository"/>
-        <property name="project.repo" value="${target}/repository/project.buildscope.repository"/>
-        <au:assertLogContains text="Registering build scope repository : ${easyant.buildscope.resolver} in ${ea.repo}" level="debug"/>
-        <au:assertLogContains text="Registering build scope repository : ${project.buildscope.resolver} in ${project.repo}" level="debug"/>
-        <au:assertLogContains text="${easyant.buildscope.resolver} registration succeeded" level="debug"/>
-        <au:assertLogContains text="${project.buildscope.resolver} registration succeeded" level="debug"/>
+        <property name="ea.repo" value="${offline.base.directory}/repository/easyant.buildscope.repository"/>
+        <property name="project.repo" value="${offline.base.directory}/repository/project.buildscope.repository"/>
         <au:assertFileExists file="${ea.repo}"/>
         <au:assertFileExists file="${project.repo}"/>
         <au:assertFileExists file="${ea.repo}/org.apache.easyant.plugins/rat/0.9/rat.ant"/>
