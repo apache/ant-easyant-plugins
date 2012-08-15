@@ -103,8 +103,10 @@
         </condition>
 
         <!-- shouldn't this be in junit plugin? -->
-        <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask" 
-            classpathref="org.apache.easyant.plugins#abstract-test.classpath" />
+        <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask">
+            <classpath refid="run.test.classpath"/>
+            <classpath refid="org.apache.easyant.plugins#abstract-test.classpath"/>
+        </taskdef>
         <taskdef name="junitreport" classname="org.apache.tools.ant.taskdefs.optional.junit.XMLResultAggregator"
             classpathref="org.apache.easyant.plugins#abstract-test.classpath" />
 
