@@ -83,7 +83,7 @@
             message="At least one test has failed. See logs in ${target.test.xml} for details or use the report target to run the test with a report"/>
     </target>
 
-    <target name="test-junit:run-integration" if="test.mode.run" unless="skip.test.integration" depends="-test-junit:integration-test" description="run junit integration tests" extensionOf="abstract-test:test-run">
+    <target name="test-junit:run-integration" if="test.mode.run" unless="skip.test.integration" depends="-test-junit:integration-test" description="run junit integration tests" extensionOf="abstract-test:integration-test-run">
         <check-test-result propertytocheck="test.integration.failed"
             message="At least one integration test has failed. See logs in ${target.test.xml} for details or use the report target to run the test with a report" />
     </target>
