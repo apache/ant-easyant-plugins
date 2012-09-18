@@ -18,6 +18,8 @@
 
     <ea:core-version requiredrevision="[0.9,+]" />
 
+    <ea:import organisation="org.apache.easyant.plugins" module="ivy-publication" revision="0.9"/>
+
     <typedef resource="org/tigris/subversion/svnant/svnantlib.xml" classpathref="org.apache.easyant.plugins#scm-svn.classpath" /> 
 
     <target name="-scm-svn:config">
@@ -59,15 +61,15 @@
        <ea:parameter property="scm.commit.message" default="EasyAnt: release ${version}" description="the commit message"/>
     </target>
 
-    <target name="scm-svn:release" depends="generate-release-version,-scm-svn:init-release,scm-svn:tag"/>
+    <target name="scm-svn:release" depends="ivy-publication:generate-release-version,-scm-svn:init-release,scm-svn:tag"/>
 
     <!-- integration -->
 
     <target name="-scm-svn:init-integration">
        <ea:parameter property="scm.tag.name" default="${version}" description="name of the tag to create"/>
-       <ea:parameter property="scm.commit.message" default="EasyAnt: release ${version}" description="the commit message"/>
+       <ea:parameter property="scm.commit.message" default="EasyAnt: integration ${version}" description="the commit message"/>
     </target>
 
-    <target name="scm-svn:integration" depends="generate-shared-version,-scm-svn:init-integration,scm-svn:tag"/>
+    <target name="scm-svn:integration" depends="ivy-publication:generate-shared-version,-scm-svn:init-integration,scm-svn:tag"/>
 
 </project>
