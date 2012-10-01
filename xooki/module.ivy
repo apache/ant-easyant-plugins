@@ -31,6 +31,5 @@
     </publications>
     <dependencies>
         <dependency org="xooki" name="xooki" rev="0.1"/>
-        <dependency org="org.apache.easyant.tasks" name="xooki-menu-generator" rev="0.1" conf="default"/>
     </dependencies>
 </ivy-module>
