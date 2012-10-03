@@ -1,0 +1,72 @@
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<project name="org.apache.easyant.plugins;scm-svn-test" 
+    xmlns:au="antlib:org.apache.ant.antunit" 
+    xmlns:ivy="antlib:org.apache.ivy.ant"
+    xmlns:ea="antlib:org.apache.easyant">
+    
+    <!-- Import your plugin --> 
+    <property name="target" value="target/test-antunit"/>
+    <!-- configure easyant in current project -->
+    <ea:configure-easyant-ivy-instance />
+    <!-- import our local plugin -->
+    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources"/>
+   
+    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement --> 
+    <target name="clean" description="remove stale build artifacts before / after each test">
+        <delete dir="${basedir}" includeemptydirs="true">
+            <include name="**/target/**"/>
+            <include name="**/lib/**"/>
+        </delete>
+    </target>
+    
+    <target name="setUp" depends="clean">
+      <property name="scm.connection.baseurl" value="mybaseurl"/>
+    </target>
+    <target name="tearDown" depends="clean"/>
+    
+    <target name="test-scm-svn:config" depends="-scm-svn:config">
+      <au:assertPropertyEquals name="scm.connection.username" value=""/>
+      <au:assertPropertyEquals name="scm.connection.password" value=""/>
+      <au:assertPropertyEquals name="scm.connection.baseurl" value="mybaseurl"/>
+      <au:assertPropertyEquals name="scm.svn.javahl" value="true"/>
+      <au:assertPropertyEquals name="scm.svn.svnkit" value="false"/>
+      <au:assertPropertyEquals name="scm.svn.failonerror" value="true"/>
+      <au:assertPropertyEquals name="scm.svn.dateformatter" value="MM/DD/YYYY HH:MM AM_PM"/>
+      <au:assertPropertyEquals name="scm.svn.datetimezone" value="local"/>
+      <au:assertPropertyEquals name="scm.working.copy" value="${basedir}"/>
+    </target>
+
+    <target name="test-scm-svn:init-release" depends="-scm-svn:init-release">
+      <au:assertPropertyEquals name="scm.tag.name" value="${version}"/>
+      <au:assertPropertyEquals name="scm.commit.message" value="EasyAnt: release ${version}"/>
+    </target>
+
+    <target name="test-scm-svn:init-integration" depends="-scm-svn:init-integration">
+      <au:assertPropertyEquals name="scm.tag.name" value="${version}"/>
+      <au:assertPropertyEquals name="scm.commit.message" value="EasyAnt: integration ${version}"/>
+    </target>
+
+    <!-- to be tested -->
+    <!--
+    <target name="test-scm-svn:tag"/>
+    <target name="test-scm-svn:branch"/>
+    <target name="test-scm-svn:release"/>
+    <target name="test-scm-svn:integration"/>
+    -->
+
+</project>
