@@ -58,7 +58,7 @@
         </sequential>
     </macrodef>
 
-    <target name="compile-test-scala:compile" depends="compile-test-scala:configure" if="has.src.test.scala" extensionOf="abstract-compile:compile-finished">
+    <target name="compile-test-scala:compile" depends="compile-test-scala:configure" if="has.src.test.scala" extensionOf="abstract-compile:compile">
         <ea:parameter property="test.compile.includes.pattern" default="**/*.scala" 
             description="Pattern describing files included in test compilation process" />
         <ea:parameter property="test.compile.excludes.pattern" default="" 
@@ -67,7 +67,7 @@
     	<compile-scala-tests prefix="test"/>
     </target>
 
-    <target name="compile-test-scala:compile-integration" depends="compile-test-scala:configure" if="has.src.test.integration.scala" extensionOf="abstract-compile:compile-finished">
+    <target name="compile-test-scala:compile-integration" depends="compile-test-scala:configure" if="has.src.test.integration.scala" extensionOf="abstract-compile:compile">
         <ea:parameter property="test.integration.compile.includes.pattern" default="**/*.scala" 
             description="Pattern describing files included in integration test compilation process" />
         <ea:parameter property="test.integration.compile.excludes.pattern" default="" 

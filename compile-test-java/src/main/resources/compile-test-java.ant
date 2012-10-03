@@ -50,7 +50,7 @@
         </sequential>
     </macrodef>
 	
-    <target name="compile-test-java:compile" depends="abstract-compile:compile-ready" if="has.src.test.java" extensionOf="abstract-compile:compile-finished">
+    <target name="compile-test-java:compile" depends="abstract-compile:compile-ready" if="has.src.test.java" extensionOf="abstract-compile:compile">
     	<ea:parameter property="test.compile.java.target.version" default="${ant.java.version}" 
             description="Specify a VM version for Generated class files (e.g., 1.1 or 1.2)." />
         <ea:parameter property="test.compile.java.source.version" default="${ant.java.version}" 
@@ -63,7 +63,7 @@
     	<compile-java-tests prefix="test"/>
     </target>
 
-    <target name="compile-test-java:compile-integration" depends="abstract-compile:compile-ready" if="has.src.test.integration.java" extensionOf="abstract-compile:compile-finished">
+    <target name="compile-test-java:compile-integration" depends="abstract-compile:compile-ready" if="has.src.test.integration.java" extensionOf="abstract-compile:compile">
     	<ea:parameter property="test.integration.compile.java.target.version" default="${ant.java.version}" 
             description="Specify a VM version for Generated class files (e.g., 1.1 or 1.2)." />
         <ea:parameter property="test.integration.compile.java.source.version" default="${ant.java.version}" 

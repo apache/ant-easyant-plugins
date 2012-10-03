@@ -76,7 +76,7 @@
         </ac:if>
     </target>
 
-    <target name="webstart:sign" depends="abstract-package:package-finished" if="webstart.sign.jar">
+    <target name="webstart:sign" depends="abstract-package:package" if="webstart.sign.jar">
         <ea:parameter property="webstart.alias" required="true" description="the alias signer" />
         <ea:parameter property="webstart.storepass" required="true" description="the keystore password" />
         <ea:parameter property="webstart.keypass" default="${webstart.storepass}" description="the key password" />

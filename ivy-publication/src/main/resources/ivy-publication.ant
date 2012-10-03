@@ -21,13 +21,13 @@
 
     <ea:core-version requiredrevision="[0.9,+]" />
 
-    <extension-point name="ivy-publication:generate-release-version" />
+    <extension-point name="ivy-publication:generate-release-version" description="defines how to build release version number"/>
 
-    <extension-point name="ivy-publication:generate-shared-version" />
+    <extension-point name="ivy-publication:generate-shared-version"  description="defines how to build shared version number"/>
 
-    <extension-point name="ivy-publication:generate-local-version" />
+    <extension-point name="ivy-publication:generate-local-version"  description="defines how to build local version number"/>
 
-    <extension-point name="ivy-publication:publish-ready" />
+    <extension-point name="ivy-publication:publish-ready" description="defines publication prerequisites"/>
 
     <target name="-ivy-publication:init">
         <ea:parameter property="release.resolver" default="shared" 

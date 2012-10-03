@@ -20,13 +20,13 @@
 
     <ea:core-version requiredrevision="[0.9,+]" />
 
-    <extension-point name="abstract-test:test-ready" />
+    <extension-point name="abstract-test:test-ready" description="defines test requirements"/>
 
-    <extension-point name="abstract-test:test-run" depends="abstract-test:test-ready"/>
+    <extension-point name="abstract-test:test-run" depends="abstract-test:test-ready" description="defines tests step"/>
 
-    <extension-point name="abstract-test:integration-test-ready" />
+    <extension-point name="abstract-test:integration-test-ready" description="defines integration-test requirements"/>
 
-    <extension-point name="abstract-test:integration-test-run" depends="abstract-test:integration-test-ready"/>
+    <extension-point name="abstract-test:integration-test-run" depends="abstract-test:integration-test-ready" description="defines integration-test step"/>
 	
     <ea:import mrid="org.apache.easyant.plugins#abstract-provisioning;0.9" />
 
@@ -35,7 +35,7 @@
         <property name="skip.test.integration" value="true" />
     </target>
 
-    <target name="abstract-test:init" depends="abstract-provisioning:provisioning-finished">
+    <target name="abstract-test:init" depends="abstract-provisioning:provisioning">
 
         <ea:parameter property="src.test.resources" default="${basedir}/src/test/resources"
             description="directory with unit test resource files (configuration files, data files, etc)" />

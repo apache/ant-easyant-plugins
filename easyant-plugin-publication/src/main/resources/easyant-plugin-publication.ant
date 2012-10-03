@@ -32,7 +32,7 @@
     <!--
         publish in build scoped repository before test 
     -->
-    <target name="easyant-plugin-publication:before-test" depends="abstract-provisioning:provisioning-finished" extensionOf="abstract-test:test-ready" if="publish.plugin.before.test">
+    <target name="easyant-plugin-publication:before-test" depends="abstract-provisioning:provisioning" extensionOf="abstract-test:test-ready" if="publish.plugin.before.test">
         <ea:configure-build-scoped-repository buildScopedRepositoryName="build" settingsRef="easyant.ivy.instance"/>
         <ivy:publish artifactspattern="${target.artifacts}/[artifact](-[classifier]).[ext]" resolver="build"  forcedeliver="true" overwrite="true" settingsRef="easyant.ivy.instance" />
     </target>

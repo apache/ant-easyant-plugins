@@ -18,7 +18,5 @@
     <info organisation="org.apache.easyant.plugins" module="plugins-orchestrator" revision="0.9" >
            <description>This module acts as orchestrator to build all easyant plugins.</description>
         <ea:build module="meta-build" revision="0.9"/>
-        <!-- If we use build scoped repository easyant use it as a dictator resolver, this have side effects as we use same ivy instance to build the plugin and to resolve plugin dependencies -->
-        <ea:property name="use.build.repository" value="false"/>
     </info>
 </ivy-module>

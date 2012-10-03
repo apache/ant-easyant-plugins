@@ -38,7 +38,7 @@
     <!-- ================================= 
               target: clean-report              
          ================================= -->
-    <target name="ivy-utils:report" depends="abstract-provisioning:provisioning-finished,ivy-utils:init" description="generate dependencies report">
+    <target name="ivy-utils:report" depends="abstract-provisioning:provisioning,ivy-utils:init" description="generate dependencies report">
        <ea:parameter property="target.reports" default="${target}/reports" description="directory where report will be generated"/>
         <ea:parameter property="target.report.ivy" default="${target.reports}/dependencies" 
             description="the directory where ivy report will be generated" />

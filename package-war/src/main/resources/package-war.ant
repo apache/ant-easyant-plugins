@@ -68,7 +68,7 @@
         <fileset id="webinf.lib.fileset" dir="${target.webinf.lib.dir}"/>
     </target>
 
-    <target name="package-war:war" depends="package-war:init,-package-war:prepare-war" description="package project as a WAR" extensionOf="abstract-package:package-finished">
+    <target name="package-war:war" depends="package-war:init,-package-war:prepare-war" description="package project as a WAR" extensionOf="abstract-package:package">
         <war destfile="${target.main.artifact}"
                 manifest="${manifest.file}"
                 needxmlfile="false"

@@ -47,7 +47,7 @@
 
     </target>
 
-    <target name="compile-groovy:compile" depends="-compile-groovy:configure" if="has.src.main.groovy" extensionOf="abstract-compile:compile-finished">
+    <target name="compile-groovy:compile" depends="-compile-groovy:configure" if="has.src.main.groovy" extensionOf="abstract-compile:compile">
         <mkdir dir="${target.main.classes}" />
         <!--
         <groovyc> Attributes

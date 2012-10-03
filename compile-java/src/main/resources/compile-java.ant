@@ -41,7 +41,7 @@
 
     </target>
 
-    <target name="compile-java:compile" depends="compile-java:init,abstract-compile:compile-ready" if="has.src.main.java" extensionOf="abstract-compile:compile-finished">
+    <target name="compile-java:compile" depends="compile-java:init,abstract-compile:compile-ready" if="has.src.main.java" extensionOf="abstract-compile:compile">
         <mkdir dir="${target.main.classes}" />
         <javac  srcdir="${src.main.java}"
                 destdir="${target.main.classes}"

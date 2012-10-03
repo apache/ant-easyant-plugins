@@ -21,8 +21,8 @@
     <ea:core-version requiredrevision="[0.9,+]" />
     <ea:import mrid="org.apache.easyant.plugins#abstract-compile;0.9" />
 
-    <extension-point name="abstract-package:package-ready" depends="abstract-compile:compile-finished"/>
-    <extension-point name="abstract-package:package-finished" depends="abstract-package:package-ready" />
+    <extension-point name="abstract-package:package-ready" depends="abstract-compile:compile" description="defines package requirement"/>
+    <extension-point name="abstract-package:package" depends="abstract-package:package-ready" description="defines package step"/>
 
     <target name="abstract-package:init">
         <ea:parameter property="target.artifacts" default="${target}/artifacts" description="destination directory for target artifacts"/>
@@ -40,7 +40,7 @@
     </target>
 
 
-    <target name="abstract-package:register-main-artifact" extensionOf="abstract-package:package-finished" unless="${skip.register.main.artifact}">
+    <target name="abstract-package:register-main-artifact" extensionOf="abstract-package:package" unless="${skip.register.main.artifact}">
          <ea:parameter property="target.main.artifact" required="true" description="the location of the main artifact"/>
          <ea:parameter property="publish.main.type" default="jar" description="default type for main artifacts"/>
          <ea:parameter property="publish.main.confs" default="default" description="default configurations for main artifacts"/>

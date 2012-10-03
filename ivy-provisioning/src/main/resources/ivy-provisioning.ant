@@ -66,7 +66,7 @@
         </condition>
     </target>
 
-    <target name="ivy-provisioning:resolve" depends="-ivy-provisioning:resolve,-ivy-provisioning:resolve-main-confs,-ivy-provisioning:resolve-test-confs,-ivy-provisioning:resolve-provided-confs" description="resolve and retrieve dependencies with ivy" unless="skip.resolve" extensionOf="abstract-provisioning:provisioning-finished"/>
+    <target name="ivy-provisioning:resolve" depends="-ivy-provisioning:resolve,-ivy-provisioning:resolve-main-confs,-ivy-provisioning:resolve-test-confs,-ivy-provisioning:resolve-provided-confs" description="resolve and retrieve dependencies with ivy" unless="skip.resolve" extensionOf="abstract-provisioning:provisioning"/>
 
     <target name="-ivy-provisioning:resolve-main-confs" depends="-ivy-provisioning:resolve" if="project.contains.main.confs">
         <ivy:cachepath pathid="cache.main.classpath" conf="${main.confs}" settingsRef="${project.ivy.instance}"/>

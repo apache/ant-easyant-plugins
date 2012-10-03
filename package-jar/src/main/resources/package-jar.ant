@@ -37,7 +37,7 @@
 
     </target>
 
-    <target name="package-jar:jar" depends="package-jar:init,abstract-package:package-ready" description="package project as a JAR" unless="skip.jar.package" extensionOf="abstract-package:package-finished">
+    <target name="package-jar:jar" depends="package-jar:init,abstract-package:package-ready" description="package project as a JAR" unless="skip.jar.package" extensionOf="abstract-package:package">
         <mkdir dir="${target.artifacts}" />
         <jar destfile="${target.main.artifact}" manifest="${manifest.file}" 
             basedir="${target.main.classes}" includes="${package.jar.includes.pattern}"

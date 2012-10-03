@@ -29,8 +29,8 @@
     <ea:import mrid="org.apache.easyant.plugins#abstract-provisioning;0.9" />
 
 	<!-- We expect at this point to have every source available, even the ones which are generated -->
-	<extension-point name="abstract-compile:compile-ready" depends="abstract-provisioning:provisioning-finished"/>
-	<extension-point name="abstract-compile:compile-finished" depends="abstract-compile:compile-ready"/>
+	<extension-point name="abstract-compile:compile-ready" depends="abstract-provisioning:provisioning" description="defines the requirements to compile. It's the good place if you want to process or generate sources"/>
+	<extension-point name="abstract-compile:compile" depends="abstract-compile:compile-ready" description="defines the compile step"/>
 	
 	<!-- Creates a empty classpath for compilation if it doesn't exist yet -->
     <ea:path pathid="compile.main.classpath" overwrite="false" />
