@@ -44,7 +44,7 @@
         <au:assertPropertyEquals name="submodule.dirs" value="**/*"/>
         <au:assertPropertyEquals name="metabuild.root" value="${basedir}"/>
         <au:assertPropertyEquals name="metabuild.includes" value="${submodule.dirs}"/>
-        <au:assertPropertyEquals name="metabuild.excludes" value="src/ test/ lib/ WEB-INF/ classes/ bin/ module.ivy"/>
+        <au:assertPropertyEquals name="metabuild.excludes" value="**/src/ **/lib/ **/target/ **/bin module.ivy"/>
         <au:assertPropertyEquals name="metabuild.mode" value="all"/>
         <au:assertReferenceSet refid="submodules.fileset"/>
         <au:assertPropertyEquals name="current-module" value="${ivy.module}"/>

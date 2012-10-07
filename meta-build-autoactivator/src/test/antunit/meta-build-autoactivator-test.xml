@@ -41,7 +41,7 @@
     
     <target name="test-meta-build-autoactivator">
         <au:assertPropertyEquals name="metabuild.root" value="."/>
-        <au:assertPropertyEquals name="metabuild.excludes" value="src/ test/ lib/ WEB-INF/ classes/ bin/ module.ivy"/>
+        <au:assertPropertyEquals name="metabuild.excludes" value="**/src/ **/lib/ **/target/ **/bin module.ivy"/>
         <au:assertPropertyEquals name="metabuild.mode" value="all"/>
     </target>
 

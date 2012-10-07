@@ -27,7 +27,7 @@
 	<ea:parameter property="submodule.dirs" description="pattern or comma-separated list indicating which submodules directories should be included in the build" default="**/*" />
 	<ea:parameter property="metabuild.root" description="root directory level of a metabuild project" default="${basedir}" />
 	<ea:parameter property="metabuild.includes" description="Pattern describing modules to include in a metabuild" default="${submodule.dirs}" />
-	<ea:parameter property="metabuild.excludes" description="Pattern describing modules to exclude in a metabuild" default="src/ test/ lib/ WEB-INF/ classes/ bin/ module.ivy" />
+	<ea:parameter property="metabuild.excludes" description="Pattern describing modules to exclude in a metabuild" default="**/src/ **/lib/ **/target/ **/bin module.ivy"/>
 	<ea:parameter property="metabuild.mode" description="defines execution mode of metabuild feature (all,dependents,dependencies)" default="all" />
 
 	<fileset id="submodules.fileset" dir="${metabuild.root}" includes="${metabuild.includes}" excludes="${metabuild.excludes}">
