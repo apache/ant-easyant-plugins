@@ -30,6 +30,6 @@
         <artifact type="ant"/>
     </publications>
     <dependencies>
-        <dependency org="xooki" name="xooki" rev="0.1"/>
+        <dependency org="org.apache.xooki" name="xooki" rev="0.1-r1397252"/>
     </dependencies>
 </ivy-module>
