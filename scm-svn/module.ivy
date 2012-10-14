@@ -29,6 +29,6 @@
                 <artifact type="ant"/>
         </publications>
         <dependencies>
-                <dependency org="svnant" name="svnant" rev="1.2.1"/>
+                <dependency org="svnant" name="svnant" rev="1.2.1" conf="default->default"/>
         </dependencies>
 </ivy-module>
