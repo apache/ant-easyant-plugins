@@ -14,83 +14,79 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project name="org.apache.easyant.plugins;ivy-repo-management-test" 
-    xmlns:au="antlib:org.apache.ant.antunit" 
-    xmlns:ivy="antlib:org.apache.ivy.ant"
-    xmlns:ea="antlib:org.apache.easyant">
+<project name="org.apache.easyant.plugins;ivy-repo-management-test" xmlns:au="antlib:org.apache.ant.antunit"
+    xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:ea="antlib:org.apache.easyant">
     
-    <!-- Import your plugin --> 
-    <property name="target" value="${basedir}/target/test-antunit"/>
+    <!-- Import your plugin -->
+    <property name="target" value="${basedir}/target/test-antunit" />
     <!-- configure easyant in current project -->
     <ea:configure-easyant-ivy-instance />
     <!-- import our local plugin -->
-    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources"/>
+    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources" />
    
-    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement --> 
+    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement -->
     <target name="clean" description="remove stale build artifacts before / after each test">
         <delete dir="${basedir}" includeemptydirs="true">
-            <include name="**/target/**"/>
-            <include name="**/lib/**"/>
+            <include name="**/target/**" />
+            <include name="**/lib/**" />
         </delete>
     </target>
-    
+
     <target name="setUp" depends="clean">
-      <property name="ivy.local.default.root" value="${target}/local-repo"/>
-      <property name="ivy.shared.default.root" value="${target}/shared-repo"/>
-      <ivy:settings id="project.ivy.instance"/>
-      <property name="install.interactive.mode" value="false"/>
+        <property name="ivy.local.default.root" value="${target}/local-repo" />
+        <property name="ivy.shared.default.root" value="${target}/shared-repo" />
+        <ivy:settings id="project.ivy.instance" />
+        <property name="install.interactive.mode" value="false" />
     </target>
-    <target name="tearDown" depends="clean"/>
-    
+    <target name="tearDown" depends="clean" />
+
     <target name="test-ivy-repo-management:init" depends="ivy-repo-management:init">
-        <au:assertPropertyEquals name="project.ivy.instance" value="project.ivy.instance"/>
-        <au:assertPropertyEquals name="default.from.resolver" value="public"/>
-        <au:assertPropertyEquals name="default.to.resolver" value="local"/>
-        <au:assertPropertyEquals name="install.override" value="false"/>
-        <au:assertPropertyEquals name="install.ivy.template" value="${org.apache.easyant.plugins#ivy-repo-management.ivy.xml.tpl.file}"/>
-        <au:assertPropertyEquals name="install.temp.directory" value="${target}/install"/>
-        <au:assertPropertyEquals name="install.status" value="release"/>
-        <au:assertPropertyEquals name="install.interactive.mode" value="false"/>
-        <au:assertPropertyEquals name="is.project.ivy.settings.configured" value="true"/>
+        <au:assertPropertyEquals name="project.ivy.instance" value="project.ivy.instance" />
+        <au:assertPropertyEquals name="default.from.resolver" value="public" />
+        <au:assertPropertyEquals name="default.to.resolver" value="local" />
+        <au:assertPropertyEquals name="install.override" value="false" />
+        <au:assertPropertyEquals name="install.ivy.template"
+            value="${org.apache.easyant.plugins#ivy-repo-management.ivy.xml.tpl.file}" />
+        <au:assertPropertyEquals name="install.temp.directory" value="${target}/install" />
+        <au:assertPropertyEquals name="install.status" value="release" />
+        <au:assertPropertyEquals name="install.interactive.mode" value="false" />
+        <au:assertPropertyEquals name="is.project.ivy.settings.configured" value="true" />
     </target>
-    
+
     <target name="test-ivy-repo-management:check-interactive-mode" depends="-ivy-repo-management:check-interactive-mode">
-        <au:assertPropertyEquals name="from.resolver" value="${default.from.resolver}"/>
-        <au:assertPropertyEquals name="to.resolver" value="${default.to.resolver}"/>
+        <au:assertPropertyEquals name="from.resolver" value="${default.from.resolver}" />
+        <au:assertPropertyEquals name="to.resolver" value="${default.to.resolver}" />
     </target>
-    
+
     <target name="prepare-copy-artifact">
-        <property name="org" value="junit"/>
-        <property name="module" value="junit"/>
-        <property name="rev" value="4.4"/>
+        <property name="org" value="junit" />
+        <property name="module" value="junit" />
+        <property name="rev" value="4.4" />
     </target>
 
     <target name="test-ivy-repo-management:copy-artifact" depends="prepare-copy-artifact, ivy-repo-management:copy-artifact">
-        <au:assertLogContains text=":: installing junit#junit;4.4 ::"/>
-        <au:assertLogContains text=":: installing in local ::"/>
-        <au:assertLogContains text="publish commited"/>
+        <au:assertLogContains text=":: installing junit#junit;4.4 ::" />
+        <au:assertLogContains text=":: installing in local ::" />
+        <au:assertLogContains text="publish commited" />
     </target>
 
     <target name="prepare-install-artifact">
-        <property name="org" value="org.foobar"/>
-        <property name="module" value="foobar-core"/>
-        <property name="rev" value="1.0"/>
-        <echo file="myartifact"/>
-        <property name="artifact" value="myartifact"/>
-         
+        <property name="org" value="org.foobar" />
+        <property name="module" value="foobar-core" />
+        <property name="rev" value="1.0" />
+        <echo file="myartifact" />
+        <property name="artifact" value="myartifact" />
     </target>
 
-
     <target name="test-ivy-repo-management:install-artifact" depends="prepare-install-artifact, ivy-repo-management:install-artifact">
-       <au:assertLogContains text="Creating ivy temp directory in ${install.temp.directory}"/>
-        <au:assertFileExists file="${install.temp.directory}"/>
-        <au:assertLogContains text="Copying ${artifact} in the ivy temp directory"/>
-        <au:assertLogContains text="Generating ivy file for ${artifact}"/>
-        <au:assertLogContains text="Publishing artifact in ${to.resolver} repository"/>
-        <au:assertLogContains text="Cleaning ${install.temp.directory}"/>
-        <au:assertLogContains text="${artifact.to.install.file} succefully installed in your ${to.resolver} repository"/>
-        <au:assertLogContains text=":: publishing :: org.foobar#foobar-core"/>
-        <au:assertLogContains text="publish commited"/>
-
+        <au:assertLogContains text="Creating ivy temp directory in ${install.temp.directory}" />
+        <au:assertFileExists file="${install.temp.directory}" />
+        <au:assertLogContains text="Copying ${artifact} in the ivy temp directory" />
+        <au:assertLogContains text="Generating ivy file for ${artifact}" />
+        <au:assertLogContains text="Publishing artifact in ${to.resolver} repository" />
+        <au:assertLogContains text="Cleaning ${install.temp.directory}" />
+        <au:assertLogContains text="${artifact.to.install.file} succefully installed in your ${to.resolver} repository" />
+        <au:assertLogContains text=":: publishing :: org.foobar#foobar-core" />
+        <au:assertLogContains text="publish commited" />
     </target>
 </project>

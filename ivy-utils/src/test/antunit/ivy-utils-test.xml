@@ -14,59 +14,52 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project name="org.apache.easyant.plugins;ivy-utils-test" 
-    xmlns:au="antlib:org.apache.ant.antunit" 
-    xmlns:ivy="antlib:org.apache.ivy.ant"
+<project name="org.apache.easyant.plugins;ivy-utils-test" xmlns:au="antlib:org.apache.ant.antunit" xmlns:ivy="antlib:org.apache.ivy.ant"
     xmlns:ea="antlib:org.apache.easyant">
     
-    <!-- Import your plugin --> 
-    <property name="target" value="${basedir}/target/test-antunit"/>
+    <!-- Import your plugin -->
+    <property name="target" value="${basedir}/target/test-antunit" />
     <!-- configure easyant in current project -->
     <ea:configure-easyant-ivy-instance />
     <!-- import our local plugin -->
-    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources"/>
+    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources" />
    
-    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement --> 
+    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement -->
     <target name="clean" description="remove stale build artifacts before / after each test">
         <delete dir="${basedir}" includeemptydirs="true">
-            <include name="**/target/**"/>
-            <include name="**/lib/**"/>
+            <include name="**/target/**" />
+            <include name="**/lib/**" />
         </delete>
     </target>
-    
+
     <target name="setUp" depends="clean">
-      <property name="ivy.local.default.root" value="${target}/local-repo"/>
-      <property name="ivy.shared.default.root" value="${target}/shared-repo"/>
-      <property name="project.ivy.file" value="sample-module.ivy"/>
-      <ivy:settings id="project.ivy.instance"/>
-      <ivy:resolve file="${project.ivy.file}" settingsRef="project.ivy.instance"/>
-      <mkdir dir="${target}/artifacts"/>
-      <echo file="${target}/artifacts/standard-java-app.jar"/>
+        <property name="ivy.local.default.root" value="${target}/local-repo" />
+        <property name="ivy.shared.default.root" value="${target}/shared-repo" />
+        <property name="project.ivy.file" value="sample-module.ivy" />
+        <ivy:settings id="project.ivy.instance" />
+        <ivy:resolve file="${project.ivy.file}" settingsRef="project.ivy.instance" />
+        <mkdir dir="${target}/artifacts" />
+        <echo file="${target}/artifacts/standard-java-app.jar" />
     </target>
-    <target name="tearDown" depends="clean"/>
-    
+    <target name="tearDown" depends="clean" />
+
     <target name="test-ivy-utils:init" depends="ivy-utils:init">
-        <au:assertPropertyEquals name="project.ivy.instance" value="project.ivy.instance"/>
-       <au:assertPropertyEquals name="is.project.ivy.settings.configured" value="true"/>
+        <au:assertPropertyEquals name="project.ivy.instance" value="project.ivy.instance" />
+        <au:assertPropertyEquals name="is.project.ivy.settings.configured" value="true" />
     </target>
 
     <target name="test-ivy-utils:report" depends="ivy-utils:report">
-        <au:assertPropertyEquals name="target.reports" value="${target}/reports"/>
-        <au:assertPropertyEquals name="target.report.ivy" value="${target.reports}/dependencies"/>
-        <au:assertFileExists file="${target.report.ivy}"/>
+        <au:assertPropertyEquals name="target.reports" value="${target}/reports" />
+        <au:assertPropertyEquals name="target.report.ivy" value="${target.reports}/dependencies" />
+        <au:assertFileExists file="${target.report.ivy}" />
     </target>
 
-    <target name="test-ivy-utils:clean-cache" depends="ivy-utils:clean-cache">
-    </target>
+    <target name="test-ivy-utils:clean-cache" depends="ivy-utils:clean-cache"/>
 
-    <target name="test-ivy-utils:clean-eacache" depends="ivy-utils:clean-eacache">
-    </target>
+    <target name="test-ivy-utils:clean-eacache" depends="ivy-utils:clean-eacache"/>
 
     <target name="test-ivy-utils:clean-lib" depends="ivy-utils:clean-lib">
-        <au:assertPropertyEquals name="lib.dir" value="lib"/>
+        <au:assertPropertyEquals name="lib.dir" value="lib" />
         <au:assertFileDoesntExist file="${lib.dir}" />
     </target>
-
-
-
 </project>
