@@ -15,7 +15,6 @@
    limitations under the License.
 -->
 <project name="org.apache.easyant.plugins#run-java" xmlns:ea="antlib:org.apache.easyant">
-
     <ea:core-version requiredrevision="[0.9,+]" />
 
     <ea:import mrid="org.apache.easyant.plugins#abstract-package;0.9" />
@@ -23,16 +22,20 @@
     <target name="run-java:init">
         <ea:parameter property="target.main.classes" required="true" description="directory where main compiled classes are" />
 
-        <ea:parameter property="project.main.classname" description="Used to define the project main class. The mainclass will then be used by many plugins (manifest, run-java, etc...)" />
+        <ea:parameter property="project.main.classname"
+            description="Used to define the project main class. The mainclass will then be used by many plugins (manifest, run-java, etc...)" />
         <condition property="project.main.classname.isset">
             <not>
-                <isset property="project.main.classname"/>
+                <isset property="project.main.classname" />
             </not>
         </condition>
         <ea:parameter property="run.main.classname" required="${project.main.classname.isset}" default="${project.main.classname}">
-Name of the main class to run.
-By default this property take the same value as 'project.main.classname'  property.
-If you are looking for a way to reference your mainclass one time for all plugins you should set project.main.classname instead.
+            Name of the main class to run.
+            By default this property take the same value as 'project.main.classname'
+            property.
+            If you are looking for a way to reference your mainclass one time for all plugins you should set
+            project.main.classname
+            instead.
         </ea:parameter>
 
         <ea:parameter path="compile.main.classpath" required="true" description="path used to compile main sources" />
@@ -45,10 +48,10 @@ If you are looking for a way to reference your mainclass one time for all plugin
     </target>
 
     <target name="run-java:run" depends="run-java:init,abstract-package:package-ready" description="run the application">
-        <available classname="${run.main.classname}" property="is.run.main.classname.configured" classpathref="run.main.classpath"/>
-        <fail unless="is.run.main.classname.configured" message="the 'run.main.classname' property is not properly configured. By default this property take the same value as 'project.main.classname'  property. If you're looking for a way to reference your mainclass one time for all plugins you should set project.main.classname instead."/>
+        <available classname="${run.main.classname}" property="is.run.main.classname.configured" classpathref="run.main.classpath" />
+        <fail unless="is.run.main.classname.configured"
+            message="the 'run.main.classname' property is not properly configured. By default this property take the same value as 'project.main.classname'  property. If you're looking for a way to reference your mainclass one time for all plugins you should set project.main.classname instead." />
 
         <java classpathref="run.main.classpath" classname="${run.main.classname}" />
     </target>
-
 </project>

@@ -14,36 +14,29 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project name="org.apache.easyant.plugins#package-jar"
-    xmlns:ea="antlib:org.apache.easyant">
-
+<project name="org.apache.easyant.plugins#package-jar" xmlns:ea="antlib:org.apache.easyant">
     <ea:core-version requiredrevision="[0.9,+]" />
-    <ea:import mrid="org.apache.easyant.plugins#abstract-package;0.9"/>
+    <ea:import mrid="org.apache.easyant.plugins#abstract-package;0.9" />
 
     <target name="package-jar:init" depends="abstract-package:init,abstract-package:compute-metainf">
         <ea:parameter property="target.artifacts.main.jar.name" default="${module.name}.jar" description="main artifact file name" />
-
-        <ea:parameter property="target.main.artifact" description="the location of the main artifact" default="${target.artifacts}/${target.artifacts.main.jar.name}"/>
-
-        <ea:parameter property="target.main.classes" required="true" 
+        <ea:parameter property="target.main.artifact" description="the location of the main artifact"
+            default="${target.artifacts}/${target.artifacts.main.jar.name}" />
+        <ea:parameter property="target.main.classes" required="true"
             description="directory where compiled classes that should be packaged are" />
-        <ea:parameter property="manifest.file" required="true"
-            description="the file used to generate manifest" />
-
-        <ea:parameter property="package.jar.includes.pattern" default="**/*" 
+        <ea:parameter property="manifest.file" required="true" description="the file used to generate manifest" />
+        <ea:parameter property="package.jar.includes.pattern" default="**/*"
             description="Pattern describing files included in the output jar" />
-        <ea:parameter property="package.jar.excludes.pattern" default="" 
+        <ea:parameter property="package.jar.excludes.pattern" default=""
             description="Pattern describing files excluded in the output jar" />
-
     </target>
 
-    <target name="package-jar:jar" depends="package-jar:init,abstract-package:package-ready" description="package project as a JAR" unless="skip.jar.package" extensionOf="abstract-package:package">
+    <target name="package-jar:jar" depends="package-jar:init,abstract-package:package-ready" description="package project as a JAR"
+        unless="skip.jar.package" extensionOf="abstract-package:package">
         <mkdir dir="${target.artifacts}" />
-        <jar destfile="${target.main.artifact}" manifest="${manifest.file}" 
-            basedir="${target.main.classes}" includes="${package.jar.includes.pattern}"
-            excludes="${package.jar.excludes.pattern}">
-            <metainf refid="package.metainf.fileset"/>
+        <jar destfile="${target.main.artifact}" manifest="${manifest.file}" basedir="${target.main.classes}"
+            includes="${package.jar.includes.pattern}" excludes="${package.jar.excludes.pattern}">
+            <metainf refid="package.metainf.fileset" />
         </jar>
     </target>
-
 </project>

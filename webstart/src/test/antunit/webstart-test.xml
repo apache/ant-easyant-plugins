@@ -14,77 +14,72 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project name="org.apache.easyant.plugins;webstart-test" 
-    xmlns:au="antlib:org.apache.ant.antunit" 
-    xmlns:ivy="antlib:org.apache.ivy.ant"
-    xmlns:ea="antlib:org.apache.easyant">
-    
-    <!-- Import your plugin --> 
-    <property name="target" value="target/test-antunit"/>
-    <!-- configure easyant in current project -->
-    <ea:configure-easyant-ivy-instance />
-    <!-- import our local plugin -->
-    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources"/>
-   
-    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement --> 
-    <target name="clean" description="remove stale build artifacts before / after each test">
-        <delete dir="${basedir}" includeemptydirs="true">
-            <include name="**/target/**"/>
-            <include name="**/lib/**"/>
-        </delete>
-    </target>
-    
-    <target name="setUp" depends="clean">
-       <property name="target.main.artifact" value="${target}/artifacts/foobar.jar"/>
-       <property name="webstart.jnlp.file" value="${basedir}/foobar.jnlp"/>
-       <property name="skip.register.main.artifact" value="true"/>
-       <property name="webstart.sign.jar" value="true"/>
-       <property name="webstart.alias" value="myalias"/>
-       <property name="webstart.storepass" value="mypass"/>
+<project name="org.apache.easyant.plugins;webstart-test" xmlns:au="antlib:org.apache.ant.antunit" xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:ea="antlib:org.apache.easyant">
 
-       <mkdir dir="${target}/artifacts"/>
-       <jar destfile="${target.main.artifact}"/>
-       <mkdir dir="lib/main"/>
-       <echo file="${webstart.jnlp.file}"/>
-    </target>
+	<!-- Import your plugin -->
+	<property name="target" value="target/test-antunit" />
+	<!-- configure easyant in current project -->
+	<ea:configure-easyant-ivy-instance />
+	<!-- import our local plugin -->
+	<ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources" />
 
-    <target name="tearDown" depends="clean"/>
-    
-    <target name="test-webstart:init" depends="webstart:init">
-        <au:assertPropertyEquals name="webstart.jnlp.file" value="${basedir}/foobar.jnlp"/>
-        <au:assertPropertyEquals name="webstart.sign.jar" value="true"/>
-<!--TODO: test property not set
+	<!-- Defines a setUp / tearDown (before each test) that cleans the environnement -->
+	<target name="clean" description="remove stale build artifacts before / after each test">
+		<delete dir="${basedir}" includeemptydirs="true">
+			<include name="**/target/**" />
+			<include name="**/lib/**" />
+		</delete>
+	</target>
+
+	<target name="setUp" depends="clean">
+		<property name="target.main.artifact" value="${target}/artifacts/foobar.jar" />
+		<property name="webstart.jnlp.file" value="${basedir}/foobar.jnlp" />
+		<property name="skip.register.main.artifact" value="true" />
+		<property name="webstart.sign.jar" value="true" />
+		<property name="webstart.alias" value="myalias" />
+		<property name="webstart.storepass" value="mypass" />
+
+		<mkdir dir="${target}/artifacts" />
+		<jar destfile="${target.main.artifact}" />
+		<mkdir dir="lib/main" />
+		<echo file="${webstart.jnlp.file}" />
+	</target>
+
+	<target name="tearDown" depends="clean" />
+
+	<target name="test-webstart:init" depends="webstart:init">
+		<au:assertPropertyEquals name="webstart.jnlp.file" value="${basedir}/foobar.jnlp" />
+		<au:assertPropertyEquals name="webstart.sign.jar" value="true" />
+		<!--TODO: test property not set
         <au:assertPropertyEquals name="webstart.flat.path" value=""/>
 -->
-        <au:assertPropertyEquals name="target.main.artifact" value="${target}/artifacts/foobar.jar"/>
-        <au:assertReferenceSet refid="lib.main.fileset"/>
-    </target>
+		<au:assertPropertyEquals name="target.main.artifact" value="${target}/artifacts/foobar.jar" />
+		<au:assertReferenceSet refid="lib.main.fileset" />
+	</target>
 
-    <target name="test-webstart:edit-jnlp" depends="webstart:edit-jnlp">
-        <au:assertLogContains text="[Library directory]: ${lib.main}" level="debug"/>
-        <au:assertLogContains text="[libArtifact]: ${target.main.artifact}" level="debug"/>
-        <!--TODO: test partialjnlp's job -->
-    </target>
-    
-    <target name="test-webstart:sign" depends="webstart:sign">
-        <au:assertPropertyEquals name="webstart.alias" value="myalias"/>
-        <au:assertPropertyEquals name="webstart.storepass" value="mypass"/>
-        <au:assertPropertyEquals name="webstart.keypass" value=""/>
-        <au:assertPropertyEquals name="webstart.keystore" value=""/>
-        <au:assertPropertyEquals name="webstart.lazy" value="false"/>
-        <au:assertLogContains text="Sign..." />
-        <au:assertTrue>
-            <issigned file="${target.main.artifact}"/>
-        </au:assertTrue> 
-        <au:assertLogContains text="Sign done !"/>
-    </target>
-    
-    <target name="test-webstart:prepare" depends="webstart:prepare">
-    </target>
+	<target name="test-webstart:edit-jnlp" depends="webstart:edit-jnlp">
+		<au:assertLogContains text="[Library directory]: ${lib.main}" level="debug" />
+		<au:assertLogContains text="[libArtifact]: ${target.main.artifact}" level="debug" />
+		<!--TODO: test partialjnlp's job -->
+	</target>
 
-    <target name="test-webstart:run" depends="webstart:run">
-        <!-- TODO: Don't know how to test it yet :) -->
-    </target>
+	<target name="test-webstart:sign" depends="webstart:sign">
+		<au:assertPropertyEquals name="webstart.alias" value="myalias" />
+		<au:assertPropertyEquals name="webstart.storepass" value="mypass" />
+		<au:assertPropertyEquals name="webstart.keypass" value="" />
+		<au:assertPropertyEquals name="webstart.keystore" value="" />
+		<au:assertPropertyEquals name="webstart.lazy" value="false" />
+		<au:assertLogContains text="Sign..." />
+		<au:assertTrue>
+			<issigned file="${target.main.artifact}" />
+		</au:assertTrue>
+		<au:assertLogContains text="Sign done !" />
+	</target>
 
+	<target name="test-webstart:prepare" depends="webstart:prepare">
+	</target>
 
+	<target name="test-webstart:run" depends="webstart:run">
+		<!-- TODO: Don't know how to test it yet :) -->
+	</target>
 </project>

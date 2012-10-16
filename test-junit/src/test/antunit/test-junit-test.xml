@@ -14,68 +14,69 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project name="org.apache.easyant.plugins;test-junit-test" 
-    xmlns:au="antlib:org.apache.ant.antunit" 
-    xmlns:ivy="antlib:org.apache.ivy.ant"
+<project name="org.apache.easyant.plugins;test-junit-test" xmlns:au="antlib:org.apache.ant.antunit" xmlns:ivy="antlib:org.apache.ivy.ant"
     xmlns:ea="antlib:org.apache.easyant">
     
-    <!-- Import your plugin --> 
-    <property name="target" value="target/test-antunit"/>
+    <!-- Import your plugin -->
+    <property name="target" value="target/test-antunit" />
     <!-- configure easyant in current project -->
     <ea:configure-easyant-ivy-instance />
     <!-- import our local plugin -->
-    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources"/>
+    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources" />
    
-    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement --> 
+    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement -->
     <target name="clean" description="remove stale build artifacts before / after each test">
         <delete dir="${basedir}" includeemptydirs="true">
-            <include name="**/target/**"/>
-            <include name="**/lib/**"/>
+            <include name="**/target/**" />
+            <include name="**/lib/**" />
         </delete>
     </target>
     
     <!--FIXME: test-junit targets get executed as they are prefixed by "test" -->
     <target name="setUp" depends="clean">
-        <ivy:settings id="project.ivy.instance"/>
-        <ivy:cachepath pathid="compile.test.classpath" file="sample-module.ivy" settingsRef="project.ivy.instance"/>
-        <mkdir dir="${target}/test/classes"/>
-        <mkdir dir="${target}/integration-test/classes"/>
-        <javac srcdir="src/test/java" destdir="${target}/test/classes" classpathref="compile.test.classpath"/>
-        <javac srcdir="src/integration-test/java" destdir="${target}/integration-test/classes" classpathref="compile.test.classpath"/>
+        <ivy:settings id="project.ivy.instance" />
+        <ivy:cachepath pathid="compile.test.classpath" file="sample-module.ivy" settingsRef="project.ivy.instance" />
+        <mkdir dir="${target}/test/classes" />
+        <mkdir dir="${target}/integration-test/classes" />
+        <javac srcdir="src/test/java" destdir="${target}/test/classes" classpathref="compile.test.classpath" />
+        <javac srcdir="src/integration-test/java" destdir="${target}/integration-test/classes" classpathref="compile.test.classpath" />
     </target>
-    <target name="tearDown" depends="clean"/>
-    
+    <target name="tearDown" depends="clean" />
+
     <target name="test-test-junit:init" depends="test-junit:init">
-        <au:assertPropertyEquals name="test.run.forkmode" value="perTest"/>
-        <au:assertPropertyEquals name="test.run.fork" value="true"/>
-        <au:assertPropertyEquals name="test.run.jvmargs" value=""/>
-        <au:assertPropertyEquals name="test.integration.run.forkmode" value="perTest"/>
-        <au:assertPropertyEquals name="test.integration.run.fork" value="true"/>
-        <au:assertPropertyEquals name="test.integration.run.jvmargs" value=""/>
+        <au:assertPropertyEquals name="test.run.forkmode" value="perTest" />
+        <au:assertPropertyEquals name="test.run.fork" value="true" />
+        <au:assertPropertyEquals name="test.run.jvmargs" value="" />
+        <au:assertPropertyEquals name="test.integration.run.forkmode" value="perTest" />
+        <au:assertPropertyEquals name="test.integration.run.fork" value="true" />
+        <au:assertPropertyEquals name="test.integration.run.jvmargs" value="" />
     </target>
 
     <target name="test-test-junit:test" depends="-test-junit:test">
-        <au:assertFileExists file="${target.test.xml}"/>
-        <au:assertFileExists file="${test.run.dir}"/>
+        <au:assertFileExists file="${target.test.xml}" />
+        <au:assertFileExists file="${test.run.dir}" />
     </target>
 
     <target name="test-test-junit:integration-test" depends="-test-junit:integration-test">
-        <au:assertFileExists file="${target.test.xml}"/>
-        <au:assertFileExists file="${test.integration.run.dir}"/>
- 
+        <au:assertFileExists file="${target.test.xml}" />
+        <au:assertFileExists file="${test.integration.run.dir}" />
     </target>
 
     <target name="configure-plugin">
-       <property name="test.mode.run" value="true"/>
-       <property name="test.run.failonerror" value="false"/>
+        <property name="test.mode.run" value="true" />
+        <property name="test.run.failonerror" value="false" />
     </target>
-    
+
     <target name="test-test-junit:run" depends="configure-plugin,test-junit:run">
-        <au:assertLogContains text="At least one test has failed. See logs in ${target.test.xml} for details or use the report target to run the test with a report" level="error"/>
+        <au:assertLogContains
+            text="At least one test has failed. See logs in ${target.test.xml} for details or use the report target to run the test with a report"
+            level="error" />
     </target>
 
     <target name="test-test-junit:run-integration" depends="configure-plugin,test-junit:run-integration">
-        <au:assertLogContains text="At least one integration test has failed. See logs in ${target.test.xml} for details or use the report target to run the test with a report" level="error"/>
+        <au:assertLogContains
+            text="At least one integration test has failed. See logs in ${target.test.xml} for details or use the report target to run the test with a report"
+            level="error" />
 
     </target>
 

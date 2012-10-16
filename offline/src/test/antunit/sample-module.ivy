@@ -15,13 +15,11 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<ivy-module version="2.0" xmlns:ea="http://www.easyant.org"> 
+<ivy-module version="2.0" xmlns:ea="http://www.easyant.org">
     <info organisation="org.apache.easyant" module="standard-java-app" revision="0.1" status="integration">
-        <ea:plugin module="rat" revision="0.9"/>
+        <ea:plugin module="rat" revision="0.9" />
     </info>
-    <dependencies> 
-        <dependency org="junit" name="junit" rev="4.4"/>
-            
+    <dependencies>
+        <dependency org="junit" name="junit" rev="4.4" />
     </dependencies>
-
 </ivy-module>

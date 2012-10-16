@@ -14,63 +14,63 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project name="org.apache.easyant.plugins;webstart" 
-        xmlns:ivy="antlib:org.apache.ivy.ant" 
-        xmlns:ac="antlib:net.sf.antcontrib"
-        xmlns:ea="antlib:org.apache.easyant">
-
+<project name="org.apache.easyant.plugins;webstart" xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:ac="antlib:net.sf.antcontrib"
+    xmlns:ea="antlib:org.apache.easyant">
     <ea:core-version requiredrevision="[0.9,+]" />
 
-    <ea:import mrid="org.apache.easyant.plugins#abstract-package;0.9"/>
+    <ea:import mrid="org.apache.easyant.plugins#abstract-package;0.9" />
 
     <macrodef name="signJars">
-        <attribute name="alias"   description="the alias signer" />
-        <attribute name="storepass"  description="the keystore password"/>
-        <attribute name="keypass"  default="@{storepass}" description="the key password"/>
-        <attribute name="keystore"  description="the path to the keystore"/>
-        <attribute name="lazy"  default="false" description="tell if the already signed jars have to be signed a second time"/>
-       <element name="signFolder" optional="yes"/>
-       <sequential>
-        <echo>Sign...</echo>
-        <ac:if>
-            <isset property="@{keystore}"/>
-            <ac:then>
-                <signjar alias="@{alias}" keypass="@{keypass}" keystore="@{keystore}" storepass="@{storepass}" lazy="@{replaceSign}">
-                   <signFolder/>
-                </signjar>
-            </ac:then>
-            <ac:else>
-                <signjar alias="@{alias}" keypass="@{keypass}" storepass="@{storepass}" lazy="@{replaceSign}">
-                    <signFolder/>
-                </signjar>
-            </ac:else>
-        </ac:if>
-        <echo>Sign done !</echo>
-       </sequential>
+        <attribute name="alias" description="the alias signer" />
+        <attribute name="storepass" description="the keystore password" />
+        <attribute name="keypass" default="@{storepass}" description="the key password" />
+        <attribute name="keystore" description="the path to the keystore" />
+        <attribute name="lazy" default="false" description="tell if the already signed jars have to be signed a second time" />
+        <element name="signFolder" optional="yes" />
+        <sequential>
+            <echo>Sign...</echo>
+            <ac:if>
+                <isset property="@{keystore}" />
+                <ac:then>
+                    <signjar alias="@{alias}" keypass="@{keypass}" keystore="@{keystore}" storepass="@{storepass}"
+                        lazy="@{replaceSign}">
+                        <signFolder />
+                    </signjar>
+                </ac:then>
+                <ac:else>
+                    <signjar alias="@{alias}" keypass="@{keypass}" storepass="@{storepass}" lazy="@{replaceSign}">
+                        <signFolder />
+                    </signjar>
+                </ac:else>
+            </ac:if>
+            <echo>Sign done !</echo>
+        </sequential>
     </macrodef>
 
     <target name="webstart:init">
         <ea:parameter property="webstart.jnlp.file" required="true" description="the jnlp to modify" />
         <ea:parameter property="webstart.sign.jar" default="false" description="tell if the jars has to be signed" />
-        <ea:parameter property="webstart.flat.path" description="Force the resources path in the jnlp file. If the path resources have to be declared in relative or absolute" />
-        <ea:parameter property="target.main.artifact" required="true" description="the location of the main artifact"/>
+        <ea:parameter property="webstart.flat.path"
+            description="Force the resources path in the jnlp file. If the path resources have to be declared in relative or absolute" />
+        <ea:parameter property="target.main.artifact" required="true" description="the location of the main artifact" />
 
         <taskdef name="partial-jnlp" classname="org.apache.easyant.tasks.JNLPTask" classpathref="org.apache.easyant.plugins#webstart.classpath" />
     </target>
 
     <target name="webstart:edit-jnlp" depends="webstart:init" description="edit an existing jnlp file">
-        <echo message="[Library directory]: ${lib.main}" level="debug"/>
-        <echo message="[libArtifact]: ${target.main.artifact}" level="debug"/>
+        <echo message="[Library directory]: ${lib.main}" level="debug" />
+        <echo message="[libArtifact]: ${target.main.artifact}" level="debug" />
         <ac:if>
             <isset property="webstart.flat.path" />
             <ac:then>
                 <partial-jnlp mainJar="${target.main.artifact}" jnlpFile="${webstart.jnlp.file}">
-                    <fileset refid="lib.main.fileset"/>
+                    <fileset refid="lib.main.fileset" />
                 </partial-jnlp>
             </ac:then>
             <ac:else>
-                <partial-jnlp mainJar="${target.main.artifact}" jnlpFile="${webstart.jnlp.file}" flatPathResources="${webstart.flat.path}">
-                    <fileset refid="lib.main.fileset"/>
+                <partial-jnlp mainJar="${target.main.artifact}" jnlpFile="${webstart.jnlp.file}"
+                    flatPathResources="${webstart.flat.path}">
+                    <fileset refid="lib.main.fileset" />
                 </partial-jnlp>
             </ac:else>
         </ac:if>
@@ -81,12 +81,14 @@
         <ea:parameter property="webstart.storepass" required="true" description="the keystore password" />
         <ea:parameter property="webstart.keypass" default="${webstart.storepass}" description="the key password" />
         <ea:parameter property="keystore" default="" description="the path to the keystore" />
-        <ea:parameter property="lazy" default="false" description="tell if the already signed jars have to be signed a second time" />
-        <signJars alias="${webstart.alias}" storepass="${webstart.storepass}" keypass="${webstart.keypass}" keystore="${webstart.keystore}" lazy="${webstart.lazy}" >
-             <signfolder>
-                 <fileset refid="lib.main.fileset"/>
-                 <fileset file="${target.main.artifact}" />
-             </signfolder>
+        <ea:parameter property="lazy" default="false"
+            description="tell if the already signed jars have to be signed a second time" />
+        <signJars alias="${webstart.alias}" storepass="${webstart.storepass}" keypass="${webstart.keypass}"
+            keystore="${webstart.keystore}" lazy="${webstart.lazy}">
+            <signfolder>
+                <fileset refid="lib.main.fileset" />
+                <fileset file="${target.main.artifact}" />
+            </signfolder>
         </signJars>
     </target>
 
@@ -97,5 +99,4 @@
             <arg value="${webstart.jnlp.file}" />
         </exec>
     </target>
-
 </project>

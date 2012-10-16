@@ -14,35 +14,32 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project name="org.apache.easyant.plugins;meta-build-autoactivator-test" 
-    xmlns:au="antlib:org.apache.ant.antunit" 
-    xmlns:ivy="antlib:org.apache.ivy.ant"
-    xmlns:ea="antlib:org.apache.easyant">
+<project name="org.apache.easyant.plugins;meta-build-autoactivator-test" xmlns:au="antlib:org.apache.ant.antunit"
+    xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:ea="antlib:org.apache.easyant">
     
-    <!-- Import your plugin --> 
-    <property name="target" value="target/test-antunit"/>
+    <!-- Import your plugin -->
+    <property name="target" value="target/test-antunit" />
     <!-- configure easyant in current project -->
     <ea:configure-easyant-ivy-instance />
-    <property name="skip.org.apache.easyant.buildtypes#meta-build;0.2" value="true"/>
+    <property name="skip.org.apache.easyant.buildtypes#meta-build;0.2" value="true" />
     <!-- import our local plugin -->
-    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources"/>
+    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources" />
 
-    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement --> 
+    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement -->
     <target name="clean" description="remove stale build artifacts before / after each test">
         <delete dir="${basedir}" includeemptydirs="true">
-            <include name="**/target/**"/>
-            <include name="**/lib/**"/>
+            <include name="**/target/**" />
+            <include name="**/lib/**" />
         </delete>
     </target>
-    
+
     <target name="setUp" depends="clean">
     </target>
-    <target name="tearDown" depends="clean"/>
-    
-    <target name="test-meta-build-autoactivator">
-        <au:assertPropertyEquals name="metabuild.root" value="."/>
-        <au:assertPropertyEquals name="metabuild.excludes" value="**/src/ **/lib/ **/target/ **/bin module.ivy"/>
-        <au:assertPropertyEquals name="metabuild.mode" value="all"/>
-    </target>
+    <target name="tearDown" depends="clean" />
 
+    <target name="test-meta-build-autoactivator">
+        <au:assertPropertyEquals name="metabuild.root" value="." />
+        <au:assertPropertyEquals name="metabuild.excludes" value="**/src/ **/lib/ **/target/ **/bin module.ivy" />
+        <au:assertPropertyEquals name="metabuild.mode" value="all" />
+    </target>
 </project>

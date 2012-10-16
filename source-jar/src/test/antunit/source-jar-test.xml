@@ -14,56 +14,50 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project name="org.apache.easyant.plugins;source-jar-test" 
-    xmlns:au="antlib:org.apache.ant.antunit" 
-    xmlns:ivy="antlib:org.apache.ivy.ant"
+<project name="org.apache.easyant.plugins;source-jar-test" xmlns:au="antlib:org.apache.ant.antunit" xmlns:ivy="antlib:org.apache.ivy.ant"
     xmlns:ea="antlib:org.apache.easyant">
     
-    <!-- Import your plugin --> 
-    <property name="target" value="target/test-antunit"/>
+    <!-- Import your plugin -->
+    <property name="target" value="target/test-antunit" />
     <!-- configure easyant in current project -->
     <ea:configure-easyant-ivy-instance />
     <!-- import our local plugin -->
-    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources"/>
+    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources" />
 
-    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement --> 
+    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement -->
     <target name="clean" description="remove stale build artifacts before / after each test">
         <delete dir="${basedir}" includeemptydirs="true">
-            <include name="**/target/**"/>
-            <include name="**/lib/**"/>
+            <include name="**/target/**" />
+            <include name="**/lib/**" />
         </delete>
     </target>
-    
+
     <target name="setUp" depends="clean">
-        <property name="project.ivy.instance" value="project.ivy.instance"/>
-        <ivy:settings id="project.ivy.instance"/>
-        <ivy:resolve file="sample-module.ivy" settingsRef="project.ivy.instance"/>
+        <property name="project.ivy.instance" value="project.ivy.instance" />
+        <ivy:settings id="project.ivy.instance" />
+        <ivy:resolve file="sample-module.ivy" settingsRef="project.ivy.instance" />
     </target>
-    <target name="tearDown" depends="clean"/>
-    
+    <target name="tearDown" depends="clean" />
+
     <target name="test-source-jar:init" depends="source-jar:init">
-        <au:assertPropertyEquals name="target.artifacts.main.source.jar.name" value="${module.name}-sources.jar"/>
-        <au:assertPropertyEquals name="target.artifacts.test.source.jar.name" value="${module.name}-test-sources.jar"/>
-        <au:assertPropertyEquals name="src.main.java" value="${basedir}/src/main/java"/>
-        <au:assertPropertyEquals name="src.test.java" value="${basedir}/src/test/java"/>
-        <au:assertPropertyEquals name="src.main.resources" value="${basedir}/src/main/resources"/>
-        <au:assertPropertyEquals name="src.test.resources" value="${basedir}/src/test/resources"/>
-        <au:assertPropertyEquals name="src.publish.conf" value="source"/>
-        <au:assertPropertyEquals name="has.src.main" value="true"/>
-        <au:assertPropertyEquals name="has.src.test" value="true"/>
+        <au:assertPropertyEquals name="target.artifacts.main.source.jar.name" value="${module.name}-sources.jar" />
+        <au:assertPropertyEquals name="target.artifacts.test.source.jar.name" value="${module.name}-test-sources.jar" />
+        <au:assertPropertyEquals name="src.main.java" value="${basedir}/src/main/java" />
+        <au:assertPropertyEquals name="src.test.java" value="${basedir}/src/test/java" />
+        <au:assertPropertyEquals name="src.main.resources" value="${basedir}/src/main/resources" />
+        <au:assertPropertyEquals name="src.test.resources" value="${basedir}/src/test/resources" />
+        <au:assertPropertyEquals name="src.publish.conf" value="source" />
+        <au:assertPropertyEquals name="has.src.main" value="true" />
+        <au:assertPropertyEquals name="has.src.test" value="true" />
     </target>
 
     <target name="test-source-jar:main" depends="source-jar:main">
-        <au:assertFileExists file="${target.artifacts}"/>
-        <au:assertFileExists file="${target.artifacts}/${target.artifacts.main.source.jar.name}"/>
+        <au:assertFileExists file="${target.artifacts}" />
+        <au:assertFileExists file="${target.artifacts}/${target.artifacts.main.source.jar.name}" />
     </target>
 
     <target name="test-source-jar:test" depends="source-jar:test">
-        <au:assertFileExists file="${target.artifacts}"/>
-        <au:assertFileExists file="${target.artifacts}/${target.artifacts.test.source.jar.name}"/>
-
-
+        <au:assertFileExists file="${target.artifacts}" />
+        <au:assertFileExists file="${target.artifacts}/${target.artifacts.test.source.jar.name}" />
     </target>
-
-
 </project>

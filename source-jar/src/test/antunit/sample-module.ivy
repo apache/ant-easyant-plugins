@@ -17,5 +17,4 @@
 -->
 <ivy-module version="2.0" xmlns:ea="http://www.easyant.org"> 
     <info organisation="org.apache.easyant" module="standard-java-app" revision="0.1" status="integration"/>
-
 </ivy-module>

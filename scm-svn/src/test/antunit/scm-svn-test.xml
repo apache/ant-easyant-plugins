@@ -14,55 +14,52 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project name="org.apache.easyant.plugins;scm-svn-test" 
-    xmlns:au="antlib:org.apache.ant.antunit" 
-    xmlns:ivy="antlib:org.apache.ivy.ant"
-    xmlns:ea="antlib:org.apache.easyant">
-    
-    <!-- Import your plugin --> 
-    <property name="target" value="target/test-antunit"/>
-    <!-- configure easyant in current project -->
-    <ea:configure-easyant-ivy-instance />
-    <!-- import our local plugin -->
-    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources"/>
-   
-    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement --> 
-    <target name="clean" description="remove stale build artifacts before / after each test">
-        <delete dir="${basedir}" includeemptydirs="true">
-            <include name="**/target/**"/>
-            <include name="**/lib/**"/>
-        </delete>
-    </target>
-    
-    <target name="setUp" depends="clean">
-      <property name="scm.connection.baseurl" value="mybaseurl"/>
-    </target>
-    <target name="tearDown" depends="clean"/>
-    
-    <target name="test-scm-svn:config" depends="-scm-svn:config">
-      <au:assertPropertyEquals name="scm.connection.username" value=""/>
-      <au:assertPropertyEquals name="scm.connection.password" value=""/>
-      <au:assertPropertyEquals name="scm.connection.baseurl" value="mybaseurl"/>
-      <au:assertPropertyEquals name="scm.svn.javahl" value="true"/>
-      <au:assertPropertyEquals name="scm.svn.svnkit" value="false"/>
-      <au:assertPropertyEquals name="scm.svn.failonerror" value="true"/>
-      <au:assertPropertyEquals name="scm.svn.dateformatter" value="MM/DD/YYYY HH:MM AM_PM"/>
-      <au:assertPropertyEquals name="scm.svn.datetimezone" value="local"/>
-      <au:assertPropertyEquals name="scm.working.copy" value="${basedir}"/>
-    </target>
+<project name="org.apache.easyant.plugins;scm-svn-test" xmlns:au="antlib:org.apache.ant.antunit" xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:ea="antlib:org.apache.easyant">
 
-    <target name="test-scm-svn:init-release" depends="-scm-svn:init-release">
-      <au:assertPropertyEquals name="scm.tag.name" value="${version}"/>
-      <au:assertPropertyEquals name="scm.commit.message" value="EasyAnt: release ${version}"/>
-    </target>
+	<!-- Import your plugin -->
+	<property name="target" value="target/test-antunit" />
+	<!-- configure easyant in current project -->
+	<ea:configure-easyant-ivy-instance />
+	<!-- import our local plugin -->
+	<ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources" />
 
-    <target name="test-scm-svn:init-integration" depends="-scm-svn:init-integration">
-      <au:assertPropertyEquals name="scm.tag.name" value="${version}"/>
-      <au:assertPropertyEquals name="scm.commit.message" value="EasyAnt: integration ${version}"/>
-    </target>
+	<!-- Defines a setUp / tearDown (before each test) that cleans the environnement -->
+	<target name="clean" description="remove stale build artifacts before / after each test">
+		<delete dir="${basedir}" includeemptydirs="true">
+			<include name="**/target/**" />
+			<include name="**/lib/**" />
+		</delete>
+	</target>
 
-    <!-- to be tested -->
-    <!--
+	<target name="setUp" depends="clean">
+		<property name="scm.connection.baseurl" value="mybaseurl" />
+	</target>
+	<target name="tearDown" depends="clean" />
+
+	<target name="test-scm-svn:config" depends="-scm-svn:config">
+		<au:assertPropertyEquals name="scm.connection.username" value="" />
+		<au:assertPropertyEquals name="scm.connection.password" value="" />
+		<au:assertPropertyEquals name="scm.connection.baseurl" value="mybaseurl" />
+		<au:assertPropertyEquals name="scm.svn.javahl" value="true" />
+		<au:assertPropertyEquals name="scm.svn.svnkit" value="false" />
+		<au:assertPropertyEquals name="scm.svn.failonerror" value="true" />
+		<au:assertPropertyEquals name="scm.svn.dateformatter" value="MM/DD/YYYY HH:MM AM_PM" />
+		<au:assertPropertyEquals name="scm.svn.datetimezone" value="local" />
+		<au:assertPropertyEquals name="scm.working.copy" value="${basedir}" />
+	</target>
+
+	<target name="test-scm-svn:init-release" depends="-scm-svn:init-release">
+		<au:assertPropertyEquals name="scm.tag.name" value="${version}" />
+		<au:assertPropertyEquals name="scm.commit.message" value="EasyAnt: release ${version}" />
+	</target>
+
+	<target name="test-scm-svn:init-integration" depends="-scm-svn:init-integration">
+		<au:assertPropertyEquals name="scm.tag.name" value="${version}" />
+		<au:assertPropertyEquals name="scm.commit.message" value="EasyAnt: integration ${version}" />
+	</target>
+
+	<!-- to be tested -->
+	<!--
     <target name="test-scm-svn:tag"/>
     <target name="test-scm-svn:branch"/>
     <target name="test-scm-svn:release"/>

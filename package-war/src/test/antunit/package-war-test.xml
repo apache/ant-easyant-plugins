@@ -14,55 +14,52 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project name="org.apache.easyant.plugins;package-war-test" 
-    xmlns:au="antlib:org.apache.ant.antunit" 
-    xmlns:ivy="antlib:org.apache.ivy.ant"
+<project name="org.apache.easyant.plugins;package-war-test" xmlns:au="antlib:org.apache.ant.antunit" xmlns:ivy="antlib:org.apache.ivy.ant"
     xmlns:ea="antlib:org.apache.easyant">
     
-    <!-- Import your plugin --> 
-    <property name="target" value="target/test-antunit"/>
+    <!-- Import your plugin -->
+    <property name="target" value="target/test-antunit" />
     <!-- configure easyant in current project -->
     <ea:configure-easyant-ivy-instance />
     <!-- import our local plugin -->
-    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources"/>
+    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources" />
 
-    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement --> 
+    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement -->
     <target name="clean" description="remove stale build artifacts before / after each test">
         <delete dir="${basedir}" includeemptydirs="true">
-            <include name="**/target/**"/>
-            <include name="**/lib/**"/>
+            <include name="**/target/**" />
+            <include name="**/lib/**" />
         </delete>
     </target>
-    
+
     <target name="setUp" depends="clean">
-       <property name="target.main.classes" value="${target}/classes"/>
-       <mkdir dir="${target.main.classes}"/>
-       <property name="manifest.file" value="${target}/MANIFEST.MF"/>
-       <echo file="${manifest.file}"/>
+        <property name="target.main.classes" value="${target}/classes" />
+        <mkdir dir="${target.main.classes}" />
+        <property name="manifest.file" value="${target}/MANIFEST.MF" />
+        <echo file="${manifest.file}" />
     </target>
-    <target name="tearDown" depends="clean"/>
+    <target name="tearDown" depends="clean" />
 
     <target name="test-package-war:init" depends="package-war:init">
-        <au:assertPropertyEquals name="target.artifacts.main.war.name" value="${module.name}.war"/>
-        <au:assertPropertyEquals name="target.main.artifact" value="${target.artifacts}/${target.artifacts.main.war.name}"/>
-        <au:assertPropertyEquals name="package.war.includes.pattern" value="**/*"/>
-        <au:assertPropertyEquals name="package.war.excludes.pattern" value=""/>
-        <au:assertPropertyEquals name="package.war.needxmlfile" value="false"/>
-        <au:assertPropertyEquals name="src.main.webapp" value="${basedir}/src/main/webapp"/>
+        <au:assertPropertyEquals name="target.artifacts.main.war.name" value="${module.name}.war" />
+        <au:assertPropertyEquals name="target.main.artifact" value="${target.artifacts}/${target.artifacts.main.war.name}" />
+        <au:assertPropertyEquals name="package.war.includes.pattern" value="**/*" />
+        <au:assertPropertyEquals name="package.war.excludes.pattern" value="" />
+        <au:assertPropertyEquals name="package.war.needxmlfile" value="false" />
+        <au:assertPropertyEquals name="src.main.webapp" value="${basedir}/src/main/webapp" />
 <!--TODO:Test this property 
         <au:assertPropertyNotSet name="package.war.webxml.file" />
 -->
-        <au:assertPropertyEquals name="target.webinf.lib.dir" value="${target}/war/WEB-INF/lib"/>
-        <au:assertFileExists file="${target.artifacts}"/>
+        <au:assertPropertyEquals name="target.webinf.lib.dir" value="${target}/war/WEB-INF/lib" />
+        <au:assertFileExists file="${target.artifacts}" />
     </target>
 
     <target name="test-package-war:prepare-war" depends="-package-war:prepare-war">
-        <au:assertFileExists file="${target.webinf.lib.dir}"/>
-        <au:assertReferenceSet refid="webinf.lib.fileset"/>
+        <au:assertFileExists file="${target.webinf.lib.dir}" />
+        <au:assertReferenceSet refid="webinf.lib.fileset" />
     </target>
 
     <target name="test-package-war:war" depends="package-war:war">
-        <au:assertFileExists file="${target.main.artifact}"/>
+        <au:assertFileExists file="${target.main.artifact}" />
     </target>
-
 </project>

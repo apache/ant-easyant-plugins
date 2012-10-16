@@ -14,54 +14,50 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project name="org.apache.easyant.plugins;jetty-deploy-test" 
-    xmlns:ac="antlib:net.sf.antcontrib"
-    xmlns:au="antlib:org.apache.ant.antunit" 
-    xmlns:ivy="antlib:org.apache.ivy.ant"
-    xmlns:ea="antlib:org.apache.easyant">
+<project name="org.apache.easyant.plugins;jetty-deploy-test" xmlns:ac="antlib:net.sf.antcontrib" xmlns:au="antlib:org.apache.ant.antunit"
+    xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:ea="antlib:org.apache.easyant">
     
-    <!-- Import your plugin --> 
-    <property name="target" value="${basedir}/target/test-antunit"/>
+    <!-- Import your plugin -->
+    <property name="target" value="${basedir}/target/test-antunit" />
     <!-- configure easyant in current project -->
     <ea:configure-easyant-ivy-instance />
     <!-- import our local plugin -->
-    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources"/>
+    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources" />
 
-    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement --> 
+    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement -->
     <target name="clean" description="remove stale build artifacts before / after each test">
         <delete dir="${basedir}" includeemptydirs="true">
-            <include name="**/target/**"/>
-            <include name="**/lib/**"/>
+            <include name="**/target/**" />
+            <include name="**/lib/**" />
         </delete>
     </target>
-    
-    <target name="setUp" depends="clean">
-      <property name="ivy.local.default.root" value="${target}/local-repo"/>
-      <property name="ivy.shared.default.root" value="${target}/shared-repo"/>
-      <property name="project.ivy.file" value="sample-module.ivy"/>
-      <ivy:settings id="project.ivy.instance"/>
-      <ivy:resolve file="${project.ivy.file}" settingsRef="project.ivy.instance"/>
-      <mkdir dir="${target}/artifacts"/>
-      <echo file="${target}/artifacts/standard-java-app.jar"/>
-      <property name="manifest.file" value="${target}/MANIFEST.MF"/>
-      <echo file="${manifest.file}"/>
 
+    <target name="setUp" depends="clean">
+        <property name="ivy.local.default.root" value="${target}/local-repo" />
+        <property name="ivy.shared.default.root" value="${target}/shared-repo" />
+        <property name="project.ivy.file" value="sample-module.ivy" />
+        <ivy:settings id="project.ivy.instance" />
+        <ivy:resolve file="${project.ivy.file}" settingsRef="project.ivy.instance" />
+        <mkdir dir="${target}/artifacts" />
+        <echo file="${target}/artifacts/standard-java-app.jar" />
+        <property name="manifest.file" value="${target}/MANIFEST.MF" />
+        <echo file="${manifest.file}" />
     </target>
-    <target name="tearDown" depends="clean"/>
-    
+    <target name="tearDown" depends="clean" />
+
     <target name="test-jetty-deploy:init" depends="jetty-deploy:init">
-        <au:assertPropertyEquals name="jetty.temp.dir" value="${target}/jetty-temp"/>
+        <au:assertPropertyEquals name="jetty.temp.dir" value="${target}/jetty-temp" />
         <au:assertFalse>
             <isset property="jetty.xml" />
         </au:assertFalse>
-        <au:assertPropertyEquals name="jetty.context" value="/"/>
-        <au:assertPropertyEquals name="jetty.available" value="true"/>
-   </target>
+        <au:assertPropertyEquals name="jetty.context" value="/" />
+        <au:assertPropertyEquals name="jetty.available" value="true" />
+    </target>
 
-   <target name="test-jetty-deploy:run">
+    <target name="test-jetty-deploy:run">
           <!--TODO : don't know yet how to test this target -->
           <!--
             <antcall target="jetty-deploy:run"/>
           -->
-   </target>
+    </target>
 </project>

@@ -15,20 +15,22 @@
    limitations under the License.
 -->
 <project name="org.apache.easyant.plugins#source-jar" xmlns:ea="antlib:org.apache.easyant">
-
     <ea:core-version requiredrevision="[0.9,+]" />
-    <ea:import mrid="org.apache.easyant.plugins#abstract-package;0.9"/>
+    <ea:import mrid="org.apache.easyant.plugins#abstract-package;0.9" />
 
     <target name="source-jar:init" depends="abstract-package:init">
-        <ea:parameter property="target.artifacts.main.source.jar.name" default="${module.name}-sources.jar" description="main source artifact file name" />
+        <ea:parameter property="target.artifacts.main.source.jar.name" default="${module.name}-sources.jar"
+            description="main source artifact file name" />
 
-        <ea:parameter property="target.artifacts.test.source.jar.name" default="${module.name}-test-sources.jar" description="test source artifact file name" />
+        <ea:parameter property="target.artifacts.test.source.jar.name" default="${module.name}-test-sources.jar"
+            description="test source artifact file name" />
 
         <ea:parameter property="src.main.java" default="${basedir}/src/main/java" description="directory where main java files are stored" />
         <ea:parameter property="src.test.java" default="${basedir}/src/test/java" description="directory where test java files are stored" />
-
-        <ea:parameter property="src.main.resources" default="${basedir}/src/main/resources" description="directory where main resources files are stored" />
-        <ea:parameter property="src.test.resources" default="${basedir}/src/test/resources" description="directory where test resources files are stored" />
+        <ea:parameter property="src.main.resources" default="${basedir}/src/main/resources"
+            description="directory where main resources files are stored" />
+        <ea:parameter property="src.test.resources" default="${basedir}/src/test/resources"
+            description="directory where test resources files are stored" />
         <ea:parameter property="src.publish.conf" default="source" description="default configuration for source artifacts" />
 
         <condition property="has.src.main">
@@ -48,24 +50,27 @@
 
     <!-- Main Sources -->
 
-    <target name="source-jar:main" depends="source-jar:init" description="package main source as a JAR" if="has.src.main" unless="skip.source">
+    <target name="source-jar:main" depends="source-jar:init" description="package main source as a JAR" if="has.src.main"
+        unless="skip.source">
         <mkdir dir="${target.artifacts}" />
         <jar destfile="${target.artifacts}/${target.artifacts.main.source.jar.name}">
             <fileset dir="${src.main.resources}" erroronmissingdir="false" />
             <fileset dir="${src.main.java}" erroronmissingdir="false" />
         </jar>
-        <ea:registerartifact type="source" ext="jar" classifier="sources" settingsRef="${project.ivy.instance}" confs="${src.publish.conf}"/>
+        <ea:registerartifact type="source" ext="jar" classifier="sources" settingsRef="${project.ivy.instance}"
+            confs="${src.publish.conf}" />
     </target>
 
     <!-- Test sources -->
 
-    <target name="source-jar:test" depends="source-jar:init" description="package test source as a JAR" if="has.src.test" unless="skip.source">
+    <target name="source-jar:test" depends="source-jar:init" description="package test source as a JAR" if="has.src.test"
+        unless="skip.source">
         <mkdir dir="${target.artifacts}" />
         <jar destfile="${target.artifacts}/${target.artifacts.test.source.jar.name}">
             <fileset dir="${src.test.resources}" erroronmissingdir="false" />
             <fileset dir="${src.test.java}" erroronmissingdir="false" />
         </jar>
-        <ea:registerartifact type="test-source" ext="jar" classifier="test-sources" settingsRef="${project.ivy.instance}" confs="${src.publish.conf}"/>
+        <ea:registerartifact type="test-source" ext="jar" classifier="test-sources" settingsRef="${project.ivy.instance}"
+            confs="${src.publish.conf}" />
     </target>
-
 </project>

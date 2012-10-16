@@ -14,41 +14,47 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<ivy-module version="2.0" xmlns:ea="http://www.easyant.org"> 
+<ivy-module version="2.0" xmlns:ea="http://www.easyant.org">
     <info organisation="org.apache.easyant.plugins" module="jetty-deploy" revision="0.9">
-           <description>
-            A developer-convenience module for quick war-build-and-deploy with jetty (v 6.1.4). This module will 
-            build a webapplication (following same requirements as build-webapp-java module), launch 
-            jetty and deploy the built application. <br/>
+        <extends organisation="org.apache.easyant.plugins" module="parent-plugin" revision="0.1" />
+        <description>
+            A developer-convenience module for quick war-build-and-deploy with jetty (v 6.1.4). This module will
+            build a webapplication (following same requirements as build-webapp-java module), launch
+            jetty and deploy the built application.
+            <br />
             The user can pass the following additional parameters for configuring the jetty run:
             <ol>
                 <li>jetty.temp.dir: Jetty temp working directory. Defaults to: target/jetty-temp.</li>
-                <li>jetty.xml: Jetty Configuration XML. If unspecified, defaults to standard jetty XML 
+                <li>jetty.xml: Jetty Configuration XML. If unspecified, defaults to standard jetty XML
                     shipped with jetty 6.1.4.</li>
                 <li>jetty.context: Context the webapplication should be deployed in. If unspecified,
-                    defaults to Root (/) context.</li>
-            </ol><br/>
-            Each of these can be selectively overriden by the user. To override, in your module.ivy, include 
+                    defaults to Root (/)
+                    context.</li>
+            </ol>
+            <br />
+            Each of these can be selectively overriden by the user. To override, in your module.ivy, include
             a property file in the module ivy description.
-           </description>
-           <ea:build organisation="org.apache.easyant.buildtypes" module="build-std-ant-plugin" revision="0.1"/>
-        </info>
-        <configurations>
-                <conf name="default" description="runtime dependencies artifact can be used with this conf"/>
-                <conf name="test" description="this scope indicates that the dependency is not required for normal use of the application, and is only available for the test compilation and execution phases."/>
-                <conf name="provided" description="this is much like compile, but indicates you expect the JDK or a container to provide it. It is only available on the compilation classpath, and is not transitive."/>
-        </configurations>
+        </description>
+        <ea:build organisation="org.apache.easyant.buildtypes" module="build-std-ant-plugin" revision="0.1" />
+    </info>
+    <configurations>
+        <conf name="default" description="runtime dependencies artifact can be used with this conf" />
+        <conf name="test"
+            description="this scope indicates that the dependency is not required for normal use of the application, and is only available for the test compilation and execution phases." />
+        <conf name="provided"
+            description="this is much like compile, but indicates you expect the JDK or a container to provide it. It is only available on the compilation classpath, and is not transitive." />
+    </configurations>
     <publications>
-        <artifact type="ant"/>
+        <artifact type="ant" />
     </publications>
     <dependencies>
-            <dependency org="org.mortbay.jetty" name="jetty" rev="6.1.4"/>
-            <dependency org="org.mortbay.jetty" name="jetty-util" rev="6.1.4"/>
-            <dependency org="org.mortbay.jetty" name="jetty-plus" rev="6.1.4"/>
-            <dependency org="org.mortbay.jetty" name="jetty-naming" rev="6.1.4"/>
-            <dependency org="org.mortbay.jetty" name="jetty-ant" rev="6.1.4"/>
-            <dependency org="org.mortbay.jetty" name="jsp-api-2.1" rev="6.1.4"/>
-            <dependency org="org.mortbay.jetty" name="jsp-2.1" rev="6.1.4"/>
-            <dependency org="org.mortbay.jetty" name="servlet-api-2.5" rev="6.1.4"/>
+        <dependency org="org.mortbay.jetty" name="jetty" rev="6.1.4" />
+        <dependency org="org.mortbay.jetty" name="jetty-util" rev="6.1.4" />
+        <dependency org="org.mortbay.jetty" name="jetty-plus" rev="6.1.4" />
+        <dependency org="org.mortbay.jetty" name="jetty-naming" rev="6.1.4" />
+        <dependency org="org.mortbay.jetty" name="jetty-ant" rev="6.1.4" />
+        <dependency org="org.mortbay.jetty" name="jsp-api-2.1" rev="6.1.4" />
+        <dependency org="org.mortbay.jetty" name="jsp-2.1" rev="6.1.4" />
+        <dependency org="org.mortbay.jetty" name="servlet-api-2.5" rev="6.1.4" />
     </dependencies>
 </ivy-module>

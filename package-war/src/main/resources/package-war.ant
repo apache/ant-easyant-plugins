@@ -14,71 +14,61 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project name="org.apache.easyant.plugins#package-war"
-    xmlns:ac="antlib:net.sf.antcontrib"
-    xmlns:ea="antlib:org.apache.easyant">
-
+<project name="org.apache.easyant.plugins#package-war" xmlns:ac="antlib:net.sf.antcontrib" xmlns:ea="antlib:org.apache.easyant">
     <ea:core-version requiredrevision="[0.9,+]" />
 
-    <ea:import mrid="org.apache.easyant.plugins#abstract-package;0.9"/>
+    <ea:import mrid="org.apache.easyant.plugins#abstract-package;0.9" />
 
     <target name="package-war:init" depends="abstract-package:init,abstract-package:compute-metainf">
         <ea:parameter property="target.artifacts.main.war.name" default="${module.name}.war" description="main artifact file name" />
-        <ea:parameter property="target.main.artifact" default="${target.artifacts}/${target.artifacts.main.war.name}" description="the location of the main artifact"/>
-
-        <ea:parameter property="target.main.classes" required="true" 
+        <ea:parameter property="target.main.artifact" default="${target.artifacts}/${target.artifacts.main.war.name}"
+            description="the location of the main artifact" />
+        <ea:parameter property="target.main.classes" required="true"
             description="directory where compiled classes that should be packaged are" />
-        <ea:parameter property="manifest.file" required="true"
-            description="the file used to generate manifest" />
-
-        <ea:parameter property="package.war.includes.pattern" default="**/*" 
+        <ea:parameter property="manifest.file" required="true" description="the file used to generate manifest" />
+        <ea:parameter property="package.war.includes.pattern" default="**/*"
             description="Pattern describing files included in the output war" />
-        <ea:parameter property="package.war.excludes.pattern" default="" 
+        <ea:parameter property="package.war.excludes.pattern" default=""
             description="Pattern describing files excluded in the output war" />
-
         <ea:parameter property="package.war.needxmlfile" default="false"
-            description="Flag to indicate whether or not the web.xml file is needed. Iit should be set to false when generating servlet 2.5+ WAR files without a web.xml file."/>
-
-        <ea:parameter property="src.main.webapp" default="${basedir}/src/main/webapp" description="directory where web resources files are stored (like pages, images, etc...)"/>
-
-        <ea:parameter property="package.war.webxml.file" required="${package.war.needxmlfile}" 
-            description="The servlet configuration descriptor to use (WEB-INF/web.xml)."/>
-
-        <ea:parameter property="target.webinf.lib.dir" default="${target}/war/WEB-INF/lib" description="temp directory used to store artifacts that will be included in the WEB-INF lib directory"/>
+            description="Flag to indicate whether or not the web.xml file is needed. Iit should be set to false when generating servlet 2.5+ WAR files without a web.xml file." />
+        <ea:parameter property="src.main.webapp" default="${basedir}/src/main/webapp"
+            description="directory where web resources files are stored (like pages, images, etc...)" />
+        <ea:parameter property="package.war.webxml.file" required="${package.war.needxmlfile}"
+            description="The servlet configuration descriptor to use (WEB-INF/web.xml)." />
+        <ea:parameter property="target.webinf.lib.dir" default="${target}/war/WEB-INF/lib"
+            description="temp directory used to store artifacts that will be included in the WEB-INF lib directory" />
 
         <mkdir dir="${target.artifacts}" />
     </target>
 
     <target name="-package-war:prepare-war" depends="package-war:init">
-        <mkdir dir="${target.webinf.lib.dir}"/>
+        <mkdir dir="${target.webinf.lib.dir}" />
         <!-- check if cache.main.classpath is defined otherwise use lib.main.fileset -->
         <ac:if>
-            <isreference refid="cache.main.classpath"/>
+            <isreference refid="cache.main.classpath" />
             <ac:then>
                 <copy todir="${target.webinf.lib.dir}" flatten="true">
-                    <path refid="cache.main.classpath"/>
+                    <path refid="cache.main.classpath" />
                 </copy>
             </ac:then>
             <ac:else>
                 <copy todir="${target.webinf.lib.dir}" flatten="true">
-                    <fileset refid="lib.main.fileset"/>
+                    <fileset refid="lib.main.fileset" />
                 </copy>
             </ac:else>
         </ac:if>
-        <fileset id="webinf.lib.fileset" dir="${target.webinf.lib.dir}"/>
+        <fileset id="webinf.lib.fileset" dir="${target.webinf.lib.dir}" />
     </target>
 
-    <target name="package-war:war" depends="package-war:init,-package-war:prepare-war" description="package project as a WAR" extensionOf="abstract-package:package">
-        <war destfile="${target.main.artifact}"
-                manifest="${manifest.file}"
-                needxmlfile="false"
-                includes="${package.war.includes.pattern}"
-                excludes="${package.war.excludes.pattern}">
-            <fileset dir="${src.main.webapp}" includes="**/*" erroronmissingdir="false"/>
-            <lib refid="webinf.lib.fileset" erroronmissingdir="false"/>
-            <classes dir="${target.main.classes}" includes="**/*" erroronmissingdir="false"/>
-            <metainf refid="package.metainf.fileset"/>
+    <target name="package-war:war" depends="package-war:init,-package-war:prepare-war" description="package project as a WAR"
+        extensionOf="abstract-package:package">
+        <war destfile="${target.main.artifact}" manifest="${manifest.file}" needxmlfile="false"
+            includes="${package.war.includes.pattern}" excludes="${package.war.excludes.pattern}">
+            <fileset dir="${src.main.webapp}" includes="**/*" erroronmissingdir="false" />
+            <lib refid="webinf.lib.fileset" erroronmissingdir="false" />
+            <classes dir="${target.main.classes}" includes="**/*" erroronmissingdir="false" />
+            <metainf refid="package.metainf.fileset" />
         </war>
     </target>
-
 </project>

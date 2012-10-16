@@ -14,19 +14,17 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project name="org.apache.easyant.plugins;rat" 
-        xmlns:ivy="antlib:org.apache.ivy.ant" 
-        xmlns:ea="antlib:org.apache.easyant">
-
+<project name="org.apache.easyant.plugins;rat" xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:ea="antlib:org.apache.easyant">
     <ea:core-version requiredrevision="[0.9,+]" />
 
     <target name="rat:init">
-        <typedef resource="org/apache/rat/anttasks/antlib.xml"
-                 uri="antlib:org.apache.rat.anttasks"
-                 classpathref="org.apache.easyant.plugins#rat.classpath" />
-        <ea:parameter property="target.reports" default="${target}/reports" description="directory where report will be generated"/>
-        <ea:parameter property="rat.report.dir" description="directory where rat report will be generated" default="${target.reports}/rat"/>
-        <ea:parameter property="rat.failOnError" description="specify if rat report should fail build if unknown licenses are found" default="true"/> 
+        <typedef resource="org/apache/rat/anttasks/antlib.xml" uri="antlib:org.apache.rat.anttasks"
+            classpathref="org.apache.easyant.plugins#rat.classpath" />
+        <ea:parameter property="target.reports" default="${target}/reports" description="directory where report will be generated" />
+        <ea:parameter property="rat.report.dir" description="directory where rat report will be generated"
+            default="${target.reports}/rat" />
+        <ea:parameter property="rat.failOnError" description="specify if rat report should fail build if unknown licenses are found"
+            default="true" />
         <fileset id="rat.fileset" dir="${basedir}">
             <exclude name=".classpath" />
             <exclude name=".project" />
@@ -37,22 +35,25 @@
     </target>
 
     <target name="rat:rat" description="generate rat report" depends="rat:init">
-        <mkdir dir="${rat.report.dir}"/>
+        <mkdir dir="${rat.report.dir}" />
         <echo>Generating rat report ...</echo>
-        <ea:parameter property="rat.report.filename" default="rat-report.txt" description="rat report filename"/>
+        <ea:parameter property="rat.report.filename" default="rat-report.txt" description="rat report filename" />
 
         <rat:report xmlns:rat="antlib:org.apache.rat.anttasks" reportFile="${rat.report.dir}/${rat.report.filename}">
-            <fileset refid="rat.fileset"/>
+            <fileset refid="rat.fileset" />
         </rat:report>
 
-        <fail message="Some files have missing or incorrect license information. Check RAT report in ${rat.report} for more details!">
+        <fail
+            message="Some files have missing or incorrect license information. Check RAT report in ${rat.report} for more details!">
             <condition>
-            <and>
-                <not><resourcecontains resource="${rat.report}" substring="0 Unknown Licenses" casesensitive="false" /></not>
-                <equals arg1="${rat.failOnError}" arg2="true"/>
-            </and>
+                <and>
+                    <not>
+                        <resourcecontains resource="${rat.report}" substring="0 Unknown Licenses"
+                            casesensitive="false" />
+                    </not>
+                    <equals arg1="${rat.failOnError}" arg2="true" />
+                </and>
             </condition>
         </fail>
     </target>
-
 </project>

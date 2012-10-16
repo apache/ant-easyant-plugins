@@ -14,52 +14,52 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project name="org.apache.easyant.plugins#meta-build-autoactivator"
-	xmlns:ac="antlib:net.sf.antcontrib"
-	xmlns:ea="antlib:org.apache.easyant" 
-	xmlns:ivy="antlib:org.apache.ivy.ant">
+<project name="org.apache.easyant.plugins#meta-build-autoactivator" xmlns:ac="antlib:net.sf.antcontrib"
+    xmlns:ea="antlib:org.apache.easyant" xmlns:ivy="antlib:org.apache.ivy.ant">
 
     <ea:core-version requiredrevision="[0.9,+]" />
-    <ea:parameter property="metabuild.root" description="root directory level of a metabuild project" default="."/>
-    <ea:parameter property="metabuild.excludes" description="Pattern describing modules to exclude in a metabuild" default="**/src/ **/lib/ **/target/ **/bin module.ivy"/>
+    <ea:parameter property="metabuild.root" description="root directory level of a metabuild project"
+        default="." />
+    <ea:parameter property="metabuild.excludes" description="Pattern describing modules to exclude in a metabuild"
+        default="**/src/ **/lib/ **/target/ **/bin module.ivy" />
 
-    <ea:parameter property="metabuild.mode" description="defines execution mode of metabuild feature (all,dependents,dependencies)" default="all"/>
+    <ea:parameter property="metabuild.mode" description="defines execution mode of metabuild feature (all,dependents,dependencies)"
+        default="all" />
     <ac:if>
-    	<or>
-        	<equals arg1="dependents" arg2="${metabuild.mode}"/>
-        	<equals arg1="dependencies" arg2="${metabuild.mode}"/>
-    	</or>
-    	<then>
+        <or>
+            <equals arg1="dependents" arg2="${metabuild.mode}" />
+            <equals arg1="dependencies" arg2="${metabuild.mode}" />
+        </or>
+        <then>
         	<!-- locate the first module.ivy we assume that a user can be in a subdirectory of the project -->
-            <ea:findparentdir filename="module.ivy" property="first.parent.directory" haltonfirstfound="true"/>
+            <ea:findparentdir filename="module.ivy" property="first.parent.directory" haltonfirstfound="true" />
     	    <!-- locate the highest module.ivy" -->
-    		<ea:findparentdir filename="module.ivy" property="parent.directory"/>
-    		
-            <ivy:info file="${first.parent.directory}/module.ivy" settingsRef="easyant.ivy.instance"/>
+            <ea:findparentdir filename="module.ivy" property="parent.directory" />
 
-    		<echo message="Setting basedir to ${parent.directory}" level="verbose"/>
-    	    <property name="project.basedir" value="${parent.directory}" />
-    		<property name="current-module" value="${ivy.module}"/>
-    	</then>
-    	<else>
-    	    <ac:if>
-    	    	<and>
-        	    	<not>
-        	    	    <available file="module.ivy"/>
-    
-        	    	</not>
-        	        <available file="module.ivy">
-        	            <filepath>
-        	               <fileset dir="${metabuild.root}" includes="*/module.ivy" excludes="${metabuild.excludes}"/>
-        	            </filepath>
-        	        </available>
-    	    	</and>
-    	        <ac:then>
-    	            <echo>Multimodule project detected !</echo>
-    	            <ea:build module="meta-build" revision="0.9"/>
-    	        </ac:then>
-    	    </ac:if>
+            <ivy:info file="${first.parent.directory}/module.ivy" settingsRef="easyant.ivy.instance" />
 
-    	</else>
+            <echo message="Setting basedir to ${parent.directory}" level="verbose" />
+            <property name="project.basedir" value="${parent.directory}" />
+            <property name="current-module" value="${ivy.module}" />
+        </then>
+        <else>
+            <ac:if>
+                <and>
+                    <not>
+                        <available file="module.ivy" />
+                    </not>
+                    <available file="module.ivy">
+                        <filepath>
+                            <fileset dir="${metabuild.root}" includes="*/module.ivy" excludes="${metabuild.excludes}" />
+                        </filepath>
+                    </available>
+                </and>
+                <ac:then>
+                    <echo>Multimodule project detected !</echo>
+                    <ea:build module="meta-build" revision="0.9" />
+                </ac:then>
+            </ac:if>
+
+        </else>
     </ac:if>
 </project>

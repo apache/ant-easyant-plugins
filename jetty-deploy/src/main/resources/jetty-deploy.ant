@@ -15,21 +15,23 @@
    limitations under the License.
 -->
 <project name="org.apache.easyant.plugins#jetty-deploy" xmlns:ea="antlib:org.apache.easyant">
-
     <ea:core-version requiredrevision="[0.9,+]" />
 
     <ea:import mrid="org.apache.easyant.plugins#package-war;0.9" />
 
     <target name="jetty-deploy:init">
-        <ea:parameter property="jetty.temp.dir" default="${target}/jetty-temp" description="Jetty temporary directory. If unspecified, defaults to target/jetty-temp" />
-        <ea:parameter property="jetty.xml" required="false" description="Jetty configuration XML. If unspecified, defaults to jetty.xml shipped with 6.1.4 jetty." />
-        <ea:parameter property="jetty.context" default="/" description="Application context in jetty. If unspecified, defaults to root (/)." />
+        <ea:parameter property="jetty.temp.dir" default="${target}/jetty-temp"
+            description="Jetty temporary directory. If unspecified, defaults to target/jetty-temp" />
+        <ea:parameter property="jetty.xml" required="false"
+            description="Jetty configuration XML. If unspecified, defaults to jetty.xml shipped with 6.1.4 jetty." />
+        <ea:parameter property="jetty.context" default="/"
+            description="Application context in jetty. If unspecified, defaults to root (/)." />
 
         <available property="jetty.available" classname="org.mortbay.jetty.ant.JettyRunTask" classpathref="org.apache.easyant.plugins#jetty-deploy.classpath" />
-
         <fail unless="jetty.available" message="Jetty is unavailable!" />
 
-        <taskdef resource="tasks.properties" classpathref="org.apache.easyant.plugins#jetty-deploy.classpath" loaderref="jetty.loader"/>
+        <taskdef resource="tasks.properties" classpathref="org.apache.easyant.plugins#jetty-deploy.classpath"
+            loaderref="jetty.loader" />
     </target>
 
     <!-- default way jetty will be run:
@@ -40,8 +42,8 @@
     <target name="jetty-deploy:run" depends="jetty-deploy:init,package-war:war" description="run your webapp inside a jetty application server">
         <echo message="Deploying ${module.name} on Jetty ..." />
         <jetty tempDirectory="${jetty.temp.dir}" jettyXml="${jetty.xml}">
-            <webApp name="${module.name}" warfile="${target.artifacts}/${target.artifacts.main.war.name}" contextpath="${jetty.context}" />
+            <webApp name="${module.name}" warfile="${target.artifacts}/${target.artifacts.main.war.name}"
+                contextpath="${jetty.context}" />
         </jetty>
     </target>
-
 </project>

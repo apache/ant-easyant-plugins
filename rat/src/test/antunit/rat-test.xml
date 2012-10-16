@@ -14,41 +14,38 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project name="org.apache.easyant.plugins;rat-test" 
-    xmlns:au="antlib:org.apache.ant.antunit" 
-    xmlns:ivy="antlib:org.apache.ivy.ant"
+<project name="org.apache.easyant.plugins;rat-test" xmlns:au="antlib:org.apache.ant.antunit" xmlns:ivy="antlib:org.apache.ivy.ant"
     xmlns:ea="antlib:org.apache.easyant">
     
-    <!-- Import your plugin --> 
-    <property name="target" value="${basedir}/target/test-antunit"/>
+    <!-- Import your plugin -->
+    <property name="target" value="${basedir}/target/test-antunit" />
     <!-- configure easyant in current project -->
     <ea:configure-easyant-ivy-instance />
     <!-- import our local plugin -->
-    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources"/>
+    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources" />
    
-    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement --> 
+    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement -->
     <target name="clean" description="remove stale build artifacts before / after each test">
         <delete dir="${basedir}" includeemptydirs="true">
-            <include name="**/target/**"/>
-            <include name="**/lib/**"/>
+            <include name="**/target/**" />
+            <include name="**/lib/**" />
         </delete>
     </target>
-    
-    <target name="setUp" depends="clean"/>
-    <target name="tearDown" depends="clean"/>
-    
+
+    <target name="setUp" depends="clean" />
+    <target name="tearDown" depends="clean" />
+
     <target name="test-rat:init" depends="rat:init">
-        <au:assertPropertyEquals name="target.reports" value="${target}/.reports/rat"/>
-        <au:assertPropertyEquals name="rat.report.dir" value="${target.reports}/rat"/>
-       <au:assertPropertyEquals name="rat.failOnError" value="true"/>
-       <au:assertReferenceSet refid="rat.fileset"/>
+        <au:assertPropertyEquals name="target.reports" value="${target}/.reports/rat" />
+        <au:assertPropertyEquals name="rat.report.dir" value="${target.reports}/rat" />
+        <au:assertPropertyEquals name="rat.failOnError" value="true" />
+        <au:assertReferenceSet refid="rat.fileset" />
     </target>
 
     <target name="test-rat:rat" depends="rat:rat">
-        <au:assertFileExists file="${rat.report.ivy}"/>
-        <au:assertLogContains text="Generating rat report ..."/>
-        <au:assertPropertyEquals name="rat.report.filename" value="rat-report.txt"/>
-        <au:assertFileExists file="${rat.report.dir}/${rat.report.filename}"/>
+        <au:assertFileExists file="${rat.report.ivy}" />
+        <au:assertLogContains text="Generating rat report ..." />
+        <au:assertPropertyEquals name="rat.report.filename" value="rat-report.txt" />
+        <au:assertFileExists file="${rat.report.dir}/${rat.report.filename}" />
     </target>
-
 </project>
