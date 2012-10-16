@@ -15,10 +15,8 @@
    limitations under the License.
 -->
 <project name="org.apache.easyant.plugins#antcontrib-activator" xmlns:ea="antlib:org.apache.easyant">
-
     <ea:core-version requiredrevision="[0.9,+]" />
 
     <echo level="verbose" message="loading antcontrib" />
     <taskdef resource="net/sf/antcontrib/antlib.xml" classpathref="org.apache.easyant.plugins#antcontrib-activator.classpath" />
-
 </project>

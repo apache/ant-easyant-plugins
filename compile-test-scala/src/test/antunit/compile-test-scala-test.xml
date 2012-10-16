@@ -14,58 +14,53 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project name="org.apache.easyant.plugins;compile-test.scala-test" 
-    xmlns:au="antlib:org.apache.ant.antunit" 
-    xmlns:ivy="antlib:org.apache.ivy.ant"
-    xmlns:ea="antlib:org.apache.easyant">
+<project name="org.apache.easyant.plugins;compile-test.scala-test" xmlns:au="antlib:org.apache.ant.antunit"
+    xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:ea="antlib:org.apache.easyant">
     
-    <!-- Import your plugin --> 
-    <property name="target" value="target/test-antunit"/>
+    <!-- Import your plugin -->
+    <property name="target" value="target/test-antunit" />
     <!-- configure easyant in current project -->
     <ea:configure-easyant-ivy-instance />
     <!-- import our local plugin -->
-    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources"/>
+    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources" />
 
-    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement --> 
+    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement -->
     <target name="clean" description="remove stale build artifacts before / after each test">
         <delete dir="${basedir}" includeemptydirs="true">
-            <include name="**/target/**"/>
-            <include name="**/lib/**"/>
+            <include name="**/target/**" />
+            <include name="**/lib/**" />
         </delete>
     </target>
-    
+
     <target name="setUp" depends="clean">
         <!--FIXME: findclasspath requires project.ivy.instance and a resolved module -->
-        <ivy:settings id="project.ivy.instance"/>
-        <ivy:resolve file="sample-module.ivy" settingsRef="project.ivy.instance"/>
+        <ivy:settings id="project.ivy.instance" />
+        <ivy:resolve file="sample-module.ivy" settingsRef="project.ivy.instance" />
     </target>
-    <target name="tearDown" depends="clean"/>
-    
+    <target name="tearDown" depends="clean" />
+
     <target name="test-compile-test-scala">
-        <au:assertPropertyEquals name="src.test.scala" value="${basedir}/src/test/scala"/>
-        <au:assertPropertyEquals name="src.test.integration.scala" value="${basedir}/src/integration-test/scala"/>
-        <au:assertPropertyEquals name="has.src.test.scala" value="true"/>
-        <au:assertPropertyEquals name="has.src.test.integration.scala" value="true"/>
+        <au:assertPropertyEquals name="src.test.scala" value="${basedir}/src/test/scala" />
+        <au:assertPropertyEquals name="src.test.integration.scala" value="${basedir}/src/integration-test/scala" />
+        <au:assertPropertyEquals name="has.src.test.scala" value="true" />
+        <au:assertPropertyEquals name="has.src.test.integration.scala" value="true" />
     </target>
-    
+
     <target name="test-compile-test-scala:configure" depends="compile-test-scala:configure">
-         <au:assertReferenceSet refid="resolved.scala.classpath"/>
+        <au:assertReferenceSet refid="resolved.scala.classpath" />
     </target>
 
     <target name="test-compile-test-scala:compile" depends="compile-test-scala:compile">
-        <au:assertPropertyEquals name="test.compile.includes.pattern" value="**/*.scala"/>
-        <au:assertPropertyEquals name="test.compile.excludes.pattern" value=""/>
-
-        <au:assertFileExists file="${target.test.classes}"/>	
-        <au:assertFileExists file="${target.test.classes}/org/apache/easyant/example/Example.class"/>
+        <au:assertPropertyEquals name="test.compile.includes.pattern" value="**/*.scala" />
+        <au:assertPropertyEquals name="test.compile.excludes.pattern" value="" />
+        <au:assertFileExists file="${target.test.classes}" />
+        <au:assertFileExists file="${target.test.classes}/org/apache/easyant/example/Example.class" />
     </target>
 
     <target name="test-compile-test-scala:compile-integration" depends="compile-test-scala:compile-integration">
-        <au:assertPropertyEquals name="test.integration.compile.includes.pattern" value="**/*.scala"/>
-        <au:assertPropertyEquals name="test.integration.compile.excludes.pattern" value=""/>
-
-        <au:assertFileExists file="${target.test.integration.classes}"/>	
-        <au:assertFileExists file="${target.test.integration.classes}/org/apache/easyant/example/Example2.class"/>
+        <au:assertPropertyEquals name="test.integration.compile.includes.pattern" value="**/*.scala" />
+        <au:assertPropertyEquals name="test.integration.compile.excludes.pattern" value="" />
+        <au:assertFileExists file="${target.test.integration.classes}" />
+        <au:assertFileExists file="${target.test.integration.classes}/org/apache/easyant/example/Example2.class" />
     </target>
-
 </project>

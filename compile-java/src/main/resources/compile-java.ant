@@ -14,45 +14,31 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project name="org.apache.easyant.plugins#compile-java"
-    xmlns:ea="antlib:org.apache.easyant">
-
+<project name="org.apache.easyant.plugins#compile-java" xmlns:ea="antlib:org.apache.easyant">
     <ea:core-version requiredrevision="[0.9,+]" />
 
     <ea:import mrid="org.apache.easyant.plugins#abstract-compile;0.9" />
-	
+
     <target name="compile-java:init">
-        <ea:parameter property="src.main.java" required="true"
-            description="directory where sources to be compiled are" />
-        <ea:parameter property="javac.debug.mode" default="true" 
-            description="javac debug mode, true or false" />
-
-        <ea:parameter property="compile.java.includes.pattern" default="**/*.java" 
+        <ea:parameter property="src.main.java" required="true" description="directory where sources to be compiled are" />
+        <ea:parameter property="javac.debug.mode" default="true" description="javac debug mode, true or false" />
+        <ea:parameter property="compile.java.includes.pattern" default="**/*.java"
             description="Pattern describing files included in compilation process" />
-        <ea:parameter property="compile.java.excludes.pattern" default="" 
+        <ea:parameter property="compile.java.excludes.pattern" default=""
             description="Pattern describing files excluded in compilation process" />
-
-        <ea:parameter property="compile.java.target.version" default="${ant.java.version}" 
+        <ea:parameter property="compile.java.target.version" default="${ant.java.version}"
             description="Specify a VM version for Generated class files (e.g., 1.1 or 1.2)." />
-        <ea:parameter property="compile.java.source.version" default="${ant.java.version}" 
+        <ea:parameter property="compile.java.source.version" default="${ant.java.version}"
             description="Specify a value of the -source command-line switch; will be ignored by all implementations prior to javac1.4 (or modern when Ant is not running in a 1.3 VM) and jikes" />
-
         <available file="${src.main.java}" property="has.src.main.java" />
-
     </target>
 
-    <target name="compile-java:compile" depends="compile-java:init,abstract-compile:compile-ready" if="has.src.main.java" extensionOf="abstract-compile:compile">
+    <target name="compile-java:compile" depends="compile-java:init,abstract-compile:compile-ready" if="has.src.main.java"
+        extensionOf="abstract-compile:compile">
         <mkdir dir="${target.main.classes}" />
-        <javac  srcdir="${src.main.java}"
-                destdir="${target.main.classes}"
-                debug="${javac.debug.mode}"
-                source="${compile.java.source.version}"
-                target="${compile.java.target.version}"
-                classpathref="compile.main.classpath"
-                includes="${compile.java.includes.pattern}"
-                excludes="${compile.java.excludes.pattern}"
-                includeantruntime="no">
+        <javac srcdir="${src.main.java}" destdir="${target.main.classes}" debug="${javac.debug.mode}" source="${compile.java.source.version}"
+            target="${compile.java.target.version}" classpathref="compile.main.classpath" includes="${compile.java.includes.pattern}"
+            excludes="${compile.java.excludes.pattern}" includeantruntime="no">
         </javac>
     </target>
-
 </project>

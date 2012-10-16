@@ -14,60 +14,57 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project name="org.apache.easyant.plugins;compile-test.groovy-test" 
-    xmlns:au="antlib:org.apache.ant.antunit" 
-    xmlns:ivy="antlib:org.apache.ivy.ant"
-    xmlns:ea="antlib:org.apache.easyant">
+<project name="org.apache.easyant.plugins;compile-test.groovy-test" xmlns:au="antlib:org.apache.ant.antunit"
+    xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:ea="antlib:org.apache.easyant">
     
-    <!-- Import your plugin --> 
-    <property name="target" value="target/test-antunit"/>
+    <!-- Import your plugin -->
+    <property name="target" value="target/test-antunit" />
     <!-- configure easyant in current project -->
     <ea:configure-easyant-ivy-instance />
     <!-- import our local plugin -->
-    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources"/>
+    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources" />
 
-    <property name="src.main.groovy" value="${basedir}/src/main/groovy"/>
+    <property name="src.main.groovy" value="${basedir}/src/main/groovy" />
    
-    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement --> 
+    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement -->
     <target name="clean" description="remove stale build artifacts before / after each test">
         <delete dir="${basedir}" includeemptydirs="true">
-            <include name="**/target/**"/>
-            <include name="**/lib/**"/>
+            <include name="**/target/**" />
+            <include name="**/lib/**" />
         </delete>
     </target>
-    
+
     <target name="setUp" depends="clean">
         <!--FIXME: findclasspath requires project.ivy.instance and a resolved module -->
-        <ivy:settings id="project.ivy.instance"/>
-        <ivy:resolve file="sample-module.ivy" settingsRef="project.ivy.instance"/>
+        <ivy:settings id="project.ivy.instance" />
+        <ivy:resolve file="sample-module.ivy" settingsRef="project.ivy.instance" />
     </target>
-    <target name="tearDown" depends="clean"/>
-    
+    <target name="tearDown" depends="clean" />
+
     <target name="test-compile-test-groovy">
-        <au:assertPropertyEquals name="src.test.groovy" value="${basedir}/src/test/groovy"/>
-        <au:assertPropertyEquals name="src.test.integration.groovy" value="${basedir}/src/integration-test/groovy"/>
-        <au:assertPropertyEquals name="has.src.test.groovy" value="true"/>
-        <au:assertPropertyEquals name="has.src.test.integration.groovy" value="true"/>
+        <au:assertPropertyEquals name="src.test.groovy" value="${basedir}/src/test/groovy" />
+        <au:assertPropertyEquals name="src.test.integration.groovy" value="${basedir}/src/integration-test/groovy" />
+        <au:assertPropertyEquals name="has.src.test.groovy" value="true" />
+        <au:assertPropertyEquals name="has.src.test.integration.groovy" value="true" />
     </target>
-    
+
     <target name="test-compile-test-groovy:configure" depends="compile-test-groovy:configure">
-         <au:assertReferenceSet refid="resolved.groovy.classpath"/>
+        <au:assertReferenceSet refid="resolved.groovy.classpath" />
     </target>
 
     <target name="test-compile-test-groovy:compile" depends="compile-test-groovy:compile">
-        <au:assertPropertyEquals name="test.compile.includes.pattern" value="**/*.groovy"/>
-        <au:assertPropertyEquals name="test.compile.excludes.pattern" value=""/>
+        <au:assertPropertyEquals name="test.compile.includes.pattern" value="**/*.groovy" />
+        <au:assertPropertyEquals name="test.compile.excludes.pattern" value="" />
 
-        <au:assertFileExists file="${target.test.classes}"/>	
-        <au:assertFileExists file="${target.test.classes}/org/apache/easyant/example/Example.class"/>
+        <au:assertFileExists file="${target.test.classes}" />
+        <au:assertFileExists file="${target.test.classes}/org/apache/easyant/example/Example.class" />
     </target>
 
     <target name="test-compile-test-groovy:compile-integration" depends="compile-test-groovy:compile-integration">
-        <au:assertPropertyEquals name="test.integration.compile.includes.pattern" value="**/*.groovy"/>
-        <au:assertPropertyEquals name="test.integration.compile.excludes.pattern" value=""/>
+        <au:assertPropertyEquals name="test.integration.compile.includes.pattern" value="**/*.groovy" />
+        <au:assertPropertyEquals name="test.integration.compile.excludes.pattern" value="" />
 
-        <au:assertFileExists file="${target.test.integration.classes}"/>	
-        <au:assertFileExists file="${target.test.integration.classes}/org/apache/easyant/example/Example2.class"/>
+        <au:assertFileExists file="${target.test.integration.classes}" />
+        <au:assertFileExists file="${target.test.integration.classes}/org/apache/easyant/example/Example2.class" />
     </target>
-
 </project>

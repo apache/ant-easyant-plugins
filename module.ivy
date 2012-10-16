@@ -14,9 +14,9 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<ivy-module version="2.0" xmlns:ea="http://www.easyant.org"> 
-    <info organisation="org.apache.easyant.plugins" module="plugins-orchestrator" revision="0.9" >
-           <description>This module acts as orchestrator to build all easyant plugins.</description>
-        <ea:build module="meta-build" revision="0.9"/>
+<ivy-module version="2.0" xmlns:ea="http://www.easyant.org">
+    <info organisation="org.apache.easyant.plugins" module="plugins-orchestrator" revision="0.1">
+        <description>This module acts as orchestrator to build all easyant plugins.</description>
+        <ea:build module="meta-build" revision="0.9" />
     </info>
 </ivy-module>

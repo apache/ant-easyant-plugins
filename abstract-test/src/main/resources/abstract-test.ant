@@ -14,20 +14,16 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project name="org.apache.easyant.plugins#abstract-test"
-    xmlns:ac="antlib:net.sf.antcontrib"
-    xmlns:ea="antlib:org.apache.easyant">
+<project name="org.apache.easyant.plugins#abstract-test" xmlns:ac="antlib:net.sf.antcontrib" xmlns:ea="antlib:org.apache.easyant">
 
     <ea:core-version requiredrevision="[0.9,+]" />
 
-    <extension-point name="abstract-test:test-ready" description="defines test requirements"/>
+    <extension-point name="abstract-test:test-ready" description="defines test requirements" />
+    <extension-point name="abstract-test:test-run" depends="abstract-test:test-ready" description="defines tests step" />
+    <extension-point name="abstract-test:integration-test-ready" description="defines integration-test requirements" />
+    <extension-point name="abstract-test:integration-test-run" depends="abstract-test:integration-test-ready"
+        description="defines integration-test step" />
 
-    <extension-point name="abstract-test:test-run" depends="abstract-test:test-ready" description="defines tests step"/>
-
-    <extension-point name="abstract-test:integration-test-ready" description="defines integration-test requirements"/>
-
-    <extension-point name="abstract-test:integration-test-run" depends="abstract-test:integration-test-ready" description="defines integration-test step"/>
-	
     <ea:import mrid="org.apache.easyant.plugins#abstract-provisioning;0.9" />
 
     <target name="/skip-tests" description="skip tests">
@@ -36,53 +32,41 @@
     </target>
 
     <target name="abstract-test:init" depends="abstract-provisioning:provisioning">
-
         <ea:parameter property="src.test.resources" default="${basedir}/src/test/resources"
             description="directory with unit test resource files (configuration files, data files, etc)" />
         <ea:parameter property="src.test.integration.resources" default="${basedir}/src/integration-test/resources"
-                description="directory for integration test resources (configuration files, data files, etc)"/>
-
-        <ea:parameter property="target.test.xml" default="${target}/test/xml" 
-            description="destination directory for xml test report" />
-        <ea:parameter property="target.test.html" default="${target}/test/html"
-            description="destination directory for html test report" />
-
+            description="directory for integration test resources (configuration files, data files, etc)" />
+        <ea:parameter property="target.test.xml" default="${target}/test/xml" description="destination directory for xml test report" />
+        <ea:parameter property="target.test.html" default="${target}/test/html" description="destination directory for html test report" />
         <ea:parameter property="test.mode" default="run"
             description="mode to use to execute tests: 'run' to only run tests, 'report' to generate html report" />
-        
         <ea:parameter property="test.run.failonerror" default="true"
-            description="specify if the build should be stopped when tests are failed. Typically this property should be set to false in continuous environmnent systems"/>
-
-	    <ea:parameter property="test.run.dir"
-            default="${basedir}" description="working directory for unit test process, defaults to the project basedir"/>
-        <ea:parameter property="test.integration.run.dir"
-            default="${basedir}" description="working directory for integration test process, defaults to the project basedir"/>
-
+            description="specify if the build should be stopped when tests are failed. Typically this property should be set to false in continuous environmnent systems" />
+        <ea:parameter property="test.run.dir" default="${basedir}"
+            description="working directory for unit test process, defaults to the project basedir" />
+        <ea:parameter property="test.integration.run.dir" default="${basedir}"
+            description="working directory for integration test process, defaults to the project basedir" />
         <ea:parameter property="test.scan.path" default="false"
-                      description="if true, the full test classpath will be scanned for additional test cases to run"/>
+            description="if true, the full test classpath will be scanned for additional test cases to run" />
         <ea:parameter property="test.jar.pattern" default=".*-test.jar"
-                      description="when test.scan.path is enabled, identifies which jars should be examined for test cases"/>
-
+            description="when test.scan.path is enabled, identifies which jars should be examined for test cases" />
         <ea:parameter property="test.integration.scan.path" default="false"
-                      description="if true, the full integration test classpath will be scanned for additional test cases to run"/>
+            description="if true, the full integration test classpath will be scanned for additional test cases to run" />
         <ea:parameter property="test.integration.jar.pattern" default=".*-test.jar"
-                      description="when test.scan.path is enabled, identifies which jars should be examined for test cases"/>
-        
-        <ea:parameter property="test.run.includes.pattern" 
-            default="**/*" description="Pattern describing class files included in test run" /> 
-        <ea:parameter property="test.run.excludes.pattern" 
-            default="" description="Pattern describing class files excluded in test run" />
-
-        <ea:parameter property="test.integration.run.includes.pattern" 
-            default="**/*" description="Pattern describing class files included in integration test run" /> 
-        <ea:parameter property="test.integration.run.excludes.pattern" 
-            default="" description="Pattern describing class files excluded in integration test run" />
-
-    	<ea:parameter property="target.test.classes" default="${target}/test/classes" 
+            description="when test.scan.path is enabled, identifies which jars should be examined for test cases" />
+        <ea:parameter property="test.run.includes.pattern" default="**/*"
+            description="Pattern describing class files included in test run" />
+        <ea:parameter property="test.run.excludes.pattern" default=""
+            description="Pattern describing class files excluded in test run" />
+        <ea:parameter property="test.integration.run.includes.pattern" default="**/*"
+            description="Pattern describing class files included in integration test run" />
+        <ea:parameter property="test.integration.run.excludes.pattern" default=""
+            description="Pattern describing class files excluded in integration test run" />
+        <ea:parameter property="target.test.classes" default="${target}/test/classes"
             description="destination directory for compiled test classes" />
-        <ea:parameter property="target.test.integration.classes" default="${target}/integration-test/classes" 
+        <ea:parameter property="target.test.integration.classes" default="${target}/integration-test/classes"
             description="destination directory for compiled integration test classes" />
-    	
+
         <ea:path pathid="run.test.classpath" overwrite="append-if-not-exist">
             <pathelement location="${target.test.classes}" />
             <path refid="compile.test.classpath" />
@@ -92,7 +76,6 @@
             <pathelement location="${target.test.integration.classes}" />
             <path refid="compile.test.classpath" />
         </ea:path>
-
 
         <condition property="test.mode.run">
             <equals arg1="${test.mode}" arg2="run" />
@@ -104,67 +87,66 @@
 
         <!-- shouldn't this be in junit plugin? -->
         <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask">
-            <classpath refid="run.test.classpath"/>
-            <classpath refid="org.apache.easyant.plugins#abstract-test.classpath"/>
+            <classpath refid="run.test.classpath" />
+            <classpath refid="org.apache.easyant.plugins#abstract-test.classpath" />
         </taskdef>
         <taskdef name="junitreport" classname="org.apache.tools.ant.taskdefs.optional.junit.XMLResultAggregator"
             classpathref="org.apache.easyant.plugins#abstract-test.classpath" />
-
     </target>
 
     <target name="abstract-test:compute-test-sets" depends="abstract-test:test-ready" description="compute the set of test cases to run">
         <compute-test-path prefix="test">
             <path refid="compile.test.classpath" />
         </compute-test-path>
-
         <compute-test-path prefix="test.integration">
             <path refid="compile.test.classpath" />
         </compute-test-path>
     </target>
-	
-    <macrodef name="compute-test-path" description="Compute the set of test cases to run.">
-        <attribute name="prefix" description="one of 'test' or 'test.integration'"/>
-        <attribute name="test-archive-pattern" default=".*-test.jar" description="Name pattern for jar files on the input class path that may contain test cases."/>
-        <element name="test-path" implicit="true" description="the classpath to search for test cases"/>
-        <sequential>
 
+    <macrodef name="compute-test-path" description="Compute the set of test cases to run.">
+        <attribute name="prefix" description="one of 'test' or 'test.integration'" />
+        <attribute name="test-archive-pattern" default=".*-test.jar"
+            description="Name pattern for jar files on the input class path that may contain test cases." />
+        <element name="test-path" implicit="true" description="the classpath to search for test cases" />
+        <sequential>
             <!-- declare test case resource set -->
             <resources id="target.@{prefix}.set">
-                <fileset dir="${target.@{prefix}.classes}"
-                         includes="${@{prefix}.run.includes.pattern}"
-                         excludes="${@{prefix}.run.excludes.pattern}"
-                         erroronmissingdir="false"/>
+                <fileset dir="${target.@{prefix}.classes}" includes="${@{prefix}.run.includes.pattern}"
+                    excludes="${@{prefix}.run.excludes.pattern}" erroronmissingdir="false" />
             </resources>
-
             <ac:if>
-                <istrue value="${@{prefix}.scan.path}"/>
+                <istrue value="${@{prefix}.scan.path}" />
                 <ac:then>
                     <ac:for param="test.collection">
-                        <test-path/>
+                        <test-path />
                         <sequential>
                             <echo level="verbose">Examining @{test.collection} for test cases</echo>
                             <ac:if>
                                 <and>
-                                    <available file="@{test.collection}" type="file"/>
-                                    <matches string="@{test.collection}" pattern="${@{prefix}.jar.pattern}"/>
+                                    <available file="@{test.collection}" type="file" />
+                                    <matches string="@{test.collection}" pattern="${@{prefix}.jar.pattern}" />
                                 </and>
                                 <ac:then>
                                     <echo level="verbose">Adding test cases from test jar @{test.collection}</echo>
                                     <augment id="target.@{prefix}.set">
-                                        <zipfileset src="@{test.collection}" includes="${@{prefix}.run.includes.pattern}" excludes="${@{prefix}.run.excludes.pattern}"/>
+                                        <zipfileset src="@{test.collection}" includes="${@{prefix}.run.includes.pattern}"
+                                            excludes="${@{prefix}.run.excludes.pattern}" />
                                     </augment>
                                 </ac:then>
                                 <ac:else>
                                     <ac:if>
-                                        <available file="@{test.collection}" type="dir"/>
+                                        <available file="@{test.collection}" type="dir" />
                                         <ac:then>
-                                            <echo level="verbose">Adding test cases from test class directory @{test.collection}</echo>
+                                            <echo level="verbose">Adding test cases from test class directory
+                                                @{test.collection}</echo>
                                             <augment id="target.@{prefix}.set">
-                                                <fileset dir="@{test.collection}" includes="${@{prefix}.run.includes.pattern}" excludes="${@{prefix}.run.excludes.pattern}"/>
+                                                <fileset dir="@{test.collection}" includes="${@{prefix}.run.includes.pattern}"
+                                                    excludes="${@{prefix}.run.excludes.pattern}" />
                                             </augment>
                                         </ac:then>
                                         <ac:else>
-                                            <echo level="verbose">Test path entry @{test.collection} does not appear to be a directory or a test jar, skipping</echo>
+                                            <echo level="verbose">Test path entry @{test.collection} does not appear to be a
+                                                directory or a test jar, skipping</echo>
                                         </ac:else>
                                     </ac:if>
                                 </ac:else>
@@ -172,38 +154,35 @@
                         </sequential>
                     </ac:for>
                     <condition property="skip.@{prefix}">
-                        <resourcecount refid="target.@{prefix}.set" when="equal" count="0"/>
+                        <resourcecount refid="target.@{prefix}.set" when="equal" count="0" />
                     </condition>
                 </ac:then>
                 <ac:else>
                     <echo level="verbose">Test path scanning disabled by property @{prefix}.scan.path</echo>
                 </ac:else>
             </ac:if>
-
         </sequential>
     </macrodef>
 
-
     <macrodef name="check-test-result" description="check test results">
-        <attribute name="propertytocheck"/>
+        <attribute name="propertytocheck" />
         <attribute name="message" />
-        <attribute name="echolevel" default="error"/>
+        <attribute name="echolevel" default="error" />
         <sequential>
             <ac:if>
-                <istrue value="${test.run.failonerror}"/>
+                <istrue value="${test.run.failonerror}" />
                 <ac:then>
                     <fail if="@{propertytocheck}" message="@{message}" />
                 </ac:then>
                 <ac:else>
                     <ac:if>
-                        <isset property="@{propertytocheck}"/>
+                        <isset property="@{propertytocheck}" />
                         <ac:then>
-                            <echo message="@{message}" level="@{echolevel}"/>
+                            <echo message="@{message}" level="@{echolevel}" />
                         </ac:then>
                     </ac:if>
                 </ac:else>
             </ac:if>
         </sequential>
     </macrodef>
-
 </project>

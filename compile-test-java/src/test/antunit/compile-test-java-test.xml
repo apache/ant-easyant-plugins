@@ -14,55 +14,50 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project name="org.apache.easyant.plugins;compile-test-java-test" 
-    xmlns:au="antlib:org.apache.ant.antunit" 
-    xmlns:ivy="antlib:org.apache.ivy.ant"
-    xmlns:ea="antlib:org.apache.easyant">
+<project name="org.apache.easyant.plugins;compile-test-java-test" xmlns:au="antlib:org.apache.ant.antunit"
+    xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:ea="antlib:org.apache.easyant">
     
-    <!-- Import your plugin --> 
-    <property name="target" value="target/test-antunit"/>
+    <!-- Import your plugin -->
+    <property name="target" value="target/test-antunit" />
     <!-- configure easyant in current project -->
     <ea:configure-easyant-ivy-instance />
     <!-- import our local plugin -->
-    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources"/>
+    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources" />
 
-    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement --> 
+    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement -->
     <target name="clean" description="remove stale build artifacts before / after each test">
         <delete dir="${basedir}" includeemptydirs="true">
-            <include name="**/target/**"/>
-            <include name="**/lib/**"/>
+            <include name="**/target/**" />
+            <include name="**/lib/**" />
         </delete>
     </target>
-   
-    <target name="setUp" depends="clean"/>
-    <target name="tearDown" depends="clean"/>
-    
+
+    <target name="setUp" depends="clean" />
+    <target name="tearDown" depends="clean" />
+
     <target name="test-compile-test-java">
-        <au:assertPropertyEquals name="src.test.java" value="${basedir}/src/test/java"/>
-        <au:assertPropertyEquals name="src.test.integration.java" value="${basedir}/src/integration-test/java"/>
-        <au:assertPropertyEquals name="javac.debug.mode" value="true"/>
-        <au:assertPropertyEquals name="has.src.test.java" value="true"/>
-        <au:assertPropertyEquals name="has.src.test.integration.java" value="true"/>
+        <au:assertPropertyEquals name="src.test.java" value="${basedir}/src/test/java" />
+        <au:assertPropertyEquals name="src.test.integration.java" value="${basedir}/src/integration-test/java" />
+        <au:assertPropertyEquals name="javac.debug.mode" value="true" />
+        <au:assertPropertyEquals name="has.src.test.java" value="true" />
+        <au:assertPropertyEquals name="has.src.test.integration.java" value="true" />
     </target>
 
     <target name="test-compile-test-java:compile" depends="compile-test-java:compile">
-        <au:assertPropertyEquals name="test.compile.includes.pattern" value="**/*.java"/>
-        <au:assertPropertyEquals name="test.compile.excludes.pattern" value=""/>
-        <au:assertPropertyEquals name="test.compile.java.target.version" value="${ant.java.version}"/>
-        <au:assertPropertyEquals name="test.compile.java.source.version" value="${ant.java.version}"/>
- 
-        <au:assertFileExists file="${target.test.classes}"/>
-        <au:assertFileExists file="${target.test.classes}/org/apache/easyant/example/Example.class"/>
+        <au:assertPropertyEquals name="test.compile.includes.pattern" value="**/*.java" />
+        <au:assertPropertyEquals name="test.compile.excludes.pattern" value="" />
+        <au:assertPropertyEquals name="test.compile.java.target.version" value="${ant.java.version}" />
+        <au:assertPropertyEquals name="test.compile.java.source.version" value="${ant.java.version}" />
+        <au:assertFileExists file="${target.test.classes}" />
+        <au:assertFileExists file="${target.test.classes}/org/apache/easyant/example/Example.class" />
     </target>
 
     <target name="test-compile-test-java:compile-integration" depends="compile-test-java:compile-integration">
-        <au:assertPropertyEquals name="test.integration.compile.includes.pattern" value="**/*.java"/>
-        <au:assertPropertyEquals name="test.integration.compile.excludes.pattern" value=""/>
-        <au:assertPropertyEquals name="test.integration.compile.java.target.version" value="${ant.java.version}"/>
-        <au:assertPropertyEquals name="test.integration.compile.java.source.version" value="${ant.java.version}"/>
- 
-        <au:assertFileExists file="${target.test.integration.classes}"/>
-        <au:assertFileExists file="${target.test.integration.classes}/org/apache/easyant/example/Example2.class"/>
+        <au:assertPropertyEquals name="test.integration.compile.includes.pattern" value="**/*.java" />
+        <au:assertPropertyEquals name="test.integration.compile.excludes.pattern" value="" />
+        <au:assertPropertyEquals name="test.integration.compile.java.target.version" value="${ant.java.version}" />
+        <au:assertPropertyEquals name="test.integration.compile.java.source.version" value="${ant.java.version}" />
+        <au:assertFileExists file="${target.test.integration.classes}" />
+        <au:assertFileExists file="${target.test.integration.classes}/org/apache/easyant/example/Example2.class" />
     </target>
-
 </project>

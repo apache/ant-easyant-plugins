@@ -1,4 +1,3 @@
-<?xml version="1.0"?>
 <!--
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
@@ -16,16 +15,12 @@
    limitations under the License.
 -->
 <ivy-module version="2.0" xmlns:ea="http://www.easyant.org">
-    <info organisation="org.apache.easyant" module="standard-java-app" revision="0.1" status="integration" />
-    <configurations>
-        <conf name="default" description="runtime dependencies artifact can be used with this conf" />
-        <conf name="test"
-            description="this scope indicates that the dependency is not required for normal use of the application, and is only available for the test compilation and execution phases." />
-        <conf name="provided"
-            description="this is much like compile, but indicates you expect the JDK or a container to provide it. It is only available on the compilation classpath, and is not transitive." />
-    </configurations>
-    <dependencies>
-        <dependency org="junit" name="junit" rev="4.4" conf="*->default" />
-    </dependencies>
-
+    <info organisation="org.apache.easyant.plugins" module="parent-plugin" revision="0.1">
+        <description>This module acts as parent to share common stuff for subprojects.</description>
+        <ea:plugin module="scm-svn" revision="0.9" as="scm">
+            <ea:property name="scm.connection.baseurl" value="https://svn.easyant.org/buildtypes/trunk" />
+            <ea:property name="scm.tag.name" value="${ivy.module}-${version}" />
+        </ea:plugin>
+        <ea:plugin module="antunit" revision="0.9" />
+    </info>
 </ivy-module>

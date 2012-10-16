@@ -19,25 +19,24 @@
     <ea:core-version requiredrevision="[0.9,+]" />
 
     <ea:parameter property="target" default="target" description="the target directory" />
-    <ea:parameter property="target.main.classes" default="${target}/main/classes" 
-        description="destination directory for compiled classes" />
-    <ea:parameter property="target.test.classes" default="${target}/test/classes" 
-        description="destination directory for compiled test classes" />
-    <ea:parameter property="target.test.integration.classes" default="${target}/integration-test/classes" 
+    <ea:parameter property="target.main.classes" default="${target}/main/classes" description="destination directory for compiled classes" />
+    <ea:parameter property="target.test.classes" default="${target}/test/classes" description="destination directory for compiled test classes" />
+    <ea:parameter property="target.test.integration.classes" default="${target}/integration-test/classes"
         description="destination directory for compiled integration test classes" />
 
     <ea:import mrid="org.apache.easyant.plugins#abstract-provisioning;0.9" />
 
 	<!-- We expect at this point to have every source available, even the ones which are generated -->
-	<extension-point name="abstract-compile:compile-ready" depends="abstract-provisioning:provisioning" description="defines the requirements to compile. It's the good place if you want to process or generate sources"/>
-	<extension-point name="abstract-compile:compile" depends="abstract-compile:compile-ready" description="defines the compile step"/>
+    <extension-point name="abstract-compile:compile-ready" depends="abstract-provisioning:provisioning"
+        description="defines the requirements to compile. It's the good place if you want to process or generate sources" />
+    <extension-point name="abstract-compile:compile" depends="abstract-compile:compile-ready"
+        description="defines the compile step" />
 	
 	<!-- Creates a empty classpath for compilation if it doesn't exist yet -->
     <ea:path pathid="compile.main.classpath" overwrite="false" />
-	
+
     <path id="compile.test.classpath">
         <pathelement location="${target.main.classes}" />
         <path refid="compile.main.classpath" />
     </path>
-
 </project>

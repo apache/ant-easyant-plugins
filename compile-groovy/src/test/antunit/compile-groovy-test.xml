@@ -14,50 +14,48 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project name="org.apache.easyant.plugins;compile-groovy-test" 
-    xmlns:au="antlib:org.apache.ant.antunit" 
-    xmlns:ivy="antlib:org.apache.ivy.ant"
-    xmlns:ea="antlib:org.apache.easyant">
+<project name="org.apache.easyant.plugins;compile-groovy-test" xmlns:au="antlib:org.apache.ant.antunit"
+    xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:ea="antlib:org.apache.easyant">
     
-    <!-- Import your plugin --> 
-    <property name="target" value="target/test-antunit"/>
+    <!-- Import your plugin -->
+    <property name="target" value="target/test-antunit" />
     <!-- configure easyant in current project -->
     <ea:configure-easyant-ivy-instance />
     <!-- import our local plugin -->
-    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources"/>
+    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources" />
 
-    <property name="src.main.groovy" value="${basedir}/src/main/groovy"/>
+    <property name="src.main.groovy" value="${basedir}/src/main/groovy" />
    
-    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement --> 
+    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement -->
     <target name="clean" description="remove stale build artifacts before / after each test">
         <delete dir="${basedir}" includeemptydirs="true">
-            <include name="**/target/**"/>
-            <include name="**/lib/**"/>
+            <include name="**/target/**" />
+            <include name="**/lib/**" />
         </delete>
     </target>
-    
+
     <target name="setUp" depends="clean">
         <!--FIXME: findclasspath requires project.ivy.instance and a resolved module -->
-        <ivy:settings id="project.ivy.instance"/>
-        <ivy:resolve file="sample-module.ivy" settingsRef="project.ivy.instance"/>
+        <ivy:settings id="project.ivy.instance" />
+        <ivy:resolve file="sample-module.ivy" settingsRef="project.ivy.instance" />
     </target>
-    <target name="tearDown" depends="clean"/>
-    
+    <target name="tearDown" depends="clean" />
+
     <target name="test-compile-groovy:init" depends="compile-groovy:init">
-        <au:assertPropertyEquals name="src.main.groovy" value="${basedir}/src/main/groovy"/>
-        <au:assertPropertyEquals name="compile.groovy.includes.pattern" value="**/*.groovy"/>
-        <au:assertPropertyEquals name="compile.groovy.excludes.pattern" value=""/>
-        <au:assertPropertyEquals name="has.src.main.groovy" value="true"/>
-        <au:assertPropertyEquals name="compile.groovy.indy" value="false"/>
+        <au:assertPropertyEquals name="src.main.groovy" value="${basedir}/src/main/groovy" />
+        <au:assertPropertyEquals name="compile.groovy.includes.pattern" value="**/*.groovy" />
+        <au:assertPropertyEquals name="compile.groovy.excludes.pattern" value="" />
+        <au:assertPropertyEquals name="has.src.main.groovy" value="true" />
+        <au:assertPropertyEquals name="compile.groovy.indy" value="false" />
     </target>
-    
+
     <target name="test-compile-groovy:configure" depends="-compile-groovy:configure">
-         <au:assertReferenceSet refid="resolved.groovy.classpath"/>
+        <au:assertReferenceSet refid="resolved.groovy.classpath" />
     </target>
 
     <target name="test-compile-groovy:compile" depends="compile-groovy:compile">
-        <au:assertFileExists file="${target.main.classes}"/>	
-        <au:assertFileExists file="${target.main.classes}/org/apache/easyant/example/Example.class"/>
-        <au:assertFileExists file="${target.main.classes}/org/apache/easyant/example/Example2.class"/>
+        <au:assertFileExists file="${target.main.classes}" />
+        <au:assertFileExists file="${target.main.classes}/org/apache/easyant/example/Example.class" />
+        <au:assertFileExists file="${target.main.classes}/org/apache/easyant/example/Example2.class" />
     </target>
 </project>

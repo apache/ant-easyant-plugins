@@ -14,23 +14,19 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project name="org.apache.easyant.plugins#abstract-provisioning"
-    xmlns:ac="antlib:net.sf.antcontrib"
-    xmlns:ea="antlib:org.apache.easyant">
+<project name="org.apache.easyant.plugins#abstract-provisioning" xmlns:ac="antlib:net.sf.antcontrib" xmlns:ea="antlib:org.apache.easyant">
 
     <ea:core-version requiredrevision="[0.9,+]" />
 
-    <extension-point name="abstract-provisioning:provisioning-ready" description="defines provisioning requirements"/>
-    <extension-point name="abstract-provisioning:provisioning" depends="abstract-provisioning:provisioning-ready" description="defines provisioning step, usually it's a good place for loading libraries, populating classpath"/>
+    <extension-point name="abstract-provisioning:provisioning-ready" description="defines provisioning requirements" />
+    <extension-point name="abstract-provisioning:provisioning" depends="abstract-provisioning:provisioning-ready"
+        description="defines provisioning step, usually it's a good place for loading libraries, populating classpath" />
 
     <ea:parameter property="lib.main" default="${basedir}/lib/main" description="directory where main libraries are picked up" />
     <ea:parameter property="lib.test" default="${basedir}/lib/test" description="directory where test libraries are picked up" />
     <ea:parameter property="lib.provided" default="${basedir}/lib/provided" description="directory where provided libraries are picked up" />
 
-    <fileset id="lib.main.fileset" dir="${lib.main}" erroronmissingdir="false"/>
-    <fileset id="lib.test.fileset" dir="${lib.test}" erroronmissingdir="false"/>
-    <fileset id="lib.provided.fileset" dir="${lib.provided}" erroronmissingdir="false"/>
-
-
-
+    <fileset id="lib.main.fileset" dir="${lib.main}" erroronmissingdir="false" />
+    <fileset id="lib.test.fileset" dir="${lib.test}" erroronmissingdir="false" />
+    <fileset id="lib.provided.fileset" dir="${lib.provided}" erroronmissingdir="false" />
 </project>

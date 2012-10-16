@@ -15,7 +15,6 @@
    limitations under the License.
 -->
 <project name="org.apache.easyant.plugins#clean-std" xmlns:ea="antlib:org.apache.easyant">
-
     <ea:core-version requiredrevision="[0.9,+]" />
 
     <ea:parameter property="target" required="true" description="the target directory to clean" />
@@ -24,5 +23,4 @@
         <echo message="Cleaning ${target}..." />
         <delete dir="${target}" />
     </target>
-
 </project>

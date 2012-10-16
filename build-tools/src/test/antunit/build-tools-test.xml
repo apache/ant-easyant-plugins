@@ -14,41 +14,38 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project name="org.apache.easyant.plugins;build-tools-test" 
-    xmlns:au="antlib:org.apache.ant.antunit" 
-    xmlns:ivy="antlib:org.apache.ivy.ant"
+<project name="org.apache.easyant.plugins;build-tools-test" xmlns:au="antlib:org.apache.ant.antunit" xmlns:ivy="antlib:org.apache.ivy.ant"
     xmlns:ea="antlib:org.apache.easyant">
     
-    <!-- Import your plugin --> 
-    <property name="target" value="target/test-antunit"/>
+    <!-- Import your plugin -->
+    <property name="target" value="target/test-antunit" />
     <!-- configure easyant in current project -->
     <ea:configure-easyant-ivy-instance />
     <!-- import our local plugin -->
-    <property name="project.ivy.file" value="module.ivy"/>
-    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources"/>
+    <property name="project.ivy.file" value="module.ivy" />
+    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources" />
 
-    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement --> 
+    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement -->
     <target name="clean" description="remove stale build artifacts before / after each test">
         <delete dir="${basedir}" includeemptydirs="true">
-            <include name="**/target/**"/>
-            <include name="**/lib/**"/>
+            <include name="**/target/**" />
+            <include name="**/lib/**" />
         </delete>
     </target>
-    
-    <target name="setUp" depends="clean"/>
-    <target name="tearDown" depends="clean"/>
-    
-    <target name="test-build-tools">
-        <au:assertPropertyEquals name="project.ivy.instance" value="project.ivy.instance"/>
-        <au:assertPropertyEquals name="pre.module.targets" value="validate,clean"/>
-        <au:assertPropertyEquals name="submodule.dirs" value="**/*"/>
-        <au:assertPropertyEquals name="metabuild.root" value="${basedir}"/>
-        <au:assertPropertyEquals name="metabuild.includes" value="${submodule.dirs}"/>
-        <au:assertPropertyEquals name="metabuild.excludes" value="**/src/ **/lib/ **/target/ **/bin module.ivy"/>
-        <au:assertPropertyEquals name="metabuild.mode" value="all"/>
-        <au:assertReferenceSet refid="submodules.fileset"/>
-        <au:assertPropertyEquals name="current-module" value="${ivy.module}"/>
-        <au:assertReferenceSet refid="build-path"/>
-    </target>
 
+    <target name="setUp" depends="clean" />
+    <target name="tearDown" depends="clean" />
+
+    <target name="test-build-tools">
+        <au:assertPropertyEquals name="project.ivy.instance" value="project.ivy.instance" />
+        <au:assertPropertyEquals name="pre.module.targets" value="validate,clean" />
+        <au:assertPropertyEquals name="submodule.dirs" value="**/*" />
+        <au:assertPropertyEquals name="metabuild.root" value="${basedir}" />
+        <au:assertPropertyEquals name="metabuild.includes" value="${submodule.dirs}" />
+        <au:assertPropertyEquals name="metabuild.excludes" value="**/src/ **/lib/ **/target/ **/bin module.ivy" />
+        <au:assertPropertyEquals name="metabuild.mode" value="all" />
+        <au:assertReferenceSet refid="submodules.fileset" />
+        <au:assertPropertyEquals name="current-module" value="${ivy.module}" />
+        <au:assertReferenceSet refid="build-path" />
+    </target>
 </project>

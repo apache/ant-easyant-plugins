@@ -14,46 +14,43 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project name="org.apache.easyant.plugins;easyant-plugin-publication-test" 
-    xmlns:au="antlib:org.apache.ant.antunit" 
-    xmlns:ivy="antlib:org.apache.ivy.ant"
-    xmlns:ea="antlib:org.apache.easyant">
+<project name="org.apache.easyant.plugins;easyant-plugin-publication-test" xmlns:au="antlib:org.apache.ant.antunit"
+    xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:ea="antlib:org.apache.easyant">
     
-    <!-- Import your plugin --> 
-    <property name="target" value="target/test-antunit"/>
+    <!-- Import your plugin -->
+    <property name="target" value="target/test-antunit" />
     <!-- configure easyant in current project -->
     <ea:configure-easyant-ivy-instance />
     <!-- import our local plugin -->
-    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources"/>
+    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources" />
    
-    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement --> 
+    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement -->
     <target name="clean" description="remove stale build artifacts before / after each test">
         <delete dir="${basedir}" includeemptydirs="true">
-            <include name="**/target/**"/>
-            <include name="**/lib/**"/>
+            <include name="**/target/**" />
+            <include name="**/lib/**" />
         </delete>
     </target>
-    
+
     <target name="setUp" depends="clean">
-      <property name="publish.plugin.before.test" value="true"/>
-      <property name="project.ivy.instance" value="project.ivy.instance"/>
-      <ivy:settings id="${project.ivy.instance}"/>
-      <ivy:resolve file="sample-module.ivy" settingsRef="${project.ivy.instance}"/>
+        <property name="publish.plugin.before.test" value="true" />
+        <property name="project.ivy.instance" value="project.ivy.instance" />
+        <ivy:settings id="${project.ivy.instance}" />
+        <ivy:resolve file="sample-module.ivy" settingsRef="${project.ivy.instance}" />
       <!-- 
           FIXME:this plugin assume artifacts are already in target/artifacts 
           This job is done by resources-std-plugin, should we add an import of this plugin there ?
       -->
-      <mkdir dir="${target}/artifacts"/>
-      <echo file="${target}/artifacts/sample-easyant-plugin.ant"/>
+        <mkdir dir="${target}/artifacts" />
+        <echo file="${target}/artifacts/sample-easyant-plugin.ant" />
     </target>
-    <target name="tearDown" depends="clean"/>
+    <target name="tearDown" depends="clean" />
 
     <target name="test-easyant-plugin-publication:before-test" depends="easyant-plugin-publication:before-test">
-        <au:assertLogContains text="Registering build scoped repository in" level="debug"/>
-        <au:assertLogContains text=":: publishing :: org.apache.easyant#sample-easyant-plugin"/>
-        <au:assertLogContains text=":: publishing :: org.apache.easyant#sample-easyant-plugin"/>
-        <au:assertLogContains text="published sample-easyant-plugin to"/>
-        <au:assertLogContains text="published ivy to"/>
+        <au:assertLogContains text="Registering build scoped repository in" level="debug" />
+        <au:assertLogContains text=":: publishing :: org.apache.easyant#sample-easyant-plugin" />
+        <au:assertLogContains text=":: publishing :: org.apache.easyant#sample-easyant-plugin" />
+        <au:assertLogContains text="published sample-easyant-plugin to" />
+        <au:assertLogContains text="published ivy to" />
     </target>
-
 </project>

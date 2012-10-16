@@ -14,36 +14,33 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project name="org.apache.easyant.plugins;abstract-provisioning-test" 
-    xmlns:au="antlib:org.apache.ant.antunit" 
-    xmlns:ivy="antlib:org.apache.ivy.ant"
-    xmlns:ea="antlib:org.apache.easyant">
+<project name="org.apache.easyant.plugins;abstract-provisioning-test" xmlns:au="antlib:org.apache.ant.antunit"
+    xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:ea="antlib:org.apache.easyant">
     
-    <!-- Import your plugin --> 
-    <property name="target" value="target/test-antunit"/>
+    <!-- Import your plugin -->
+    <property name="target" value="target/test-antunit" />
     <!-- configure easyant in current project -->
     <ea:configure-easyant-ivy-instance />
     <!-- import our local plugin -->
-    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources"/>
+    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources" />
    
-    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement --> 
+    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement -->
     <target name="clean" description="remove stale build artifacts before / after each test">
         <delete dir="${basedir}" includeemptydirs="true">
-            <include name="**/target/**"/>
-            <include name="**/lib/**"/>
+            <include name="**/target/**" />
+            <include name="**/lib/**" />
         </delete>
     </target>
-    
-    <target name="setUp" depends="clean"/>
-    <target name="tearDown" depends="clean"/>
-    
-    <target name="test-abstract-provisioning">
-        <au:assertPropertyEquals name="lib.main" value="${basedir}/lib/main"/>
-        <au:assertPropertyEquals name="lib.test" value="${basedir}/lib/test"/>
-        <au:assertPropertyEquals name="lib.provided" value="${basedir}/lib/provided"/>
-        <au:assertReferenceSet refid="lib.main.fileset"/>
-        <au:assertReferenceSet refid="lib.test.fileset"/>
-        <au:assertReferenceSet refid="lib.provided.fileset"/>
-    </target>
 
+    <target name="setUp" depends="clean" />
+    <target name="tearDown" depends="clean" />
+
+    <target name="test-abstract-provisioning">
+        <au:assertPropertyEquals name="lib.main" value="${basedir}/lib/main" />
+        <au:assertPropertyEquals name="lib.test" value="${basedir}/lib/test" />
+        <au:assertPropertyEquals name="lib.provided" value="${basedir}/lib/provided" />
+        <au:assertReferenceSet refid="lib.main.fileset" />
+        <au:assertReferenceSet refid="lib.test.fileset" />
+        <au:assertReferenceSet refid="lib.provided.fileset" />
+    </target>
 </project>

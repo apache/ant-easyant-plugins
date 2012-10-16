@@ -15,18 +15,22 @@
    limitations under the License.
 -->
 <project name="org.apache.easyant.plugins#documentation" xmlns:ea="antlib:org.apache.easyant">
-
     <ea:core-version requiredrevision="[0.9,+]" />
 
     <dirname file="${org.apache.easyant.plugins#documentation.style.css.file}" property="org.apache.easyant.plugins#documentation.style.css.dir" />
 
     <target name="documentation:init">
-        <ea:parameter property="documentation.xsl.file" default="${org.apache.easyant.plugins#documentation.site.xsl.file}" description="xsl, used to transform XML -> HTML" />
-        <ea:parameter property="documentation.css.dir" default="{org.apache.easyant.plugins#documentation.style.css.dir}" description="path where the css are stored, used for nice looking HTML" />
-        <ea:parameter property="target.documentation.dir" default="${target}/documentation" description="directory where the documentation will be generated to" />
+        <ea:parameter property="documentation.xsl.file" default="${org.apache.easyant.plugins#documentation.site.xsl.file}"
+            description="xsl, used to transform XML -> HTML" />
+        <ea:parameter property="documentation.css.dir" default="{org.apache.easyant.plugins#documentation.style.css.dir}"
+            description="path where the css are stored, used for nice looking HTML" />
+        <ea:parameter property="target.documentation.dir" default="${target}/documentation"
+            description="directory where the documentation will be generated to" />
         <ea:parameter property="src.dir" default="${user.dir}/src" description="directory containing projects sources" />
-        <ea:parameter property="src.documentation.dir" default="${src.dir}/documentation" description="directory where the documentation is stored in the project" />
-        <ea:parameter property="documentation.menu.file" default="${src.documentation.dir}/menu.xml" description="the file, which stores the navigation" />
+        <ea:parameter property="src.documentation.dir" default="${src.dir}/documentation"
+            description="directory where the documentation is stored in the project" />
+        <ea:parameter property="documentation.menu.file" default="${src.documentation.dir}/menu.xml"
+            description="the file, which stores the navigation" />
 
         <condition property="xslt.available">
             <available classname="org.apache.tools.ant.taskdefs.optional.TraXLiaison" />
@@ -38,29 +42,30 @@
 
         <available file="${src.documentation.dir}" property="has.src.documentation.dir" />
         <available file="${documentation.menu.file}" property="has.documentation.menu.file" />
-
         <available file="${documentation.css.dir}" property="has.documentation.css.dir" />
     </target>
 
     <target name="-documentation:warn-src.documentation.dir.missing" unless="has.src.documentation.dir">
         <echo>WARN: Your project doesn't match with documentation structure.</echo>
-        <echo>  If you want to use the documentation feature you must create ${src.documentation.dir} directory. This directory must have a menu.xml file</echo>
-        <echo>  If you want to have more information, you should look at the documentation of this module.</echo>
+        <echo> If you want to use the documentation feature you must create ${src.documentation.dir} directory. This
+            directory must have a menu.xml file</echo>
+        <echo> If you want to have more information, you should look at the documentation of this module.</echo>
         <property name="skip.documentation" value="true" />
     </target>
 
     <target name="-documentation:warn-documentation.menu.file.missing" unless="has.documentation.menu.file">
-        <echo>WARN: Your project doesn't match with documentation structure (documentation menu file is missing).</echo> 
-        <echo>  If you want to have more information, you should look at the documentation of this module.</echo>
+        <echo>WARN: Your project doesn't match with documentation structure (documentation menu file is missing).</echo>
+        <echo> If you want to have more information, you should look at the documentation of this module.</echo>
         <property name="skip.documentation" value="true" />
     </target>
 
-    <target name="-documentation:documentation" unless="skip.documentation" 
+    <target name="-documentation:documentation" unless="skip.documentation"
         depends="documentation:init, -documentation:warn-src.documentation.dir.missing, -documentation:warn-documentation.menu.file.missing, -documentation:copy-css">
         <mkdir dir="${target.documentation.dir}" />
 
         <echo message="Transforming the site documents..." />
-        <xslt basedir="${src.documentation.dir}" destdir="${target.documentation.dir}" extension=".html" style="${documentation.xsl.file}" excludes="${documentation.menu.file}" includes="*.xml">
+        <xslt basedir="${src.documentation.dir}" destdir="${target.documentation.dir}" extension=".html"
+            style="${documentation.xsl.file}" excludes="${documentation.menu.file}" includes="*.xml">
             <param name="relative-path" expression="." />
             <param name="menu-src-path" expression="${src.documentation.dir}" />
             <param name="menu-file" expression="${documentation.menu.file}" />
@@ -77,7 +82,6 @@
                 <include name="**/*.jpg" />
             </fileset>
         </copy>
-
     </target>
 
     <!-- Copy CSS stylesheets -->
@@ -90,8 +94,8 @@
         </copy>
     </target>
 
-    <target name="documentation:documentation" depends="-documentation:documentation" unless="skip.documentation" description="generate documentation">
+    <target name="documentation:documentation" depends="-documentation:documentation" unless="skip.documentation"
+        description="generate documentation">
         <fail if="documentation.failure" message="There are documentation violation(s)" />
     </target>
-
 </project>

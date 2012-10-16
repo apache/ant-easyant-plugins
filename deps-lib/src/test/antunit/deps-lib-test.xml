@@ -14,43 +14,40 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project name="org.apache.easyant.plugins;deps-lib-test" 
-    xmlns:au="antlib:org.apache.ant.antunit" 
-    xmlns:ivy="antlib:org.apache.ivy.ant"
+<project name="org.apache.easyant.plugins;deps-lib-test" xmlns:au="antlib:org.apache.ant.antunit" xmlns:ivy="antlib:org.apache.ivy.ant"
     xmlns:ea="antlib:org.apache.easyant">
     
-    <!-- Import your plugin --> 
-    <property name="target" value="target/test-antunit"/>
+    <!-- Import your plugin -->
+    <property name="target" value="target/test-antunit" />
     <!-- configure easyant in current project -->
     <ea:configure-easyant-ivy-instance />
     <!-- import our local plugin -->
-    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources"/>
+    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources" />
    
-    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement --> 
+    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement -->
     <target name="clean" description="remove stale build artifacts before / after each test">
         <delete dir="${basedir}" includeemptydirs="true">
-            <include name="**/target/**"/>
-            <include name="**/lib/**"/>
+            <include name="**/target/**" />
+            <include name="**/lib/**" />
         </delete>
     </target>
-    
+
     <target name="setUp" depends="clean">
-      <path id="compile.main.classpath"/>
-      <path id="compile.test.classpath"/>
-      <mkdir dir="lib/main"/>
-      <mkdir dir="lib/test"/>
-      <echo file="lib/main/foobar.jar"/>
-      <echo file="lib/test/foobar-test.jar"/>
+        <path id="compile.main.classpath" />
+        <path id="compile.test.classpath" />
+        <mkdir dir="lib/main" />
+        <mkdir dir="lib/test" />
+        <echo file="lib/main/foobar.jar" />
+        <echo file="lib/test/foobar-test.jar" />
     </target>
-    <target name="tearDown" depends="clean"/>
+    <target name="tearDown" depends="clean" />
 
     <target name="test-deps-lib:plugin" depends="deps-lib:plugin">
-        <property name="main.classpath" refid="compile.main.classpath"/>
-        <property name="test.classpath" refid="compile.test.classpath"/>
-        <au:assertPropertyEquals name="main.classpath" value="${basedir}/lib/main/foobar.jar"/>
-        <au:assertPropertyEquals name="test.classpath" value="${basedir}/lib/test/foobar-test.jar"/>
-
-        <au:assertReferenceSet refid="compile.main.classpath"/>
-        <au:assertReferenceSet refid="compile.test.classpath"/>
+        <property name="main.classpath" refid="compile.main.classpath" />
+        <property name="test.classpath" refid="compile.test.classpath" />
+        <au:assertPropertyEquals name="main.classpath" value="${basedir}/lib/main/foobar.jar" />
+        <au:assertPropertyEquals name="test.classpath" value="${basedir}/lib/test/foobar-test.jar" />
+        <au:assertReferenceSet refid="compile.main.classpath" />
+        <au:assertReferenceSet refid="compile.test.classpath" />
     </target>
 </project>

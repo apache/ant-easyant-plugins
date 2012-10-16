@@ -14,63 +14,55 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project name="org.apache.easyant.plugins#compile-test-groovy"
-    xmlns:ea="antlib:org.apache.easyant">
-
+<project name="org.apache.easyant.plugins#compile-test-groovy" xmlns:ea="antlib:org.apache.easyant">
     <ea:core-version requiredrevision="[0.9,+]" />
 
     <ea:import mrid="org.apache.easyant.plugins#abstract-compile;0.9" />
 
-    <ea:parameter property="src.test.groovy" default="${basedir}/src/test/groovy"
-        description="directory where test sources to be compiled are" />
+    <ea:parameter property="src.test.groovy" default="${basedir}/src/test/groovy" description="directory where test sources to be compiled are" />
     <ea:parameter property="src.test.integration.groovy" default="${basedir}/src/integration-test/groovy"
         description="directory where integration test sources to be compiled are" />
-
     <available file="${src.test.groovy}" property="has.src.test.groovy" />
     <available file="${src.test.integration.groovy}" property="has.src.test.integration.groovy" />
 
     <macrodef name="compile-groovy-tests">
-        <attribute name="prefix"/>
+        <attribute name="prefix" />
         <sequential>
             <mkdir dir="${target.@{prefix}.classes}" />
-            <groovyc  srcdir="${src.@{prefix}.groovy}"
-                destdir="${target.@{prefix}.classes}"
-                classpathref="compile.test.classpath"
-                indy="${@{prefix}.compile.indy}"
-                includes="${@{prefix}.compile.includes.pattern}"
-                excludes="${@{prefix}.compile.excludes.pattern}"/>
+            <groovyc srcdir="${src.@{prefix}.groovy}" destdir="${target.@{prefix}.classes}" classpathref="compile.test.classpath"
+                indy="${@{prefix}.compile.indy}" includes="${@{prefix}.compile.includes.pattern}" excludes="${@{prefix}.compile.excludes.pattern}" />
         </sequential>
     </macrodef>
 
     <target name="compile-test-groovy:configure" depends="abstract-compile:compile-ready">
-        <ea:findclasspath pathid="resolved.groovy.classpath" organisation="org.codehaus.groovy" module="groovy-all" revision="2.0.0">
+        <ea:findclasspath pathid="resolved.groovy.classpath" organisation="org.codehaus.groovy" module="groovy-all"
+            revision="2.0.0">
             <ea:project-dependency-strategy />
-            <ea:environment-strategy env="GROOVY_HOME"/>
+            <ea:environment-strategy env="GROOVY_HOME" />
             <ea:basic-configuration-strategy />
         </ea:findclasspath>
-
         <taskdef name="groovyc" classname="org.codehaus.groovy.ant.Groovyc" classpathref="resolved.groovy.classpath" />
     </target>
 
-    <target name="compile-test-groovy:compile" depends="compile-test-groovy:configure" if="has.src.test.groovy" extensionOf="abstract-compile:compile">
-        <ea:parameter property="test.compile.includes.pattern" default="**/*.groovy" 
+    <target name="compile-test-groovy:compile" depends="compile-test-groovy:configure" if="has.src.test.groovy"
+        extensionOf="abstract-compile:compile">
+        <ea:parameter property="test.compile.includes.pattern" default="**/*.groovy"
             description="Pattern describing files included in test compilation process" />
-        <ea:parameter property="test.compile.excludes.pattern" default="" 
+        <ea:parameter property="test.compile.excludes.pattern" default=""
             description="Pattern describing files excluded in test compilation process" />
-        <ea:parameter property="test.compile.indy" default="false" 
-            description="Enable compilation with the invoke dynamic support when using Groovy 2.0 and beyond and running on JDK 7"/>
-    	<compile-groovy-tests prefix="test"/>
+        <ea:parameter property="test.compile.indy" default="false"
+            description="Enable compilation with the invoke dynamic support when using Groovy 2.0 and beyond and running on JDK 7" />
+        <compile-groovy-tests prefix="test" />
     </target>
 
-    <target name="compile-test-groovy:compile-integration" depends="compile-test-groovy:configure" if="has.src.test.integration.groovy" extensionOf="abstract-compile:compile">
-        <ea:parameter property="test.integration.compile.includes.pattern" default="**/*.groovy" 
+    <target name="compile-test-groovy:compile-integration" depends="compile-test-groovy:configure" if="has.src.test.integration.groovy"
+        extensionOf="abstract-compile:compile">
+        <ea:parameter property="test.integration.compile.includes.pattern" default="**/*.groovy"
             description="Pattern describing files included in integration test compilation process" />
-        <ea:parameter property="test.integration.compile.excludes.pattern" default="" 
+        <ea:parameter property="test.integration.compile.excludes.pattern" default=""
             description="Pattern describing files excluded in integration test compilation process" />
-        <ea:parameter property="test.integration.compile.indy" default="false" 
-            description="Enable compilation with the invoke dynamic support when using Groovy 2.0 and beyond and running on JDK 7"/>
- 
-    	<compile-groovy-tests prefix="test.integration"/>
+        <ea:parameter property="test.integration.compile.indy" default="false"
+            description="Enable compilation with the invoke dynamic support when using Groovy 2.0 and beyond and running on JDK 7" />
+        <compile-groovy-tests prefix="test.integration" />
     </target>
-
 </project>

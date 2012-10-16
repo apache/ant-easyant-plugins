@@ -14,54 +14,47 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project name="org.apache.easyant.plugins;easyant-plugin-documentation-test" 
-    xmlns:au="antlib:org.apache.ant.antunit" 
-    xmlns:ivy="antlib:org.apache.ivy.ant"
-    xmlns:ea="antlib:org.apache.easyant">
+<project name="org.apache.easyant.plugins;easyant-plugin-documentation-test" xmlns:au="antlib:org.apache.ant.antunit"
+    xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:ea="antlib:org.apache.easyant">
     
-    <!-- Import your plugin --> 
-    <property name="target" value="${basedir}/target/test-antunit"/>
+    <!-- Import your plugin -->
+    <property name="target" value="${basedir}/target/test-antunit" />
     <!-- configure easyant in current project -->
     <ea:configure-easyant-ivy-instance />
     <!-- import our local plugin -->
-    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources"/>
+    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources" />
    
-    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement --> 
+    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement -->
     <target name="clean" description="remove stale build artifacts before / after each test">
         <delete dir="${basedir}" includeemptydirs="true">
-            <include name="**/target/**"/>
-            <include name="**/lib/**"/>
+            <include name="**/target/**" />
+            <include name="**/lib/**" />
         </delete>
     </target>
-    
+
     <target name="setUp" depends="clean">
-        <property name="plugindoc.module.ivy" value="${basedir}/sample-module.ivy"/>
-        <property name="plugindoc.source.dir" value="${basedir}/src/main/resources"/>
-        <property name="plugindoc.todir" value="${target}/artifacts"/>
+        <property name="plugindoc.module.ivy" value="${basedir}/sample-module.ivy" />
+        <property name="plugindoc.source.dir" value="${basedir}/src/main/resources" />
+        <property name="plugindoc.todir" value="${target}/artifacts" />
 
     </target>
-    <target name="tearDown" depends="clean"/>
-    
+    <target name="tearDown" depends="clean" />
+
     <target name="test-easyant-plugin-documentation:report" depends="easyant-plugin-documentation:report">
-        <au:assertPropertyEquals name="plugindoc.module.ivy" value="${basedir}/sample-module.ivy"/>
-        <au:assertPropertyEquals name="plugindoc.source.dir" value="${basedir}/src/main/resources"/>
-        <au:assertPropertyEquals name="plugindoc.main.confs" value="default"/>
-        <au:assertPropertyEquals name="plugindoc.todir" value="${target}/artifacts"/>
-        <au:assertFileExists file="${target}/artifacts/org.apache.easyant.plugins-tinyplugin-default.html"/>
+        <au:assertPropertyEquals name="plugindoc.module.ivy" value="${basedir}/sample-module.ivy" />
+        <au:assertPropertyEquals name="plugindoc.source.dir" value="${basedir}/src/main/resources" />
+        <au:assertPropertyEquals name="plugindoc.main.confs" value="default" />
+        <au:assertPropertyEquals name="plugindoc.todir" value="${target}/artifacts" />
+        <au:assertFileExists file="${target}/artifacts/org.apache.easyant.plugins-tinyplugin-default.html" />
     </target>
-     
 
     <target name="prepare-register-artifact">
-        <ivy:settings id="easyant.ivy.instance"/>
-        <ivy:resolve file="sample-module.ivy" settingsRef="easyant.ivy.instance"/>
+        <ivy:settings id="easyant.ivy.instance" />
+        <ivy:resolve file="sample-module.ivy" settingsRef="easyant.ivy.instance" />
     </target>
-
-
 
     <target name="test-easyant-plugin-documentation:register-artifact" depends="prepare-register-artifact,easyant-plugin-documentation:register-artifact">
-        <au:assertPropertyEquals name="plugindoc.publish.type" value="html"/>
-        <au:assertPropertyEquals name="plugindoc.publish.confs" value="documentation"/>
- 
+        <au:assertPropertyEquals name="plugindoc.publish.type" value="html" />
+        <au:assertPropertyEquals name="plugindoc.publish.confs" value="documentation" />
     </target>
-
 </project>

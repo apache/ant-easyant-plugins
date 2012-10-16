@@ -14,63 +14,59 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project name="org.apache.easyant.plugins;abstract-test-test" 
-    xmlns:au="antlib:org.apache.ant.antunit" 
-    xmlns:ivy="antlib:org.apache.ivy.ant"
-    xmlns:ea="antlib:org.apache.easyant">
+<project name="org.apache.easyant.plugins;abstract-test-test" xmlns:au="antlib:org.apache.ant.antunit"
+    xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:ea="antlib:org.apache.easyant">
     
-    <!-- Import your plugin --> 
-    <property name="target" value="target/test-antunit"/>
+    <!-- Import your plugin -->
+    <property name="target" value="target/test-antunit" />
     <!-- configure easyant in current project -->
     <ea:configure-easyant-ivy-instance />
     <!-- import our local plugin -->
-    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources"/>
+    <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources" />
    
-    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement --> 
+    <!-- Defines a setUp / tearDown (before each test) that cleans the environnement -->
     <target name="clean" description="remove stale build artifacts before / after each test">
         <delete dir="${basedir}" includeemptydirs="true">
-            <include name="**/target/**"/>
-            <include name="**/lib/**"/>
+            <include name="**/target/**" />
+            <include name="**/lib/**" />
         </delete>
     </target>
-    
-    <target name="setUp" depends="clean"/>
-    <target name="tearDown" depends="clean"/>
-    
+
+    <target name="setUp" depends="clean" />
+    <target name="tearDown" depends="clean" />
+
     <target name="test-abstract-test:init" depends="abstract-test:init">
-        <au:assertPropertyEquals name="src.test.resources" value="${basedir}/src/test/resources"/>
-        <au:assertPropertyEquals name="src.test.integration.resources" value="${basedir}/src/integration-test/resources"/>
-        <au:assertPropertyEquals name="target.test.xml" value="${target}/test/xml"/>
-        <au:assertPropertyEquals name="target.test.html" value="${target}/test/html"/>
-        <au:assertPropertyEquals name="test.mode" value="run"/>
-        <au:assertPropertyEquals name="test.run.failonerror" value="true"/>
-        <au:assertPropertyEquals name="test.run.dir" value="${basedir}"/>
-        <au:assertPropertyEquals name="test.integration.run.dir" value="${basedir}"/>
-        <au:assertPropertyEquals name="test.integration.scan.path" value="false"/>
-        <au:assertPropertyEquals name="test.integration.jar.pattern" value=".*-test.jar"/>
-        <au:assertPropertyEquals name="test.run.includes.pattern" value="**/*"/>
-        <au:assertPropertyEquals name="test.run.excludes.pattern" value=""/>
-        <au:assertPropertyEquals name="test.integration.run.includes.pattern" value="**/*"/>
-        <au:assertPropertyEquals name="test.integration.run.excludes.pattern" value=""/>
-        <au:assertPropertyEquals name="target.test.classes" value="${target}/test/classes"/>
-        <au:assertPropertyEquals name="target.test.integration.classes" value="${target}/integration-test/classes"/>
-        <au:assertReferenceSet refid="run.test.classpath"/>
-        <au:assertReferenceSet refid="run.test.integration.classpath"/>
-        <au:assertPropertyEquals name="test.mode.run" value="true"/>
+        <au:assertPropertyEquals name="src.test.resources" value="${basedir}/src/test/resources" />
+        <au:assertPropertyEquals name="src.test.integration.resources" value="${basedir}/src/integration-test/resources" />
+        <au:assertPropertyEquals name="target.test.xml" value="${target}/test/xml" />
+        <au:assertPropertyEquals name="target.test.html" value="${target}/test/html" />
+        <au:assertPropertyEquals name="test.mode" value="run" />
+        <au:assertPropertyEquals name="test.run.failonerror" value="true" />
+        <au:assertPropertyEquals name="test.run.dir" value="${basedir}" />
+        <au:assertPropertyEquals name="test.integration.run.dir" value="${basedir}" />
+        <au:assertPropertyEquals name="test.integration.scan.path" value="false" />
+        <au:assertPropertyEquals name="test.integration.jar.pattern" value=".*-test.jar" />
+        <au:assertPropertyEquals name="test.run.includes.pattern" value="**/*" />
+        <au:assertPropertyEquals name="test.run.excludes.pattern" value="" />
+        <au:assertPropertyEquals name="test.integration.run.includes.pattern" value="**/*" />
+        <au:assertPropertyEquals name="test.integration.run.excludes.pattern" value="" />
+        <au:assertPropertyEquals name="target.test.classes" value="${target}/test/classes" />
+        <au:assertPropertyEquals name="target.test.integration.classes" value="${target}/integration-test/classes" />
+        <au:assertReferenceSet refid="run.test.classpath" />
+        <au:assertReferenceSet refid="run.test.integration.classpath" />
+        <au:assertPropertyEquals name="test.mode.run" value="true" />
         <au:assertFalse>
-           <isset property="test.mode.report"/>
+            <isset property="test.mode.report" />
         </au:assertFalse>
     </target>
 
     <target name="test-/skip-tests" depends="/skip-tests">
-        <au:assertPropertyEquals name="skip.test" value="true"/>
-        <au:assertPropertyEquals name="skip.test.integration" value="true"/>
+        <au:assertPropertyEquals name="skip.test" value="true" />
+        <au:assertPropertyEquals name="skip.test.integration" value="true" />
     </target>
    
     <!-- TODO: add abstract-test:compute-test-sets case 
     <target name="test-abstract-test:compute-test-sets" depends="abstract-test:compute-test-sets">
     </target>
     -->
- 
-
 </project>
