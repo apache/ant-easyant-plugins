@@ -26,7 +26,7 @@
         <ea:parameter property="target.antunit.xml" default="${target.test.xml}" description="destination directory for xml test report" />
         <ea:parameter property="target.antunit.html" default="${target.test.html}" description="destination directory for html test report" />
 
-        <ea:parameter property="src.test.antunit" default="src/test/antunit" description="directory where antunit test scripts are stored" />
+        <ea:parameter property="src.test.antunit" default="${basedir}/src/test/antunit" description="directory where antunit test scripts are stored" />
         <ea:parameter property="antunit.testcase"
             description="specify a list of testcase that you want to run, if no one is specified includes pattern will be used" />
         <ea:parameter property="test.antunit.log.level" default="error"
@@ -35,7 +35,7 @@
         <ea:parameter property="test.antunit.excludes.pattern" default=""
             description="Pattern describing files excluded in antunit test process" />
 
-        <ea:parameter property="src.test.integration.antunit" default="src/integration-test/antunit"
+        <ea:parameter property="src.test.integration.antunit" default="${basedir}/src/integration-test/antunit"
             description="directory where antunit integration tests are stored.  Integration tests are run after packaging, in the integration-test phase." />
         <ea:parameter property="test.integration.antunit.includes.pattern" description="Pattern describing files included in antunit integration test process" />
         <ea:parameter property="test.integration.antunit.excludes.pattern" default=""
