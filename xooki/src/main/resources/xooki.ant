@@ -66,7 +66,7 @@
     <target name="xooki:create-skeleton" depends="xooki:init">
         <mkdir dir="${xooki.temp.dir}" />
         <mkdir dir="${documentation.css.dir}" />
-        <ivy:retrieve organisation="xooki" module="xooki" inline="true" pattern="${xooki.temp.dir}/[artifact].[ext]"
+        <ivy:retrieve organisation="org.apache.xooki" module="xooki" inline="true" pattern="${xooki.temp.dir}/[artifact].[ext]"
             settingsRef="easyant.ivy.instance" />
         <unzip src="${xooki.temp.dir}/xooki.jar" dest="${src.documentation.dir}" />
         <delete dir="${xooki.temp.dir}" />
