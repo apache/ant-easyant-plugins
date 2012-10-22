@@ -22,5 +22,6 @@
             <ea:property name="scm.tag.name" value="${ivy.module}-${version}" />
         </ea:plugin>
         <ea:plugin module="antunit" revision="0.9" />
+        <ea:plugin module="easyant-plugin-documentation" revision="0.9" plugindoc.source.dir="${basedir}/src/main/resources"/>
     </info>
 </ivy-module>
