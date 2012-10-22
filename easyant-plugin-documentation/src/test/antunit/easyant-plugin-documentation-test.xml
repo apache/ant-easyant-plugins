@@ -35,8 +35,6 @@
     <target name="setUp" depends="clean">
         <property name="plugindoc.module.ivy" value="${basedir}/sample-module.ivy" />
         <property name="plugindoc.source.dir" value="${basedir}/src/main/resources" />
-        <property name="plugindoc.todir" value="${target}/artifacts" />
-
     </target>
     <target name="tearDown" depends="clean" />
 
@@ -44,8 +42,14 @@
         <au:assertPropertyEquals name="plugindoc.module.ivy" value="${basedir}/sample-module.ivy" />
         <au:assertPropertyEquals name="plugindoc.source.dir" value="${basedir}/src/main/resources" />
         <au:assertPropertyEquals name="plugindoc.main.confs" value="default" />
-        <au:assertPropertyEquals name="plugindoc.todir" value="${target}/artifacts" />
-        <au:assertFileExists file="${target}/artifacts/org.apache.easyant.plugins-tinyplugin-default.html" />
+        <au:assertPropertyEquals name="target.documentation.dir" value="${target}/documentation" />
+        <au:assertFileExists file="${target}/documentation/org.apache.easyant.plugins-tinyplugin-default.html" />
+    </target>
+    
+    <target name="testeasyant-plugin-documentation:package" depends="easyant-plugin-documentation:package">
+        <au:assertPropertyEquals name="target.artifacts" value="${target}/artifacts" />
+        <au:assertFileExists file="${target.artifacts}"/>
+        <au:assertFileExists file="${target.artifacts}/${ivy.module}-documentation.zip"/>
     </target>
 
     <target name="prepare-register-artifact">
@@ -54,7 +58,8 @@
     </target>
 
     <target name="test-easyant-plugin-documentation:register-artifact" depends="prepare-register-artifact,easyant-plugin-documentation:register-artifact">
-        <au:assertPropertyEquals name="plugindoc.publish.type" value="html" />
+        <au:assertPropertyEquals name="plugindoc.publish.type" value="zip" />
         <au:assertPropertyEquals name="plugindoc.publish.confs" value="documentation" />
+        <au:assertPropertyEquals name="project.ivy.instance" value="project.ivy.instance"/>
     </target>
 </project>

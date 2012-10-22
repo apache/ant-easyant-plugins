@@ -18,23 +18,36 @@
     xmlns:ea="antlib:org.apache.easyant">
     <ea:core-version requiredrevision="[0.9,+]" />
 
+    <ea:parameter property="target.documentation.dir" default="${target}/documentation"
+        description="directory where the documentation will be generated to" />
+
+
     <target name="easyant-plugin-documentation:report">
         <ea:parameter property="plugindoc.module.ivy" description="plugin's module ivy used to know dependencies"
             default="${basedir}/module.ivy" />
         <ea:parameter property="plugindoc.source.dir" description="plugin's source dirrectory used to know targets/extensionPoints etc..."
             required="true" />
         <ea:parameter property="plugindoc.main.confs" description="plugin's main conf" default="default" />
-        <ea:parameter property="plugindoc.todir" description="target directory where plugin doc will be generated"
-            required="true" />
         <ea:plugin-report moduleIvy="${plugindoc.module.ivy}" sourceDirectory="${plugindoc.source.dir}"
-            conf="${plugindoc.main.confs}" todir="${plugindoc.todir}" />
+            conf="${plugindoc.main.confs}" todir="${target.documentation.dir}" />
     </target>
 
-    <target name="easyant-plugin-documentation:register-artifact" depends="easyant-plugin-documentation:report">
-        <ea:parameter property="plugindoc.publish.type" default="html"
+    <target name="easyant-plugin-documentation:package" depends="easyant-plugin-documentation:report"
+        description="generate a package containing plugin documentation">
+        <ea:parameter property="target.artifacts" default="${target}/artifacts" description="destination directory for target artifacts" />
+        <mkdir dir="${target.artifacts}" />
+        <zip destfile="${target.artifacts}/${ivy.module}-documentation.zip">
+            <fileset dir="${target.documentation.dir}" erroronmissingdir="false" />
+        </zip>
+    </target>
+
+    <target name="easyant-plugin-documentation:register-artifact" depends="easyant-plugin-documentation:package">
+        <ea:parameter property="plugindoc.publish.type" default="zip"
             description="default type for plugin documentation artifacts" />
         <ea:parameter property="plugindoc.publish.confs" default="documentation"
             description="default configurations for plugin documentation artifacts" />
+        <ea:parameter property="project.ivy.instance" default="project.ivy.instance" description="the ivy instance name for your project" />
+
         <ea:registerartifact type="${plugindoc.publish.type}" confs="${publishdoc.publish.confs}"
             settingsRef="easyant.ivy.instance" />
     </target>
