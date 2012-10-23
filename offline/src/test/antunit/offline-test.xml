@@ -42,7 +42,6 @@
     <target name="tearDown" depends="clean" />
 
     <target name="test-offline:init">
-        <au:assertPropertyEquals name="project.ivy.instance" value="project.ivy.instance" />
         <au:assertPropertyEquals name="project.buildscope.resolver" value="project.buildscope.repository" />
         <au:assertPropertyEquals name="easyant.buildscope.resolver" value="easyant.buildscope.repository" />
         <au:assertPropertyEquals name="easyant.offline" value="false" />
@@ -51,6 +50,8 @@
 
 
     <target name="test-offline:offline:go-offline" depends="offline:go-offline">
+        <au:assertPropertyEquals name="project.ivy.instance" value="project.ivy.instance" />
+
         <au:assertLogContains text=":: installing junit#junit;4.4 ::" />
         <au:assertLogContains text=":: installing in project.buildscope.repository ::" />
         <au:assertLogContains text=":: installing in easyant.buildscope.repository ::" />
