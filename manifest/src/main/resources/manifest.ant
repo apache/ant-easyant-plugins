@@ -14,7 +14,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project name="org.apache.easyant.plugins#manifest" xmlns:ea="antlib:org.apache.easyant">
+<project name="org.apache.easyant.plugins#manifest" xmlns:ea="antlib:org.apache.easyant" xmlns:ac="antlib:net.sf.antcontrib">
     <ea:core-version requiredrevision="[0.9,+]" />
     <ea:import mrid="org.apache.easyant.plugins#abstract-provisioning;0.9" />
 
@@ -22,9 +22,12 @@
         <ea:parameter property="project.main.classname"
             description="Used to define the project main class. The mainclass will then be used by many plugins (manifest, run-java, etc...)" />
         <ea:parameter property="manifest.main.classname" default="${project.main.classname}">
-            If defined, Main-Class and Class-Path attributes are added to produce an executable jar file.
-            By default this property take the same value as 'project.main.classname' property.
-            If you are looking for a way to reference your mainclass one time for all plugins you should set project.main.classname
+            If defined, Main-Class and Class-Path
+            attributes are added to produce an executable jar file.
+            By default this property take the same value as
+            'project.main.classname' property.
+            If you are looking for a way to reference your mainclass one time for all
+            plugins you should set project.main.classname
             instead.
         </ea:parameter>
         <ea:parameter property="manifest.classpath" required="false"
@@ -83,15 +86,22 @@
     <!-- currently this target is only available if we use retrieve.dependencies=true because manifestclasspath is excepting a relative based structure which is not really usable using the ivy cache for example -->
     <target name="manifest:manifest-runnable" depends="manifest:manifest" description="add manifest attributes required for an executable jar"
         if="is.manifest.runnable">
-        <condition property="is.retrieve.dependencies.enabled">
-            <istrue value="${retrieve.dependencies}" />
-        </condition>
-        <fail unless="is.retrieve.dependencies.enabled"
-            message="manifest runnable feature can only be used if your the property retrieve.dependencies is enabled" />
+        <fileset id="lib.main.fileset" dir="${lib.main}" erroronmissingdir="false">
+            <include name="*.jar" />
+        </fileset>
+
+        <ac:if>
+            <length length="0">
+                <fileset refid="lib.main.fileset" />
+            </length>
+            <ac:then>
+                <echo level="warn"
+                    message="no dependencies found in ${lib.main}, will not be able to set Classpath attribute correctly" />
+            </ac:then>
+        </ac:if>
+
         <path id="manifest.main.classpath">
-            <fileset id="lib.main.fileset" dir="${lib.main}">
-                <include name="*.jar" />
-            </fileset>
+            <fileset refid="lib.main.fileset" />
         </path>
 
         <!-- create the target artifact dir if it does not exists -->

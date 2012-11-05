@@ -64,15 +64,24 @@
     </target>
 
     <target name="prepare-manifest-runnable">
-        <property name="retrieve.dependencies" value="true" />
         <property name="project.main.classname" value="foobar" />
         <mkdir dir="${lib.main}" />
         <echo file="${lib.main}/myjar.jar" />
     </target>
     
     <target name="test-manifest:manifest-runnable" depends="prepare-manifest-runnable, manifest:manifest-runnable">
-        <!--FIXME: manifest-runable fails if ${lib.main} doesn't exists -->
+        <au:assertLogDoesntContain text="no dependencies found in ${lib.main}, will not be able to set Classpath attribute correctly" level="warn"/>
         <au:assertReferenceSet refid="manifest.main.classpath" />
         <au:assertPropertyEquals name="manifest.classpath" value="lib/main/myjar.jar" />
+    </target>
+    
+    <target name="prepare-manifest-runnable-without-dependencies">
+        <property name="project.main.classname" value="foobar" />
+    </target>
+    
+    <target name="test-manifest:manifest-runnable-without-dependecies" depends="prepare-manifest-runnable-without-dependencies, manifest:manifest-runnable">
+        <au:assertLogContains text="no dependencies found in ${lib.main}, will not be able to set Classpath attribute correctly" level="warn"/>
+        <au:assertReferenceSet refid="manifest.main.classpath" />
+        <au:assertPropertyEquals name="manifest.classpath" value="" />
     </target>
 </project>
