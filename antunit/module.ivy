@@ -31,6 +31,9 @@
         <artifact type="ant" />
     </publications>
     <dependencies>
-        <dependency org="org.apache.ant" name="ant-antunit" rev="1.2" conf="default->default" />
+        <dependency org="org.apache.ant" name="ant-antunit" rev="1.2" conf="default->default">
+            <!--already loaded by easyant -->
+            <exclude org="org.apache.ant" module="*"/>
+        </dependency>
     </dependencies>
 </ivy-module>
