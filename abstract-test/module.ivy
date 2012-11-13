@@ -37,6 +37,6 @@
         <artifact type="ant" />
     </publications>
     <dependencies>
-        <dependency org="org.apache.ant" name="ant-junit" rev="1.8.2" conf="default->master"/>
+        <dependency org="org.apache.ant" name="ant-junit" rev="1.8.4" conf="default->master"/>
     </dependencies>
 </ivy-module>

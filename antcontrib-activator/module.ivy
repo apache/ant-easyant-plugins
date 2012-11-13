@@ -32,6 +32,9 @@
         <artifact type="ant" />
     </publications>
     <dependencies>
-        <dependency org="ant-contrib" name="ant-contrib" rev="1.0b2" conf="default->default" />
+        <dependency org="ant-contrib" name="ant-contrib" rev="1.0b2" conf="default->master">
+            <!--already loaded by easyant -->
+            <exclude org="ant" module="ant"/>
+        </dependency>
     </dependencies>
 </ivy-module>
