@@ -16,7 +16,7 @@
 -->
 <ivy-module version="2.0" xmlns:ea="http://www.easyant.org">
     <info organisation="org.apache.easyant.plugins" module="antunit" revision="0.9">
-        <extends organisation="org.apache.easyant.plugins" module="parent-plugin" revision="0.1" />
+        <extends organisation="org.apache.easyant.plugins" module="parent-plugin" revision="0.1" parent="parent.ivy"/>
         <description>This module provides antunit test features.</description>
         <ea:build organisation="org.apache.easyant.buildtypes" module="build-std-ant-plugin" revision="0.1" />
     </info>
@@ -33,7 +33,8 @@
     <dependencies>
         <dependency org="org.apache.ant" name="ant-antunit" rev="1.2" conf="default->default">
             <!--already loaded by easyant -->
-            <exclude org="org.apache.ant" module="*"/>
+            <exclude org="org.apache.ant" module="ant"/>
+            <exclude org="org.apache.ant" module="ant-launcher"/>
         </dependency>
     </dependencies>
 </ivy-module>
