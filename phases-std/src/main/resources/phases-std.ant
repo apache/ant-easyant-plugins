@@ -28,11 +28,11 @@
         description="process and deploy the package if necessary into an environment where integration tests can be run" />
     <extension-point name="verify" depends="package, test, integration-test"
         description="run any checks to verify the package is valid and meets quality criteria" />
-    <extension-point name="publish-local" depends="package"
+    <extension-point name="publish-local"
         description="publish the package into the local repository, for use as a dependency in other projects locally" />
-    <extension-point name="publish-shared" depends="package"
+    <extension-point name="publish-shared"
         description="done in an integration environment, copies the final package to the remote repository for sharing with other developers and projects" />
-    <extension-point name="release" depends="verify"
+    <extension-point name="release"
         description="done in an integration or release environment, copies the final package to the remote repository for sharing with other developers and projects" />
     <extension-point name="report" description="generate report" />
 </project>
