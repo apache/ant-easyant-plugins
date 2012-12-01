@@ -26,6 +26,10 @@
     <ea:parameter property="easyant.offline" default="false" description="specify if you're running easyant in offline mode" />
     <ea:parameter property="offline.base.directory" default="${basedir}/offline/" description="specify offline base directory" />
 
+    <target name="offline:clean">
+        <delete dir="${offline.base.directory}" failonerror="false" />
+    </target>
+
     <target name="offline:go-offline">
         <fail if="${easyant.offline}" message="can't run offline:go-offline when you are already offline" />
         <ea:parameter property="project.ivy.instance" default="project.ivy.instance" description="the ivy instance name for your project" />

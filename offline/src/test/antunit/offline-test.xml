@@ -33,12 +33,10 @@
         </delete>
     </target>
 
-    <target name="setUp" depends="clean">
-        <property name="easyant.file" value="${basedir}/sample-module.ivy" />
-        <ea:loadmodule buildModule="${easyant.file}" />
-<!--<ea:configure-build-scoped-repository generateWrapperResoler="false" dictator="@{dictator}" name="${project.buildscope.resolver}" settingsRef="${project.ivy.instance}"/>
--->
-    </target>
+    <property name="easyant.file" value="${basedir}/sample-module.ivy" />
+    <ea:loadmodule buildModule="${easyant.file}" />
+
+    <target name="setUp" depends="clean" />
     <target name="tearDown" depends="clean" />
 
     <target name="test-offline:init">
@@ -77,5 +75,13 @@
         <au:assertFileExists file="${project.repo}/junit/junit/4.4/junit.jar" />
         <au:assertFileExists file="${project.repo}/junit/junit/4.4/junit-javadoc.jar" />
         <au:assertFileExists file="${project.repo}/junit/junit/4.4/junit-sources.jar" />
+    </target>
+
+    <target name="prepare-clean">
+        <mkdir dir="${offline.base.directory}" />
+    </target>
+
+    <target name="test-offline:clean" depends="prepare-clean,offline:clean">
+        <au:assertFileDoesntExist file="${offline.base.directory}" />
     </target>
 </project>
