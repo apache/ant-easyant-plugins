@@ -19,6 +19,7 @@
     
     <!-- Import your plugin -->
     <property name="target" value="${basedir}/target/test-antunit" />
+    
     <!-- configure easyant in current project -->
     <ea:configure-easyant-ivy-instance />
     <!-- import our local plugin -->
@@ -36,8 +37,9 @@
         <property name="ivy.local.default.root" value="${target}/local-repo" />
         <property name="ivy.shared.default.root" value="${target}/shared-repo" />
         <property name="project.ivy.file" value="sample-module.ivy" />
-        <ivy:settings id="project.ivy.instance" />
-        <ivy:resolve file="${project.ivy.file}" settingsRef="project.ivy.instance" />
+        <property name="project.ivy.instance" value="test.ivy.instance" />
+        <ivy:configure settingsId="${project.ivy.instance}" url="${ivy.default.settings.dir}/ivysettings.xml"/>
+        <ivy:resolve file="${project.ivy.file}" settingsRef="${project.ivy.instance}"  />
         <mkdir dir="${target}/artifacts" />
         <echo file="${target}/artifacts/standard-java-app.jar" />
     </target>
@@ -47,10 +49,10 @@
         <au:assertPropertyEquals name="release.resolver" value="shared" />
         <au:assertPropertyEquals name="shared.resolver" value="shared" />
         <au:assertPropertyEquals name="local.resolver" value="local" />
-        <au:assertPropertyEquals name="project.ivy.instance" value="project.ivy.instance" />
         <au:assertPropertyEquals name="publish.overwrite" value="false" />
         <au:assertPropertyEquals name="ivy.haltonmissing" value="true" />
         <au:assertPropertyEquals name="target.artifacts" value="${target}/artifacts" />
+        <au:assertPropertyEquals name="publish.artifacts.pattern" value="${target.artifacts}/[artifact](-[classifier]).[ext]"/>
         <au:assertPropertyEquals name="is.project.ivy.settings.configured" value="true" />
     </target>
 

@@ -29,7 +29,7 @@
             description="the name of the resolver use for release publication" />
         <ea:parameter property="shared.resolver" default="shared" description="the name of the shared resolver" />
         <ea:parameter property="local.resolver" default="local" description="the name of the local resolver" />
-
+      
         <ea:parameter property="project.ivy.instance" default="project.ivy.instance" description="ivy instance name" />
         <ea:parameter property="project.ivy.file" required="true"
             description="ivy file (use to resolve dependencies for the project)" />
@@ -42,6 +42,7 @@
         <ea:parameter property="project.ivy.settings.file" description="the ivysettings file used by your project" />
         <ea:parameter property="project.ivy.settings.url" description="the ivysettings url used by your project" />
         <ea:parameter property="target.artifacts" default="${target}/artifacts" description="destination directory for target artifacts" />
+        <ea:parameter property="publish.artifacts.pattern" default="${target.artifacts}/[artifact](-[classifier]).[ext]" description="defines publication artifacts pattern"/>
 
         <ea:parameter property="fail.publication.if.no.revision" default="true"
             description="fail build if current module has no revision in 'info' tag of the module.ivy" />
@@ -83,7 +84,7 @@
         <ea:checkresolver resolver="release.resolver" settingsRef="${project.ivy.instance}"
             description="name of the repository used to publish releases" />
         <check-version-number />
-        <ivy:publish artifactspattern="${target.artifacts}/[artifact](-[classifier]).[ext]" resolver="${release.resolver}"
+        <ivy:publish artifactspattern="${publish.artifacts.pattern}" resolver="${release.resolver}"
             pubrevision="${version}" status="release" settingsRef="${project.ivy.instance}" overwrite="${publish.overwrite}"
             haltonmissing="${ivy.haltonmissing}" update="true" />
         <echo message="project ${module.name} released with version ${version} on ${release.resolver}" />
@@ -99,7 +100,7 @@
         <tstamp>
             <format property="now" pattern="yyyyMMddHHmmss" />
         </tstamp>
-        <ivy:publish artifactspattern="${target.artifacts}/[artifact](-[classifier]).[ext]" resolver="${shared.resolver}"
+        <ivy:publish artifactspattern="${publish.artifacts.pattern}" resolver="${shared.resolver}"
             forcedeliver="true" pubdate="${now}" pubrevision="${version}" status="integration" overwrite="${publish.overwrite}"
             settingsRef="${project.ivy.instance}" haltonmissing="${ivy.haltonmissing}" />
         <echo message="project ${module.name} published with version ${version} on ${shared.resolver}" />
@@ -109,12 +110,14 @@
           target: publish-local              
          ================================= -->
     <target name="ivy-publication:publish-local" depends="-ivy-publication:init,ivy-publication:generate-local-version,ivy-publication:publish-ready">
+        <ea:checkresolver resolver="local.resolver" settingsRef="${project.ivy.instance}"
+            description="name of the repository used to publish local versions" />
         <check-version-number />
         <tstamp>
             <format property="now" pattern="yyyyMMddHHmmss" />
         </tstamp>
 
-        <ivy:publish artifactspattern="${target.artifacts}/[artifact](-[classifier]).[ext]" resolver="${local.resolver}"
+        <ivy:publish artifactspattern="${publish.artifacts.pattern}" resolver="${local.resolver}"
             pubrevision="${version}" pubdate="${now}" status="integration" forcedeliver="true" overwrite="${publish.overwrite}"
             settingsRef="${project.ivy.instance}" haltonmissing="${ivy.haltonmissing}" />
         <echo message="project ${module.name} published locally with version ${version}" />
