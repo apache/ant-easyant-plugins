@@ -15,7 +15,7 @@
    limitations under the License.
 -->
 <ivy-module version="2.0" xmlns:ea="http://www.easyant.org">
-    <info organisation="org.apache.easyant.plugins" module="test-testng" revision="0.9">
+    <info organisation="org.apache.easyant.plugins" module="testng" revision="0.9">
         <extends organisation="org.apache.easyant.plugins" module="parent-plugin" revision="0.1" />
         <description>
             This module provides testng tests compilation and execution feature.

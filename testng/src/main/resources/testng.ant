@@ -14,12 +14,12 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project name="org.apache.easyant.plugins#test-testng" xmlns:ea="antlib:org.apache.easyant">
+<project name="org.apache.easyant.plugins#testng" xmlns:ea="antlib:org.apache.easyant">
     <ea:core-version requiredrevision="[0.9,+]" />
 
     <ea:import mrid="org.apache.easyant.plugins#abstract-test;0.9" />
 
-    <target name="test-testng:init" depends="abstract-test:init">
+    <target name="testng:init" depends="abstract-test:init">
         <ea:parameter property="testng.filename" description="testng configuration filename" default="testng.xml" />
         <available property="testng.available" classname="org.testng.TestNGAntTask">
             <classpath refid="run.test.classpath" />
@@ -45,29 +45,29 @@
         </sequential>
     </macrodef>
 
-    <target name="-test-testng:test" depends="test-testng:init,abstract-test:compute-test-sets" unless="skip.test">
+    <target name="-testng:test" depends="testng:init,abstract-test:compute-test-sets" unless="skip.test">
         <testng-test prefix="test" />
     </target>
 
-    <target name="-test-testng:integration-test" depends="test-testng:init,abstract-test:compute-test-sets"
+    <target name="-testng:integration-test" depends="testng:init,abstract-test:compute-test-sets"
         unless="skip.test.integration">
         <testng-test prefix="test.integration" />
     </target>
 
-    <target name="test-testng:run" if="test.mode.run" unless="skip.test" depends="-test-testng:test" description="run testng tests"
+    <target name="testng:run" if="test.mode.run" unless="skip.test" depends="-testng:test" description="run testng tests"
         extensionOf="abstract-test:test-run">
         <check-test-result propertytocheck="test.failed"
             message="At least one test has failed. See logs in ${target.test.xml} for details or use the report target to run the test with a report" />
     </target>
 
-    <target name="test-testng:run-integration" if="test.mode.run" unless="skip.test.integration" depends="-test-testng:integration-test"
+    <target name="testng:run-integration" if="test.mode.run" unless="skip.test.integration" depends="-testng:integration-test"
         description="run testng integration tests" extensionOf="abstract-test:integration-test-run">
         <check-test-result propertytocheck="test.integration.failed"
             message="At least one integration test has failed. See logs in ${target.test.xml} for details or use the report target to run the test with a report" />
     </target>
 
-    <target name="test-testng:report" if="test.mode.report" unless="skip.test"
-        depends="-test-testng:test,-test-testng:integration-test" description="generate testng reports">
+    <target name="testng:report" if="test.mode.report" unless="skip.test"
+        depends="-testng:test,-testng:integration-test" description="generate testng reports">
         <junitreport todir="${target.test.xml}">
             <fileset dir="${target.test.xml}">
                 <include name="TEST-*.xml" />
