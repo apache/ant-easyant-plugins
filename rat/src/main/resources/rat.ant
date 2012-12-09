@@ -38,8 +38,8 @@
         <mkdir dir="${rat.report.dir}" />
         <echo>Generating rat report ...</echo>
         <ea:parameter property="rat.report.filename" default="rat-report.txt" description="rat report filename" />
-
-        <rat:report xmlns:rat="antlib:org.apache.rat.anttasks" reportFile="${rat.report.dir}/${rat.report.filename}">
+        <property name="rat.report" value="${rat.report.dir}/${rat.report.filename}"/>
+        <rat:report xmlns:rat="antlib:org.apache.rat.anttasks" reportFile="${rat.report}">
             <fileset refid="rat.fileset" />
         </rat:report>
 
