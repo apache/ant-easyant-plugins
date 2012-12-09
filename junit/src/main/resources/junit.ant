@@ -14,13 +14,13 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project name="org.apache.easyant.plugins#test-junit" xmlns:ea="antlib:org.apache.easyant">
+<project name="org.apache.easyant.plugins#junit" xmlns:ea="antlib:org.apache.easyant">
     <ea:core-version requiredrevision="[0.9,+]" />
 
     <ea:import mrid="org.apache.easyant.plugins#abstract-test;0.9" />
     <ea:import mrid="org.apache.easyant.plugins#antcontrib-activator;0.9" />
 
-    <target name="test-junit:init" depends="abstract-test:init">
+    <target name="junit:init" depends="abstract-test:init">
         <ea:parameter property="test.run.forkmode" default="perTest"
             description="The forkmode for junit tests; 'perTest' or 'once'" />
         <ea:parameter property="test.run.fork" default="true" description="Run the tests in a separate VM. (true/false)" />
@@ -59,27 +59,27 @@
         </sequential>
     </macrodef>
 
-    <target name="-test-junit:test" depends="test-junit:init,abstract-test:compute-test-sets" unless="skip.test">
+    <target name="-junit:test" depends="junit:init,abstract-test:compute-test-sets" unless="skip.test">
         <junit-test prefix="test" />
     </target>
 
-    <target name="-test-junit:integration-test" depends="test-junit:init,abstract-test:compute-test-sets" unless="skip.test.integration">
+    <target name="-junit:integration-test" depends="junit:init,abstract-test:compute-test-sets" unless="skip.test.integration">
         <junit-test prefix="test.integration" />
     </target>
 
-    <target name="test-junit:run" if="test.mode.run" unless="skip.test" depends="-test-junit:test" description="run junit tests"
+    <target name="junit:run" if="test.mode.run" unless="skip.test" depends="-junit:test" description="run junit tests"
         extensionOf="abstract-test:test-run">
         <check-test-result propertytocheck="test.failed"
             message="At least one test has failed. See logs in ${target.test.xml} for details or use the report target to run the test with a report" />
     </target>
 
-    <target name="test-junit:run-integration" if="test.mode.run" unless="skip.test.integration" depends="-test-junit:integration-test"
+    <target name="junit:run-integration" if="test.mode.run" unless="skip.test.integration" depends="-junit:integration-test"
         description="run junit integration tests" extensionOf="abstract-test:integration-test-run">
         <check-test-result propertytocheck="test.integration.failed"
             message="At least one integration test has failed. See logs in ${target.test.xml} for details or use the report target to run the test with a report" />
     </target>
 
-    <target name="test-junit:report" if="test.mode.report" unless="skip.test" depends="-test-junit:test,-test-junit:integration-test"
+    <target name="junit:report" if="test.mode.report" unless="skip.test" depends="-junit:test,-junit:integration-test"
         description="generate junit report">
         <junitreport todir="${target.test.xml}">
             <fileset dir="${target.test.xml}">

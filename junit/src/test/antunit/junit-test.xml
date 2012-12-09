@@ -14,7 +14,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project name="org.apache.easyant.plugins;test-junit-test" xmlns:au="antlib:org.apache.ant.antunit" xmlns:ivy="antlib:org.apache.ivy.ant"
+<project name="org.apache.easyant.plugins;junit-test" xmlns:au="antlib:org.apache.ant.antunit" xmlns:ivy="antlib:org.apache.ivy.ant"
     xmlns:ea="antlib:org.apache.easyant">
     
     <!-- Import your plugin -->
@@ -32,7 +32,7 @@
         </delete>
     </target>
     
-    <!--FIXME: test-junit targets get executed as they are prefixed by "test" -->
+    <!--FIXME: junit targets get executed as they are prefixed by "test" -->
     <target name="setUp" depends="clean">
         <ivy:settings id="project.ivy.instance" />
         <ivy:cachepath pathid="compile.test.classpath" file="sample-module.ivy" settingsRef="project.ivy.instance" />
@@ -43,7 +43,7 @@
     </target>
     <target name="tearDown" depends="clean" />
 
-    <target name="test-test-junit:init" depends="test-junit:init">
+    <target name="test-junit:init" depends="junit:init">
         <au:assertPropertyEquals name="test.run.forkmode" value="perTest" />
         <au:assertPropertyEquals name="test.run.fork" value="true" />
         <au:assertPropertyEquals name="test.run.jvmargs" value="" />
@@ -52,12 +52,12 @@
         <au:assertPropertyEquals name="test.integration.run.jvmargs" value="" />
     </target>
 
-    <target name="test-test-junit:test" depends="-test-junit:test">
+    <target name="test-junit:test" depends="-junit:test">
         <au:assertFileExists file="${target.test.xml}" />
         <au:assertFileExists file="${test.run.dir}" />
     </target>
 
-    <target name="test-test-junit:integration-test" depends="-test-junit:integration-test">
+    <target name="test-junit:integration-test" depends="-junit:integration-test">
         <au:assertFileExists file="${target.test.xml}" />
         <au:assertFileExists file="${test.integration.run.dir}" />
     </target>
@@ -67,20 +67,20 @@
         <property name="test.run.failonerror" value="false" />
     </target>
 
-    <target name="test-test-junit:run" depends="configure-plugin,test-junit:run">
+    <target name="test-junit:run" depends="configure-plugin,junit:run">
         <au:assertLogContains
             text="At least one test has failed. See logs in ${target.test.xml} for details or use the report target to run the test with a report"
             level="error" />
     </target>
 
-    <target name="test-test-junit:run-integration" depends="configure-plugin,test-junit:run-integration">
+    <target name="test-junit:run-integration" depends="configure-plugin,junit:run-integration">
         <au:assertLogContains
             text="At least one integration test has failed. See logs in ${target.test.xml} for details or use the report target to run the test with a report"
             level="error" />
 
     </target>
 
-    <target name="test-test-junit:report" depends="test-junit:report">
+    <target name="test-junit:report" depends="junit:report">
         <!--TODO: add this missing test case -->
     </target>
 </project>
