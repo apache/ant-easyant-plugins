@@ -31,6 +31,8 @@
         <artifact type="ant" />
     </publications>
     <dependencies>
+<!--
         <dependency org="net.luminis" name="osgi-bundle-ant" rev="0.2.0" />
+-->
     </dependencies>
 </ivy-module>
