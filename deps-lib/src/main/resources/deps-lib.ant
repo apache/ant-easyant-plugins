@@ -16,7 +16,7 @@
 -->
 <project name="org.apache.easyant.plugins#deps-lib" xmlns:ea="antlib:org.apache.easyant">
     <ea:core-version requiredrevision="[0.9,+]" />
-    <ea:import mrid="org.apache.easyant.plugins#abstract-provisioning;0.9" />
+    <ea:plugin module="abstract-provisioning" revision="0.9" />
 
     <target name="deps-lib:plugin">
         <ea:parameter path="compile.main.classpath" description="main compilation path" />

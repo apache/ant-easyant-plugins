@@ -18,7 +18,7 @@
     xmlns:au="antlib:org.apache.ant.antunit">
     <ea:core-version requiredrevision="[0.9,+]" />
 
-    <ea:import mrid="org.apache.easyant.plugins#abstract-test;0.9" />
+    <ea:plugin module="abstract-test" revision="0.9" />
 
     <dirname property="antunit.plugin.dir" file="${org.apache.easyant.plugins#antunit.junit-frames.xsl.file}" />
 

@@ -17,7 +17,7 @@
 <project name="org.apache.easyant.plugins#ivy-provisioning" xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:ac="antlib:net.sf.antcontrib"
     xmlns:ea="antlib:org.apache.easyant">
     <ea:core-version requiredrevision="[0.9,+]" />
-    <ea:import mrid="org.apache.easyant.plugins#abstract-provisioning;0.9" />
+    <ea:plugin module="abstract-provisioning" revision="0.9" />
 
     <target name="-ivy-provisioning:init" extensionOf="abstract-provisioning:provisioning-ready">
         <ea:parameter property="main.confs" default="default" description="confs used for main librairies" />

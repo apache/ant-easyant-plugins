@@ -17,7 +17,7 @@
 <project name="org.apache.easyant.plugins#package-war" xmlns:ac="antlib:net.sf.antcontrib" xmlns:ea="antlib:org.apache.easyant">
     <ea:core-version requiredrevision="[0.9,+]" />
 
-    <ea:import mrid="org.apache.easyant.plugins#abstract-package;0.9" />
+    <ea:plugin module="abstract-package" revision="0.9" />
 
     <target name="package-war:init" depends="abstract-package:init,abstract-package:compute-metainf">
         <ea:parameter property="target.artifacts.main.war.name" default="${module.name}.war" description="main artifact file name" />

@@ -24,7 +24,7 @@
     <ea:parameter property="target.test.integration.classes" default="${target}/integration-test/classes"
         description="destination directory for compiled integration test classes" />
 
-    <ea:import mrid="org.apache.easyant.plugins#abstract-provisioning;0.9" />
+    <ea:plugin module="abstract-provisioning" revision="0.9" />
 
 	<!-- We expect at this point to have every source available, even the ones which are generated -->
     <extension-point name="abstract-compile:compile-ready" depends="abstract-provisioning:provisioning"

@@ -17,7 +17,7 @@
 <project name="org.apache.easyant.plugins#compile-test-groovy" xmlns:ea="antlib:org.apache.easyant">
     <ea:core-version requiredrevision="[0.9,+]" />
 
-    <ea:import mrid="org.apache.easyant.plugins#abstract-compile;0.9" />
+    <ea:plugin module="abstract-compile" revision="0.9" />
 
     <ea:parameter property="src.test.groovy" default="${basedir}/src/test/groovy" description="directory where test sources to be compiled are" />
     <ea:parameter property="src.test.integration.groovy" default="${basedir}/src/integration-test/groovy"

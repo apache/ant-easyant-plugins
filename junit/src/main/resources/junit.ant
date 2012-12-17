@@ -17,8 +17,7 @@
 <project name="org.apache.easyant.plugins#junit" xmlns:ea="antlib:org.apache.easyant">
     <ea:core-version requiredrevision="[0.9,+]" />
 
-    <ea:import mrid="org.apache.easyant.plugins#abstract-test;0.9" />
-    <ea:import mrid="org.apache.easyant.plugins#antcontrib-activator;0.9" />
+    <ea:plugin module="abstract-test" revision="0.9" />
 
     <target name="junit:init" depends="abstract-test:init">
         <ea:parameter property="test.run.forkmode" default="perTest"

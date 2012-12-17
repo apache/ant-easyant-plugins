@@ -18,7 +18,7 @@
     xmlns:ea="antlib:org.apache.easyant">
     <ea:core-version requiredrevision="[0.9,+]" />
 
-    <ea:import mrid="org.apache.easyant.plugins#abstract-package;0.9" />
+    <ea:plugin module="abstract-package" revision="0.9" />
 
     <macrodef name="signJars">
         <attribute name="alias" description="the alias signer" />
