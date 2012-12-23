@@ -124,7 +124,7 @@
         </fileset>
 
         <xooki:generate destDir="${full.target.documentation.dir}/${basename.target.documentation.dir}"
-            checkUpToDate="${xooki.checkUpToDate}">
+            checkUpToDate="${xooki.checkUpToDate}" xookidir="${src.documentation.dir}/xooki">
             <fileset refid="src.documentation.fileset" />
         </xooki:generate>
     </target>
