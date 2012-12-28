@@ -16,7 +16,7 @@
 -->
 <ivy-module version="2.0" xmlns:ea="http://www.easyant.org">
     <info organisation="org.apache.easyant.plugins" module="abstract-package" revision="0.9">
-        <extends organisation="org.apache.easyant.plugins" module="parent-plugin" revision="0.1" />
+        <extends organisation="org.apache.easyant.plugins" module="parent-plugin" revision="0.1" location="../parent.ivy" />
         <description>Abstract base plugin, that any modules providing
             packaging features should include. abstract-package
             defines common configuration properties governing packaging</description>

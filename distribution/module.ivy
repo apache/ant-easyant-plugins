@@ -16,7 +16,7 @@
 -->
 <ivy-module version="2.0" xmlns:ea="http://www.easyant.org">
     <info organisation="org.apache.easyant.plugins" module="distribution" revision="0.9">
-        <extends organisation="org.apache.easyant.plugins" module="parent-plugin" revision="0.1" />
+        <extends organisation="org.apache.easyant.plugins" module="parent-plugin" revision="0.1" location="../parent.ivy" />
         <description>This module allow you to make binary distributions of your project such as zip, tar.bz2, tar.gz,
             etc...
             It provides ready to use distributions like bin, with-dependencies, sources. It also comes with a

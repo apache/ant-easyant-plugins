@@ -1,0 +1,72 @@
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<project name="easyant-plugins" xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:ac="antlib:net.sf.antcontrib">
+
+    <target name="init">
+        <mkdir dir="target"/>
+
+        <property name="ivy.version"  value="2.3.0-rc2"/>
+        <mkdir dir="${user.home}/.ivy2/jars" />
+        <get src="http://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.version}/ivy-${ivy.version}.jar" dest="${user.home}/.ivy2/jars/ivy-${ivy.version}.jar" usetimestamp="true"/>
+        <taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpath="${user.home}/.ivy2/jars/ivy-${ivy.version}.jar" />
+
+        <get src="http://repo1.maven.org/maven2/ant-contrib/ant-contrib/20020829/ant-contrib-20020829.jar" dest="${user.home}/.ant/jars/ant-contrib-20020829.jar" usetimestamp="true" />
+        <taskdef resource="net/sf/antcontrib/antcontrib.properties" uri="antlib:net.sf.antcontrib" classpath="${user.home}/.ant/jars/ant-contrib-20020829.jar" />
+    </target>
+
+    <target name="clean-shared-repo">
+        <delete dir ="${user.home}/.easyant/repository/easyant-shared-modules" failonerror="false"/>
+    </target>
+
+    <target name="clean">
+        <delete dir="target" failonerror="false" />
+    </target>
+
+    <target name="install-all" depends="init">
+        <tstamp>
+            <format property="now" pattern="yyyyMMddHHmmss" />
+        </tstamp>
+        <ivy:configure file="ivysettings-bootstrap.xml" />
+        <ac:for param="plugin">
+            <path>
+                <dirset dir="${basedir}" includes="*" excludes="target,maven-publication,scm-svn,test-junit,test-testng,webstart" />
+            </path>
+            <sequential>
+                <echo message="Publishing @{plugin}" />
+                <ivy:info file="@{plugin}/module.ivy" property="ivy.@{plugin}" />
+                <ivy:resolve file="@{plugin}/module.ivy" />
+                <copy todir="@{plugin}/target/artifacts" includeEmptyDirs="true">
+                    <fileset dir="@{plugin}/src/main/resources" />
+                </copy>
+                <ivy:publish artifactspattern="@{plugin}/target/artifacts/[artifact](-[classifier]).[ext]" resolver="easyant-shared-modules"
+                    forcedeliver="true" pubdate="${now}" pubrevision="${ivy.@{plugin}.revision}" status="integration" overwrite="false"
+                    haltonmissing="true" organisation="${ivy.@{plugin}.organisation}" module="${ivy.@{plugin}.module}" revision="${ivy.@{plugin}.revision}" />
+            </sequential>
+        </ac:for>
+    </target>
+
+    <target name="distribution">
+        <mkdir dir="${basedir}/target/dist" />
+        <zip destfile="${basedir}/target/dist/easyant-plugins-0.9-src.zip">
+            <fileset dir="${basedir}">
+                <exclude name="target/**" />
+                <exclude name="*/target/**" />
+            </fileset>
+        </zip>
+    </target>
+
+</project>

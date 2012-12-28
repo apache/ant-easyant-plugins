@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!--
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
@@ -15,13 +14,20 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<projectDescription>
-	<name>easyant-plugins</name>
-	<comment></comment>
-	<projects>
-	</projects>
-	<buildSpec>
-	</buildSpec>
-	<natures>
-	</natures>
-</projectDescription>
+<ivysettings>
+    <settings defaultResolver="main" />
+    <caches defaultCacheDir="${user.home}/.easyant/easyant-cache" />
+
+    <resolvers>
+        <!-- Maven central -->
+        <ibiblio name="maven2" m2compatible="true" />
+        <chain name="main" returnFirst="true">
+            <resolver ref="maven2" />
+        </chain>
+
+        <filesystem name="easyant-shared-modules" descriptor="required">
+            <ivy pattern="${user.home}/.easyant/repository/easyant-shared-modules/[organisation]/[module]/[revision]/[module].ivy"/>
+            <artifact pattern="${user.home}/.easyant/repository/easyant-shared-modules/[organisation]/[module]/[revision]/[artifact](-[classifier]).[ext]"/>
+        </filesystem>
+    </resolvers>
+</ivysettings>

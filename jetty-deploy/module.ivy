@@ -16,7 +16,7 @@
 -->
 <ivy-module version="2.0" xmlns:ea="http://www.easyant.org">
     <info organisation="org.apache.easyant.plugins" module="jetty-deploy" revision="0.9">
-        <extends organisation="org.apache.easyant.plugins" module="parent-plugin" revision="0.1" />
+        <extends organisation="org.apache.easyant.plugins" module="parent-plugin" revision="0.1" location="../parent.ivy" />
         <description>
             A developer-convenience module for quick war-build-and-deploy with jetty (v 6.1.4). This module will
             build a webapplication (following same requirements as build-webapp-java module), launch
