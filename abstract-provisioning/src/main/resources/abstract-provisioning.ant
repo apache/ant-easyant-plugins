@@ -26,7 +26,7 @@
     <ea:parameter property="lib.test" default="${basedir}/lib/test" description="directory where test libraries are picked up" />
     <ea:parameter property="lib.provided" default="${basedir}/lib/provided" description="directory where provided libraries are picked up" />
 
-    <fileset id="lib.main.fileset" dir="${lib.main}" erroronmissingdir="false" />
-    <fileset id="lib.test.fileset" dir="${lib.test}" erroronmissingdir="false" />
-    <fileset id="lib.provided.fileset" dir="${lib.provided}" erroronmissingdir="false" />
+    <fileset id="lib.main.fileset" dir="${lib.main}" erroronmissingdir="false" description="content of lib main, usually used to build a classpath from a lib directory"/>
+    <fileset id="lib.test.fileset" dir="${lib.test}" erroronmissingdir="false" description="content of lib test, usually used to build a classpath from a lib directory"/>
+    <fileset id="lib.provided.fileset" dir="${lib.provided}" erroronmissingdir="false" description="content of lib provided, usually used to build a classpath from a lib directory"/>
 </project>

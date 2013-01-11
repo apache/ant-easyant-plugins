@@ -67,12 +67,12 @@
         <ea:parameter property="target.test.integration.classes" default="${target}/integration-test/classes"
             description="destination directory for compiled integration test classes" />
 
-        <ea:path pathid="run.test.classpath" overwrite="append-if-not-exist">
+        <ea:path pathid="run.test.classpath" overwrite="append-if-not-exist" description="defines test runtime classpath, usually a good place to plug instrumented classes for coverage tool">
             <pathelement location="${target.test.classes}" />
             <path refid="compile.test.classpath" />
         </ea:path>
 
-        <ea:path pathid="run.test.integration.classpath" overwrite="append-if-not-exist">
+        <ea:path pathid="run.test.integration.classpath" overwrite="append-if-not-exist" description="defines integration-test runtime classpath, usually a good place to plug instrumented classes for coverage tool">
             <pathelement location="${target.test.integration.classes}" />
             <path refid="compile.test.classpath" />
         </ea:path>

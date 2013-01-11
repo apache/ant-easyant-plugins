@@ -35,7 +35,7 @@
             description="Pattern describing files excluded in the META-INF of the package" />
 
         <fileset id="package.metainf.fileset" dir="${package.metainf.basedir}" includes="${package.metainf.includes.pattern}"
-            excludes="${package.metainf.excludes.pattern}" />
+            excludes="${package.metainf.excludes.pattern}" description="content of metainf in future archives"/>
     </target>
 
     <target name="abstract-package:register-main-artifact" extensionOf="abstract-package:package" unless="${skip.register.main.artifact}">

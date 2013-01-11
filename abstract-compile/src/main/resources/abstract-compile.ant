@@ -33,9 +33,9 @@
         description="defines the compile step" />
 	
 	<!-- Creates a empty classpath for compilation if it doesn't exist yet -->
-    <ea:path pathid="compile.main.classpath" overwrite="false" />
+    <ea:path pathid="compile.main.classpath" overwrite="false" description="classpath for main sources"/>
 
-    <path id="compile.test.classpath">
+    <path id="compile.test.classpath" description="classpath for tests sources">
         <pathelement location="${target.main.classes}" />
         <path refid="compile.main.classpath" />
     </path>
