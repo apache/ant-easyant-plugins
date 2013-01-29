@@ -16,6 +16,8 @@
 -->
 <project name="easyant-plugins" xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:ac="antlib:net.sf.antcontrib">
 
+    <property name="version" value="0.9-incubating" />
+
     <target name="init">
         <mkdir dir="target"/>
 
@@ -61,7 +63,7 @@
 
     <target name="distribution">
         <mkdir dir="${basedir}/target/dist" />
-        <zip destfile="${basedir}/target/dist/easyant-plugins-0.9-src.zip">
+        <zip destfile="${basedir}/target/dist/easyant-plugins-${version}-src.zip">
             <fileset dir="${basedir}">
                 <exclude name="target/**" />
                 <exclude name="*/target/**" />
