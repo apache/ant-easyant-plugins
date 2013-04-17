@@ -14,7 +14,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project name="org.apache.easyant.plugins#junit" xmlns:ea="antlib:org.apache.easyant">
+<project name="org.apache.easyant.plugins#junit" xmlns:ea="antlib:org.apache.easyant" xmlns:ac="antlib:net.sf.antcontrib">
     <ea:core-version requiredrevision="[0.9,+]" />
 
     <ea:plugin module="abstract-test" revision="0.9" />
@@ -32,6 +32,24 @@
             description="Run integration tests in a separate VM. (true/false)" />
         <ea:parameter property="test.integration.run.jvmargs" default=""
             description="Extra parameters to pass to the integration test JVM, for example to enable debugging" />
+
+        <condition property="junit.available">
+            <or>
+                <!-- Junit 3 -->
+                <available classname="junit.framework.Test" classpathref="compile.test.classpath" />
+                <!-- Junit 4 -->
+                <available classname="org.junit.Test" classpathref="compile.test.classpath" />
+            </or>
+        </condition>
+        <ac:if>
+            <isfalse value="${junit.available}" />
+            <ac:then>
+                <echo level="debug"
+                    message="tests will be disabled as junit is not available in your project. Check your project dependencies if you want to run tests" />
+                <property name="skip.test" value="true" />
+                <property name="skip.test.integration" value="true" />
+            </ac:then>
+        </ac:if>
     </target>
 
     <macrodef name="junit-test">
