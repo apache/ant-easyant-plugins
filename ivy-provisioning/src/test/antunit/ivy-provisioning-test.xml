@@ -50,6 +50,7 @@
         <au:assertPropertyEquals name="retrieve.pattern.lib.main" value="${lib.main}/[artifact]-[revision].[ext]" />
         <au:assertPropertyEquals name="retrieve.pattern.lib.test" value="${lib.test}/[artifact]-[revision].[ext]" />
         <au:assertPropertyEquals name="retrieve.pattern.lib.provided" value="${lib.provided}/[artifact]-[revision].[ext]" />
+        <au:assertPropertyEquals name="ivy.resolve.log" value="download-only"/>
         <au:assertPropertyEquals name="sync.lib.dir" value="true" />
         <au:assertPropertyEquals name="is.project.ivy.settings.configured" value="true" />
         <au:assertReferenceSet refid="project.lib.main.classpath" />
@@ -58,6 +59,17 @@
     </target>
 
     <target name="test-ivy-provisioning:resolve" depends="-ivy-provisioning:resolve">
+        <au:assertLogDoesntContain text=":: resolving dependencies :: org.apache.easyant#standard-java-app;0.1" />
+        <au:assertPropertyEquals name="project.contains.main.confs" value="true" />
+        <au:assertPropertyEquals name="project.contains.test.confs" value="true" />
+        <au:assertPropertyEquals name="project.contains.provided.confs" value="true" />
+    </target>
+    
+    <target name="prepare-verbose-log">
+        <property name="ivy.resolve.log" value="default"/>
+    </target>
+    
+    <target name="test-ivy-provisioning:verbose-resolve" depends="prepare-verbose-log,-ivy-provisioning:resolve">
         <au:assertLogContains text=":: resolving dependencies :: org.apache.easyant#standard-java-app;0.1" />
         <au:assertPropertyEquals name="project.contains.main.confs" value="true" />
         <au:assertPropertyEquals name="project.contains.test.confs" value="true" />

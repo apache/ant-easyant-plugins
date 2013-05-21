@@ -36,6 +36,14 @@
         <ea:parameter property="retrieve.pattern.lib.provided" default="${lib.provided}/[artifact]-[revision].[ext]"
             description="retrieve pattern for provided artifacts" />
 
+        <ea:parameter property="ivy.resolve.log" default="download-only"
+            description="the log setting to use during the resolve process.
+Available options are:
+
+    default : the default log settings, where all usual messages are output to the console
+    download-only : disable all usual messages but download ones. A resolve with everything in cache won't output any message.
+    quiet: disable all usual messages, making the whole resolve process quiet unless errors occur " />
+
         <ea:parameter property="sync.lib.dir" default="true"
             description="a boolean that define if lib dir should be synchronized or not" />
         <!-- is project ivy settings configured ? -->
@@ -57,7 +65,7 @@
               target: resolve              
          ================================= -->
     <target name="-ivy-provisioning:resolve" depends="abstract-provisioning:provisioning-ready">
-        <ivy:resolve file="${project.ivy.file}" settingsRef="${project.ivy.instance}" />
+        <ivy:resolve file="${project.ivy.file}" settingsRef="${project.ivy.instance}" log="${ivy.resolve.log}" />
         <condition property="project.contains.main.confs">
             <matches string="${ivy.resolved.configurations}" pattern="${main.confs}" />
         </condition>
@@ -74,7 +82,8 @@
         description="resolve and retrieve dependencies with ivy" unless="skip.resolve" extensionOf="abstract-provisioning:provisioning" />
 
     <target name="-ivy-provisioning:resolve-main-confs" depends="-ivy-provisioning:resolve" if="project.contains.main.confs">
-        <ivy:cachepath pathid="cache.main.classpath" conf="${main.confs}" settingsRef="${project.ivy.instance}" />
+        <ivy:cachepath pathid="cache.main.classpath" conf="${main.confs}" settingsRef="${project.ivy.instance}"
+            log="${ivy.resolve.log}" />
         <ea:path pathid="compile.main.classpath" overwrite="append-if-not-exist">
             <path refid="cache.main.classpath" />
         </ea:path>
@@ -83,7 +92,7 @@
             <ac:then>
                 <mkdir dir="${lib.main}" />
                 <ivy:retrieve pattern="${retrieve.pattern.lib.main}" settingsRef="${project.ivy.instance}"
-                    conf="${main.confs}" sync="${sync.lib.dir}" />
+                    conf="${main.confs}" sync="${sync.lib.dir}" log="${ivy.resolve.log}" />
                 <ea:path pathid="project.lib.main.classpath" overwrite="append">
                     <fileset dir="${lib.main}" includes="*.jar" erroronmissingdir="false" />
                 </ea:path>
@@ -92,7 +101,8 @@
     </target>
 
     <target name="-ivy-provisioning:resolve-test-confs" depends="-ivy-provisioning:resolve" if="project.contains.test.confs">
-        <ivy:cachepath pathid="cache.test.classpath" conf="${test.confs}" settingsRef="${project.ivy.instance}" />
+        <ivy:cachepath pathid="cache.test.classpath" conf="${test.confs}" settingsRef="${project.ivy.instance}"
+            log="${ivy.resolve.log}" />
         <ea:path pathid="compile.test.classpath" overwrite="append-if-not-exist">
             <path refid="cache.test.classpath" />
         </ea:path>
@@ -102,7 +112,7 @@
                 <mkdir dir="${lib.test}" />
                 <!-- resolve test dependencies -->
                 <ivy:retrieve pattern="${retrieve.pattern.lib.test}" settingsRef="${project.ivy.instance}"
-                    conf="${test.confs}" sync="${sync.lib.dir}" />
+                    conf="${test.confs}" sync="${sync.lib.dir}" log="${ivy.resolve.log}" />
                 <ea:path pathid="project.lib.test.classpath" overwrite="append">
                     <fileset dir="${lib.test}" includes="*.jar" erroronmissingdir="false" />
                 </ea:path>
@@ -111,7 +121,7 @@
     </target>
 
     <target name="-ivy-provisioning:resolve-provided-confs" depends="-ivy-provisioning:resolve" if="project.contains.provided.confs">
-        <ivy:cachepath pathid="cache.provided.classpath" conf="${provided.confs}" settingsRef="${project.ivy.instance}" />
+        <ivy:cachepath pathid="cache.provided.classpath" conf="${provided.confs}" settingsRef="${project.ivy.instance}" log="${ivy.resolve.log}"/>
         <ea:path pathid="compile.main.classpath" overwrite="append-if-not-exist">
             <path refid="cache.provided.classpath" />
         </ea:path>
@@ -121,7 +131,7 @@
                 <mkdir dir="${lib.provided}" />
                 <!-- resolve provided dependencies -->
                 <ivy:retrieve pattern="${retrieve.pattern.lib.provided}" settingsRef="${project.ivy.instance}"
-                    conf="${provided.confs}" sync="${sync.lib.dir}" />
+                    conf="${provided.confs}" sync="${sync.lib.dir}" log="${ivy.resolve.log}"/>
                 <ea:path pathid="project.lib.provided.classpath" overwrite="append">
                     <fileset dir="${lib.provided}" includes="*.jar" erroronmissingdir="false" />
                 </ea:path>
