@@ -15,7 +15,7 @@
    limitations under the License.
 -->
 <ivy-module version="2.0" xmlns:ea="http://www.easyant.org">
-    <info organisation="org.apache.easyant.plugins" module="antunit" revision="0.9">
+    <info organisation="org.apache.easyant.plugins" module="antunit" revision="0.10">
         <extends organisation="org.apache.easyant.plugins" module="parent-plugin" revision="0.1" location="../parent.ivy" />
         <description>This module provides antunit test features.</description>
         <ea:build organisation="org.apache.easyant.buildtypes" module="build-std-ant-plugin" revision="0.1" />

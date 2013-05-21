@@ -22,7 +22,7 @@
 
     <dirname property="antunit.plugin.dir" file="${org.apache.easyant.plugins#antunit.junit-frames.xsl.file}" />
 
-    <target name="antunit:init" description="load parameters, antunit tasks, and create report directories">
+    <target name="antunit:init" depends="abstract-test:init" description="load parameters, antunit tasks, and create report directories">
         <ea:parameter property="target.antunit.xml" default="${target.test.xml}" description="destination directory for xml test report" />
         <ea:parameter property="target.antunit.html" default="${target.test.html}" description="destination directory for html test report" />
 
