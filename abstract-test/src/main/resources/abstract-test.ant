@@ -25,6 +25,7 @@
         description="defines integration-test step" />
 
     <ea:plugin module="abstract-provisioning" revision="0.9" />
+    <ea:plugin module="abstract-compile" revision="0.9" />
 
     <target name="/skip-tests" description="skip tests">
         <property name="skip.test" value="true" />
