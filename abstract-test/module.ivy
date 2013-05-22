@@ -15,7 +15,7 @@
    limitations under the License.
 -->
 <ivy-module version="2.0" xmlns:ea="http://www.easyant.org">
-    <info organisation="org.apache.easyant.plugins" module="abstract-test" revision="0.9">
+    <info organisation="org.apache.easyant.plugins" module="abstract-test" revision="0.10">
         <extends organisation="org.apache.easyant.plugins" module="parent-plugin" revision="0.1" location="../parent.ivy" />
         <description>
             This module provides tests compilation feature.
@@ -37,6 +37,7 @@
         <artifact type="ant" />
     </publications>
     <dependencies>
-        <dependency org="org.apache.ant" name="ant-junit" rev="1.8.4" conf="default->master"/>
+        <dependency org="org.apache.ant" name="ant-junit" rev="1.9.1" conf="default->master"/>
+        <dependency org="org.apache.ant" name="ant-junit4" rev="1.9.1" conf="default->master"/>
     </dependencies>
 </ivy-module>
