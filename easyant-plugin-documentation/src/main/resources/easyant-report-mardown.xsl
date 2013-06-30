@@ -118,7 +118,9 @@
 			<xsl:text>|</xsl:text>
 			<xsl:value-of select="@visibility" />
 			<xsl:text>|</xsl:text>
-			<xsl:value-of select="@deprecated" />
+			<xsl:if test="@deprecated != null">
+				<xsl:value-of select="@deprecated" />
+			</xsl:if>
 			<xsl:text>|</xsl:text>
 			<xsl:value-of select="$newline" />
 		</xsl:for-each>
