@@ -64,7 +64,9 @@
 			test="count($modules/revision/caller[(@organisation=$org and @name=$mod) and @callerrev=$rev]) > 0">
 			<xsl:text>|Organisation|Module|Revision|</xsl:text>
 			<xsl:value-of select="$newline" />
-			<xsl:for-each
+			<xsl:text>|------------|------|--------|</xsl:text>
+            <xsl:value-of select="$newline" />
+            <xsl:for-each
 				select="$modules/revision/caller[(@organisation=$org and @name=$mod) and @callerrev=$rev]">
 				<xsl:call-template name="called">
 					<xsl:with-param name="callstack"
