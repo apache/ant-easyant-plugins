@@ -16,6 +16,57 @@
 -->
 <project name="org.apache.easyant.plugins#javadoc" xmlns:ea="antlib:org.apache.easyant">
     <ea:core-version requiredrevision="[0.8,+]" />
+	
+	<macrodef name="patch-javadoc" description="workaround for CVE-2013-1571">
+	    <attribute name="dir"/>
+	    <attribute name="docencoding" default="${file.encoding}"/>
+	    <sequential>
+	      <replace encoding="@{docencoding}" summary="true" taskname="patch-javadoc">
+	        <fileset dir="@{dir}" casesensitive="false" includes="**/index.html,**/index.htm,**/toc.html,**/toc.htm">
+	          <!-- TODO: add encoding="@{docencoding}" to contains check, when we are on ANT 1.9.0: -->
+	          <not><contains text="function validURL(url) {" casesensitive="true" /></not>
+	        </fileset>
+	        <replacetoken><![CDATA[function loadFrames() {]]></replacetoken>
+	        <replacevalue expandProperties="false"><![CDATA[if (targetPage != "" && !validURL(targetPage))
+	        targetPage = "undefined";
+	    function validURL(url) {
+	        var pos = url.indexOf(".html");
+	        if (pos == -1 || pos != url.length - 5)
+	            return false;
+	        var allowNumber = false;
+	        var allowSep = false;
+	        var seenDot = false;
+	        for (var i = 0; i < url.length - 5; i++) {
+	            var ch = url.charAt(i);
+	            if ('a' <= ch && ch <= 'z' ||
+	                    'A' <= ch && ch <= 'Z' ||
+	                    ch == '$' ||
+	                    ch == '_') {
+	                allowNumber = true;
+	                allowSep = true;
+	            } else if ('0' <= ch && ch <= '9'
+	                    || ch == '-') {
+	                if (!allowNumber)
+	                     return false;
+	            } else if (ch == '/' || ch == '.') {
+	                if (!allowSep)
+	                    return false;
+	                allowNumber = false;
+	                allowSep = false;
+	                if (ch == '.')
+	                     seenDot = true;
+	                if (ch == '/' && seenDot)
+	                     return false;
+	            } else {
+	                return false;
+	            }
+	        }
+	        return true;
+	    }
+	    function loadFrames() {]]></replacevalue>
+	      </replace>
+	    </sequential>
+	  </macrodef>
 
     <target name="javadoc:init">
         <ea:parameter property="src.main.java" default="${basedir}/src/main/java" description="directory where sources to be compiled are" />
@@ -61,6 +112,8 @@
         </path>
         <javadoc encoding="${javadoc.file.encoding}" docencoding="${javadoc.file.encoding}" destdir="${target.javadoc.main}"
             sourcepathref="java.main.source.path" />
+    	
+    	<patch-javadoc dir="${target.javadoc.main}" docencoding="${javadoc.file.encoding}"/>
     </target>
 
     <target name="-javadoc:test" depends="javadoc:init" unless="empty.src.test.java.dir">
@@ -69,6 +122,8 @@
         </path>
         <javadoc encoding="${javadoc.file.encoding}" docencoding="${javadoc.file.encoding}" destdir="${target.javadoc.test}"
             sourcepathref="java.test.source.path" />
+
+        <patch-javadoc dir="${target.javadoc.test}" docencoding="${javadoc.file.encoding}"/>
     </target>
 
     <target name="javadoc:package" depends="javadoc:javadoc" description="generate a package containing javadoc"
