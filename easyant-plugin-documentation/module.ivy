@@ -29,5 +29,6 @@
     </configurations>
     <publications>
         <artifact type="ant" />
+        <artifact type="xsl" ext="xsl" name="easyant-report-markdown"/>
     </publications>
 </ivy-module>

@@ -16,22 +16,24 @@
 -->
 <project name="org.apache.easyant.plugins;easyant-plugin-documentation" xmlns:ivy="antlib:org.apache.ivy.ant"
     xmlns:ea="antlib:org.apache.easyant">
-    <ea:core-version requiredrevision="[0.9,+]" />
+    <ea:core-version requiredrevision="[0.10,+]" />
 
     <ea:parameter property="target.documentation.dir" default="${target}/documentation"
         description="directory where the documentation will be generated to" />
 
-
-    <target name="easyant-plugin-documentation:report">
+    <target name="easyant-plugin-documentation:init">
         <ea:parameter property="plugindoc.module.ivy" description="plugin's module ivy used to know dependencies"
             default="${basedir}/module.ivy" />
         <ea:parameter property="plugindoc.source.dir" description="plugin's source dirrectory used to know targets/extensionPoints etc..."
             required="true" />
         <ea:parameter property="plugindoc.main.confs" description="plugin's main conf" default="default" />
+    </target>
+
+    <target name="easyant-plugin-documentation:report" depends="easyant-plugin-documentation:init">
         <ea:plugin-report moduleIvy="${plugindoc.module.ivy}" sourceDirectory="${plugindoc.source.dir}"
             conf="${plugindoc.main.confs}" todir="${target.documentation.dir}" />
     </target>
-
+	
     <target name="easyant-plugin-documentation:package" depends="easyant-plugin-documentation:report"
         description="generate a package containing plugin documentation">
         <ea:parameter property="target.artifacts" default="${target}/artifacts" description="destination directory for target artifacts" />
@@ -39,6 +41,12 @@
         <zip destfile="${target.artifacts}/${ivy.module}-documentation.zip">
             <fileset dir="${target.documentation.dir}" erroronmissingdir="false" />
         </zip>
+    </target>
+	
+    <target name="easyant-plugin-documentation:generate-readme" depends="easyant-plugin-documentation:init">
+        <ea:plugin-report moduleIvy="${plugindoc.module.ivy}" sourceDirectory="${plugindoc.source.dir}" xslext="markdown"
+        	xslFile="${org.apache.easyant.plugins#easyant-plugin-documentation.easyant-report-markdown.xsl.file}"
+            conf="${plugindoc.main.confs}" todir="${target.documentation.dir}" tofile="README.md" />
     </target>
 
     <target name="easyant-plugin-documentation:register-artifact" depends="easyant-plugin-documentation:package">

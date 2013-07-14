@@ -29,6 +29,7 @@
         <delete dir="${basedir}" includeemptydirs="true">
             <include name="**/target/**" />
             <include name="**/lib/**" />
+        	<include name="README.md"/>
         </delete>
     </target>
 
@@ -38,20 +39,28 @@
     </target>
     <target name="tearDown" depends="clean" />
 
-    <target name="test-easyant-plugin-documentation:report" depends="easyant-plugin-documentation:report">
+    <target name="test-easyant-plugin-documentation:init" depends="easyant-plugin-documentation:init">
         <au:assertPropertyEquals name="plugindoc.module.ivy" value="${basedir}/sample-module.ivy" />
         <au:assertPropertyEquals name="plugindoc.source.dir" value="${basedir}/src/main/resources" />
         <au:assertPropertyEquals name="plugindoc.main.confs" value="default" />
         <au:assertPropertyEquals name="target.documentation.dir" value="${target}/documentation" />
+    </target>
+	
+    <target name="test-easyant-plugin-documentation:report" depends="easyant-plugin-documentation:report">
         <au:assertFileExists file="${target}/documentation/org.apache.easyant.plugins-tinyplugin-default.html" />
     </target>
-    
+	
     <target name="testeasyant-plugin-documentation:package" depends="easyant-plugin-documentation:package">
         <au:assertPropertyEquals name="target.artifacts" value="${target}/artifacts" />
         <au:assertFileExists file="${target.artifacts}"/>
         <au:assertFileExists file="${target.artifacts}/${ivy.module}-documentation.zip"/>
     </target>
 
+    <target name="test-easyant-plugin-documentation:generate-readme" depends="easyant-plugin-documentation:generate-readme">
+        <au:assertFileExists file="${basedir}/README.md" />
+    </target>
+
+	
     <target name="prepare-register-artifact">
         <ivy:settings id="easyant.ivy.instance" />
         <ivy:resolve file="sample-module.ivy" settingsRef="easyant.ivy.instance" />
