@@ -24,6 +24,25 @@
     <ea:parameter property="target.test.integration.classes" default="${target}/integration-test/classes"
         description="destination directory for compiled integration test classes" />
 
+	<target name="abstract-compile:init" extensionOf="abstract-compile:compile-ready">
+	    <!-- concrete compile plugin should define thoses properties -->
+	    <ea:parameter property="main.sources" required="true" description="directory where sources to be compiled are. This property should be reused by other plugins to locate sources."/>
+        <ea:parameter property="main.sources.includes" required="true" description="Pattern describing files included in compilation process. This property should be reused by other plugins to locate sources" />
+        <ea:parameter property="main.sources.excludes" required="true" description="Pattern describing files excluded in compilation process. This property should be reused by other plugins to locate sources" />
+	</target>
+	
+    <target name="abstract-compile:init-test" extensionOf="abstract-compile:test-compile-ready">
+        <!-- concrete compile plugin should define thoses properties -->
+        <ea:parameter property="test.sources" required="true" description="directory where sources to be compiled are. This property should be reused by other plugins to locate sources."/>
+        <ea:parameter property="test.sources.includes" required="true" description="Pattern describing files included in compilation process. This property should be reused by other plugins to locate sources" />
+        <ea:parameter property="test.sources.excludes" required="true" description="Pattern describing files excluded in compilation process. This property should be reused by other plugins to locate sources" />
+
+    	<ea:parameter property="test.integration.sources" required="true" description="directory where integration test sources to be compiled are. This property should be reused by other plugins to locate sources."/>
+        <ea:parameter property="test.integration.sources.includes" required="true" description="Pattern describing files included in integration test compilation process. This property should be reused by other plugins to locate sources" />
+        <ea:parameter property="test.integration.sources.excludes" required="true" description="Pattern describing files excluded in integration test compilation process. This property should be reused by other plugins to locate sources" />
+
+    </target>
+	
     <ea:plugin module="abstract-provisioning" revision="0.9" />
 
 	<!-- We expect at this point to have every source available, even the ones which are generated -->
@@ -31,6 +50,12 @@
         description="defines the requirements to compile. It's the good place if you want to process or generate sources" />
     <extension-point name="abstract-compile:compile" depends="abstract-compile:compile-ready"
         description="defines the compile step" />
+	
+	<extension-point name="abstract-compile:test-compile-ready" depends="abstract-provisioning:provisioning"
+	    description="defines the requirements to test-compile. It's the good place if you want to process or generate sources" />
+	<extension-point name="abstract-compile:test-compile" depends="abstract-compile:test-compile-ready"
+	    description="defines the test-compile step" />
+	    
 	
 	<!-- Creates a empty classpath for compilation if it doesn't exist yet -->
     <ea:path pathid="compile.main.classpath" overwrite="false" description="classpath for main sources"/>
