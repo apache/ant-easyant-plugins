@@ -69,9 +69,13 @@
 	  </macrodef>
 
     <target name="javadoc:init">
-        <ea:parameter property="src.main.java" default="${basedir}/src/main/java" description="directory where sources to be compiled are" />
-        <ea:parameter property="src.test.java" default="${basedir}/src/test/java" description="directory where test sources to be compiled are" />
-        <ea:parameter property="javadoc.file.encoding" default="UTF-8" description="encoding used for generated javadoc" />
+    	<ea:parameter property="main.sources" required="true" description="directory where sources to be compiled are. This property should be reused by other plugins to locate sources."/>
+    	<ea:parameter property="test.sources" required="true" description="directory where test sources to be compiled are. This property should be reused by other plugins to locate sources."/>
+    	        
+        <ea:parameter property="javadoc.main.sources" default="${main.sources}" description="directory where sources to be compiled are" />
+        <ea:parameter property="javadoc.test.sources" default="${test.sources}" description="directory where test sources to be compiled are" />
+
+    	<ea:parameter property="javadoc.file.encoding" default="UTF-8" description="encoding used for generated javadoc" />
 
         <ea:parameter property="target.reports" default="${target}/reports" description="base directory for reports" />
         <ea:parameter property="target.javadoc" default="${target.reports}/javadoc" description="base directory where javadoc will be generated" />
@@ -82,46 +86,46 @@
         <ea:parameter property="javadoc.publish.conf" default="documentation" description="default configuration for javadoc artifacts" />
 
         <!-- javadoc task seems to be sensible to empty directory -->
-        <!-- if src.test.java does not exit OR is an empty dir we set the empty.src.test.java.dir property that will skip the javadoc generation -->
-        <condition property="empty.src.test.java.dir">
+        <!-- if test.sources does not exit OR is an empty dir we set the empty.src.test.java.dir property that will skip the javadoc generation -->
+        <condition property="empty.javadoc.test.sources.dir">
             <or>
                 <not>
-                    <available file="${src.test.java}" />
+                    <available file="${javadoc.test.sources}" />
                 </not>
                 <length length="0">
-                    <fileset dir="${src.test.java}" />
+                    <fileset dir="${javadoc.test.sources}" />
                 </length>
             </or>
         </condition>
         <!-- if src.main.java does not exit OR is an empty dir we set the empty.src.main.java.dir property that will skip the javadoc generation -->
-        <condition property="empty.src.main.java.dir">
+        <condition property="empty.javadoc.main.sources.dir">
             <or>
                 <not>
-                    <available file="${src.main.java}" />
+                    <available file="${javadoc.main.sources}" />
                 </not>
                 <length length="0">
-                    <fileset dir="${src.main.java}" />
+                    <fileset dir="${javadoc.main.sources}" />
                 </length>
             </or>
         </condition>
     </target>
 
-    <target name="-javadoc:main" depends="javadoc:init" unless="empty.src.main.java.dir">
-        <path id="java.main.source.path">
-            <dirset dir="${src.main.java}" />
+    <target name="-javadoc:main" depends="javadoc:init" unless="empty.javadoc.main.sources.dir">
+        <path id="javadoc.main.source.path">
+            <dirset dir="${javadoc.main.sources}" />
         </path>
         <javadoc encoding="${javadoc.file.encoding}" docencoding="${javadoc.file.encoding}" destdir="${target.javadoc.main}"
-            sourcepathref="java.main.source.path" />
+            sourcepathref="javadoc.main.source.path" />
     	
     	<patch-javadoc dir="${target.javadoc.main}" docencoding="${javadoc.file.encoding}"/>
     </target>
 
-    <target name="-javadoc:test" depends="javadoc:init" unless="empty.src.test.java.dir">
-        <path id="java.test.source.path">
-            <dirset dir="${src.test.java}" />
+    <target name="-javadoc:test" depends="javadoc:init" unless="empty.javadoc.test.sources.java.dir">
+        <path id="javadoc.test.source.path">
+            <dirset dir="${javadoc.test.sources}" />
         </path>
         <javadoc encoding="${javadoc.file.encoding}" docencoding="${javadoc.file.encoding}" destdir="${target.javadoc.test}"
-            sourcepathref="java.test.source.path" />
+            sourcepathref="javadoc.test.source.path" />
 
         <patch-javadoc dir="${target.javadoc.test}" docencoding="${javadoc.file.encoding}"/>
     </target>

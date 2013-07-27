@@ -19,6 +19,8 @@
     
     <!-- Import your plugin -->
     <property name="target" value="${basedir}/target/test-antunit" />
+	<property name="main.sources" value="${basedir}/src/main/java"/>
+    <property name="test.sources" value="${basedir}/src/test/java"/>
     <!-- configure easyant in current project -->
     <ea:configure-easyant-ivy-instance />
     <!-- import our local plugin -->
@@ -39,8 +41,8 @@
     <target name="tearDown" depends="clean" />
 
     <target name="test-javadoc:init" depends="javadoc:init">
-        <au:assertPropertyEquals name="src.main.java" value="${basedir}/src/main/java" />
-        <au:assertPropertyEquals name="src.test.java" value="${basedir}/src/test/java" />
+        <au:assertPropertyEquals name="javadoc.main.sources" value="${basedir}/src/main/java" />
+        <au:assertPropertyEquals name="javadoc.test.sources" value="${basedir}/src/test/java" />
         <au:assertPropertyEquals name="javadoc.file.encoding" value="UTF-8" />
         <au:assertPropertyEquals name="target.reports" value="${target}/reports" />
         <au:assertPropertyEquals name="target.javadoc" value="${target.reports}/javadoc" />
@@ -50,12 +52,12 @@
     </target>
 
     <target name="test-javadoc:main" depends="-javadoc:main">
-        <au:assertReferenceSet refid="java.main.source.path" />
+        <au:assertReferenceSet refid="javadoc.main.source.path" />
         <au:assertFileExists file="${target.javadoc.main}" />
     </target>
 
     <target name="test-javadoc:test" depends="-javadoc:test">
-        <au:assertReferenceSet refid="java.test.source.path" />
+        <au:assertReferenceSet refid="javadoc.test.source.path" />
         <au:assertFileExists file="${target.javadoc.test}" />
     </target>
 
