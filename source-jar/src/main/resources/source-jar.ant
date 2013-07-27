@@ -18,15 +18,16 @@
     <ea:core-version requiredrevision="[0.9,+]" />
     <ea:plugin module="abstract-package" revision="0.9" />
 
-    <target name="source-jar:init" depends="abstract-package:init">
-        <ea:parameter property="target.artifacts.main.source.jar.name" default="${module.name}-sources.jar"
+    <target name="source-jar:init" depends="abstract-package:init,abstract-compile:compile-ready">
+    	<ea:parameter property="main.sources" required="true" description="directory where sources to be compiled are. This property should be reused by other plugins to locate sources."/>
+        <ea:parameter property="test.sources" required="true" description="directory where test sources to be compiled are. This property should be reused by other plugins to locate sources."/>
+    	
+    	<ea:parameter property="target.artifacts.main.source.jar.name" default="${module.name}-sources.jar"
             description="main source artifact file name" />
 
         <ea:parameter property="target.artifacts.test.source.jar.name" default="${module.name}-test-sources.jar"
             description="test source artifact file name" />
 
-        <ea:parameter property="src.main.java" default="${basedir}/src/main/java" description="directory where main java files are stored" />
-        <ea:parameter property="src.test.java" default="${basedir}/src/test/java" description="directory where test java files are stored" />
         <ea:parameter property="src.main.resources" default="${basedir}/src/main/resources"
             description="directory where main resources files are stored" />
         <ea:parameter property="src.test.resources" default="${basedir}/src/test/resources"
@@ -35,14 +36,14 @@
 
         <condition property="has.src.main">
             <or>
-                <available file="${src.main.java}" />
+                <available file="${main.sources}" />
                 <available file="${src.main.resources}" />
             </or>
         </condition>
 
         <condition property="has.src.test">
             <or>
-                <available file="${src.test.java}" />
+                <available file="${test.sources}" />
                 <available file="${src.test.resources}" />
             </or>
         </condition>
@@ -55,7 +56,7 @@
         <mkdir dir="${target.artifacts}" />
         <jar destfile="${target.artifacts}/${target.artifacts.main.source.jar.name}">
             <fileset dir="${src.main.resources}" erroronmissingdir="false" />
-            <fileset dir="${src.main.java}" erroronmissingdir="false" />
+            <fileset dir="${main.sources}" erroronmissingdir="false" />
         </jar>
         <ea:registerartifact type="source" ext="jar" classifier="sources" settingsRef="${project.ivy.instance}"
             confs="${src.publish.conf}" />
@@ -68,7 +69,7 @@
         <mkdir dir="${target.artifacts}" />
         <jar destfile="${target.artifacts}/${target.artifacts.test.source.jar.name}">
             <fileset dir="${src.test.resources}" erroronmissingdir="false" />
-            <fileset dir="${src.test.java}" erroronmissingdir="false" />
+            <fileset dir="${test.sources}" erroronmissingdir="false" />
         </jar>
         <ea:registerartifact type="test-source" ext="jar" classifier="test-sources" settingsRef="${project.ivy.instance}"
             confs="${src.publish.conf}" />

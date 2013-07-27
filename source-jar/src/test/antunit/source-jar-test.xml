@@ -19,7 +19,10 @@
     
     <!-- Import your plugin -->
     <property name="target" value="target/test-antunit" />
-    <!-- configure easyant in current project -->
+    <property name="main.sources" value="${basedir}/src/main/java"/>
+    <property name="test.sources" value="${basedir}/src/test/java"/>
+	
+	<!-- configure easyant in current project -->
     <ea:configure-easyant-ivy-instance />
     <!-- import our local plugin -->
     <ea:import-test-module moduleIvy="../../../module.ivy" sourceDirectory="../../main/resources" />
@@ -42,8 +45,6 @@
     <target name="test-source-jar:init" depends="source-jar:init">
         <au:assertPropertyEquals name="target.artifacts.main.source.jar.name" value="${module.name}-sources.jar" />
         <au:assertPropertyEquals name="target.artifacts.test.source.jar.name" value="${module.name}-test-sources.jar" />
-        <au:assertPropertyEquals name="src.main.java" value="${basedir}/src/main/java" />
-        <au:assertPropertyEquals name="src.test.java" value="${basedir}/src/test/java" />
         <au:assertPropertyEquals name="src.main.resources" value="${basedir}/src/main/resources" />
         <au:assertPropertyEquals name="src.test.resources" value="${basedir}/src/test/resources" />
         <au:assertPropertyEquals name="src.publish.conf" value="source" />
