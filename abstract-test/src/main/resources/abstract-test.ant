@@ -25,7 +25,7 @@
         description="defines integration-test step" />
 
     <ea:plugin module="abstract-provisioning" revision="0.9" />
-    <ea:plugin module="abstract-compile" revision="0.9" />
+    <ea:plugin module="abstract-compile" revision="0.10" />
 
     <target name="/skip-tests" description="skip tests">
         <property name="skip.test" value="true" />
@@ -33,37 +33,39 @@
     </target>
 
     <target name="abstract-test:init" depends="abstract-provisioning:provisioning">
-        <ea:parameter property="src.test.resources" default="${basedir}/src/test/resources"
-            description="directory with unit test resource files (configuration files, data files, etc)" />
-        <ea:parameter property="src.test.integration.resources" default="${basedir}/src/integration-test/resources"
-            description="directory for integration test resources (configuration files, data files, etc)" />
         <ea:parameter property="target.test.xml" default="${target}/test/xml" description="destination directory for xml test report" />
         <ea:parameter property="target.test.html" default="${target}/test/html" description="destination directory for html test report" />
         <ea:parameter property="test.mode" default="run"
             description="mode to use to execute tests: 'run' to only run tests, 'report' to generate html report" />
         <ea:parameter property="test.run.failonerror" default="true"
             description="specify if the build should be stopped when tests are failed. Typically this property should be set to false in continuous environmnent systems" />
-        <ea:parameter property="test.run.dir" default="${basedir}"
+
+    	<ea:parameter property="test.run.dir" default="${basedir}"
             description="working directory for unit test process, defaults to the project basedir" />
         <ea:parameter property="test.integration.run.dir" default="${basedir}"
             description="working directory for integration test process, defaults to the project basedir" />
-        <ea:parameter property="test.scan.path" default="false"
+        
+    	<ea:parameter property="test.scan.path" default="false"
             description="if true, the full test classpath will be scanned for additional test cases to run" />
         <ea:parameter property="test.jar.pattern" default=".*-test.jar"
             description="when test.scan.path is enabled, identifies which jars should be examined for test cases" />
-        <ea:parameter property="test.integration.scan.path" default="false"
+        
+    	<ea:parameter property="test.integration.scan.path" default="false"
             description="if true, the full integration test classpath will be scanned for additional test cases to run" />
         <ea:parameter property="test.integration.jar.pattern" default=".*-test.jar"
             description="when test.scan.path is enabled, identifies which jars should be examined for test cases" />
-        <ea:parameter property="test.run.includes.pattern" default="**/*"
+        
+    	<ea:parameter property="test.run.includes.pattern" default="**/*"
             description="Pattern describing class files included in test run" />
         <ea:parameter property="test.run.excludes.pattern" default=""
             description="Pattern describing class files excluded in test run" />
-        <ea:parameter property="test.integration.run.includes.pattern" default="**/*"
+        
+    	<ea:parameter property="test.integration.run.includes.pattern" default="**/*"
             description="Pattern describing class files included in integration test run" />
         <ea:parameter property="test.integration.run.excludes.pattern" default=""
             description="Pattern describing class files excluded in integration test run" />
-        <ea:parameter property="target.test.classes" default="${target}/test/classes"
+        
+    	<ea:parameter property="target.test.classes" default="${target}/test/classes"
             description="destination directory for compiled test classes" />
         <ea:parameter property="target.test.integration.classes" default="${target}/integration-test/classes"
             description="destination directory for compiled integration test classes" />

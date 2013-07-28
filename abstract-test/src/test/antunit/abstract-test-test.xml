@@ -36,8 +36,6 @@
     <target name="tearDown" depends="clean" />
 
     <target name="test-abstract-test:init" depends="abstract-test:init">
-        <au:assertPropertyEquals name="src.test.resources" value="${basedir}/src/test/resources" />
-        <au:assertPropertyEquals name="src.test.integration.resources" value="${basedir}/src/integration-test/resources" />
         <au:assertPropertyEquals name="target.test.xml" value="${target}/test/xml" />
         <au:assertPropertyEquals name="target.test.html" value="${target}/test/html" />
         <au:assertPropertyEquals name="test.mode" value="run" />
