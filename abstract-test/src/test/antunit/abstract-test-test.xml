@@ -34,6 +34,10 @@
 
     <target name="setUp" depends="clean" />
     <target name="tearDown" depends="clean" />
+	
+	<target name="test-abstract-test-global">
+		<au:assertReferenceSet refid="test.propertyset.ref"/>
+	</target>
 
     <target name="test-abstract-test:init" depends="abstract-test:init">
         <au:assertPropertyEquals name="target.test.xml" value="${target}/test/xml" />

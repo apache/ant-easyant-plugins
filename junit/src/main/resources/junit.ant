@@ -17,7 +17,7 @@
 <project name="org.apache.easyant.plugins#junit" xmlns:ea="antlib:org.apache.easyant" xmlns:ac="antlib:net.sf.antcontrib">
     <ea:core-version requiredrevision="[0.9,+]" />
 
-    <ea:plugin module="abstract-test" revision="0.9" />
+    <ea:plugin module="abstract-test" revision="0.10" />
 
     <target name="junit:init" depends="abstract-test:init">
         <ea:parameter property="test.run.forkmode" default="perTest"
@@ -72,6 +72,9 @@
                 <batchtest todir="${target.test.xml}">
                     <resources refid="target.@{prefix}.set" />
                 </batchtest>
+            	
+                <syspropertyset refid="test.propertyset.ref"/>
+
             </junit>
         </sequential>
     </macrodef>

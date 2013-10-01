@@ -31,6 +31,8 @@
         <property name="skip.test" value="true" />
         <property name="skip.test.integration" value="true" />
     </target>
+	
+	<propertyset id="test.propertyset.ref" description="a set of properties / system properties used by tests"/>
 
     <target name="abstract-test:init" depends="abstract-provisioning:provisioning">
         <ea:parameter property="target.test.xml" default="${target}/test/xml" description="destination directory for xml test report" />
