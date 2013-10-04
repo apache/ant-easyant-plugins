@@ -29,18 +29,23 @@
         description="Specify a VM version for Generated class files (e.g., 1.1 or 1.2)." />
     <ea:parameter property="compile.java.source.version" default="${ant.java.version}"
         description="Specify a value of the -source command-line switch; will be ignored by all implementations prior to javac1.4 (or modern when Ant is not running in a 1.3 VM) and jikes" />
+	<ea:parameter property="compile.java.compiler" description="The compiler implementation to use" default="modern"/>
     <available file="${src.main.java}" property="has.src.main.java" />
 	
 	<property name="main.sources" value="${src.main.java}"/>
 	<property name="main.sources.includes" value="${compile.java.includes.pattern}"/>
 	<property name="main.sources.excludes" value="${compile.java.excludes.pattern}"/>
+	
+	<path id="java.compiler.classpath" description="A PATH like structure holding the classpath to use when loading the compiler implementation if a custom class has been specified. Doesn't have any effect when using one of the built-in compilers."/>
 		    
     <target name="compile-java:compile" depends="abstract-compile:compile-ready" if="has.src.main.java"
         extensionOf="abstract-compile:compile">
         <mkdir dir="${target.main.classes}" />
         <javac srcdir="${src.main.java}" destdir="${target.main.classes}" debug="${javac.debug.mode}" source="${compile.java.source.version}"
             target="${compile.java.target.version}" classpathref="compile.main.classpath" includes="${compile.java.includes.pattern}"
-            excludes="${compile.java.excludes.pattern}" includeantruntime="no">
+            excludes="${compile.java.excludes.pattern}" includeantruntime="no"
+        	compiler="${compile.java.compiler}">
+        	<compilerclasspath refid="java.compiler.classpath"/>
         </javac>
     </target>
 </project>

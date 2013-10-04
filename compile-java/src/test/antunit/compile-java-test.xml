@@ -42,11 +42,14 @@
         <au:assertPropertyEquals name="compile.java.excludes.pattern" value="" />
         <au:assertPropertyEquals name="compile.java.target.version" value="${ant.java.version}" />
         <au:assertPropertyEquals name="compile.java.source.version" value="${ant.java.version}" />
-        <au:assertPropertyEquals name="has.src.main.java" value="true" />
+        <au:assertPropertyEquals name="compile.java.compiler" value="modern"/>
+
+    	<au:assertPropertyEquals name="has.src.main.java" value="true" />
 
         <au:assertPropertyEquals name="main.sources" value="${basedir}/src/main/java"/>
         <au:assertPropertyEquals name="main.sources.includes" value="**/*.java"/>
         <au:assertPropertyEquals name="main.sources.excludes" value=""/>
+    	<au:assertReferenceSet refid="java.compiler.classpath"/>
     </target>
 
     <target name="test-compile-java:compile" depends="compile-java:compile">
