@@ -35,11 +35,16 @@
     <target name="setUp" depends="clean" />
     <target name="tearDown" depends="clean" />
 
-    <target name="test-skeleton:init">
-        <au:assertPropertyEquals name="target.main.classes" value="target/test-antunit/main/classes" />
-        <au:assertPropertyEquals name="target.test.classes" value="target/test-antunit/test/classes" />
-        <au:assertPropertyEquals name="target.test.integration.classes" value="target/test-antunit/integration-test/classes" />
-        <au:assertReferenceSet refid="compile.main.classpath" />
-        <au:assertReferenceSet refid="compile.test.classpath" />
+    <target name="test-skeleton:init" depends="skeleton:init">
+        <au:assertPropertyEquals name="skeleton.default.basedir" value="${basedir}" />
+        <au:assertPropertyEquals name="skeleton.default.excludes.pattern" value="target/**" />
+        <au:assertPropertyEquals name="skeleton.default.includes.pattern" value="" />
+        <au:assertPropertyEquals name="skeleton.default.type" value="zip" />
+        <au:assertPropertyEquals name="skeleton.default.to.resolver" value="easyant-shared-modules" />
+        <au:assertPropertyEquals name="skeleton.default.revision" value="0.1" />
+        <au:assertPropertyEquals name="skeleton.default.organisation" value="org.apache.easyant.skeletons" />
+        <au:assertPropertyEquals name="project.default.organisation" value=""/>
+        <au:assertPropertyEquals name="skeleton.interactive.mode" value="true"/>
+        <au:assertPropertyEquals name="skeleton.is.interactive" value="true"/>
     </target>
 </project>

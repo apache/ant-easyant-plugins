@@ -17,7 +17,7 @@
 <project name="org.apache.easyant.plugins;webstart-test" xmlns:au="antlib:org.apache.ant.antunit" xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:ea="antlib:org.apache.easyant">
 
 	<!-- Import your plugin -->
-	<property name="target" value="target/test-antunit" />
+	<property name="target" value="${basedir}/target/test-antunit" />
 	<!-- configure easyant in current project -->
 	<ea:configure-easyant-ivy-instance />
 	<!-- import our local plugin -->
@@ -40,7 +40,7 @@
 		<property name="webstart.storepass" value="mypass" />
 
 		<mkdir dir="${target}/artifacts" />
-		<jar destfile="${target.main.artifact}" />
+		<jar destfile="${target.main.artifact}"/>
 		<mkdir dir="lib/main" />
 		<echo file="${webstart.jnlp.file}" />
 	</target>

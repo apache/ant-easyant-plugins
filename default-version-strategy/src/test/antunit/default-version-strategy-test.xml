@@ -18,7 +18,7 @@
     xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:ea="antlib:org.apache.easyant">
     
     <!-- Import your plugin -->
-    <property name="target" value="target/test-antunit" />
+    <property name="target" value="${basedir}/target/test-antunit" />
     <!-- configure easyant in current project -->
     <ea:configure-easyant-ivy-instance />
     <!-- import our local plugin -->
@@ -36,8 +36,10 @@
     <target name="tearDown" depends="clean" />
 
     <target name="configure-ivy-project">
+        <property name="ivy.local.default.root" value="${target}/local-repo" />
+        <property name="ivy.shared.default.root" value="${target}/shared-repo" />
         <property name="project.ivy.file" value="sample-module.ivy" />
-        <ivy:settings id="project.ivy.instance" />
+        <ivy:configure settingsId="project.ivy.instance" url="${ivy.default.settings.dir}/ivysettings.xml"/>
         <ivy:info file="sample-module.ivy" settingsRef="project.ivy.instance" />
     </target>
     <target name="test-default-version-strategy:init" depends="default-version-strategy:init">

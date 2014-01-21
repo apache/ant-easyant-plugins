@@ -35,7 +35,7 @@
     <target name="setUp" depends="clean">
         <property name="ivy.local.default.root" value="${target}/local-repo" />
         <property name="ivy.shared.default.root" value="${target}/shared-repo" />
-        <ivy:settings id="project.ivy.instance" />
+        <ivy:configure settingsId="project.ivy.instance" url="${ivy.default.settings.dir}/ivysettings.xml"/>
         <property name="install.interactive.mode" value="false" />
     </target>
     <target name="tearDown" depends="clean" />
