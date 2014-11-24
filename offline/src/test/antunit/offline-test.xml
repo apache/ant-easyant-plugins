@@ -55,6 +55,7 @@
         <au:assertLogContains text=":: installing in easyant.buildscope.repository ::" />
         <au:assertLogContains text=":: installing org.apache.easyant.plugins#rat;0.9 ::" />
         <au:assertLogContains text=":: installing org.apache.rat#apache-rat-tasks;0.7 ::" />
+        <au:assertLogContains text=":: installing org.mortbay.jetty#jetty;6.1.14 ::" />
 
         <property name="ea.repo" value="${offline.base.directory}/repository/easyant.buildscope.repository" />
         <property name="project.repo" value="${offline.base.directory}/repository/project.buildscope.repository" />
@@ -75,6 +76,14 @@
         <au:assertFileExists file="${project.repo}/junit/junit/4.4/junit.jar" />
         <au:assertFileExists file="${project.repo}/junit/junit/4.4/junit-javadoc.jar" />
         <au:assertFileExists file="${project.repo}/junit/junit/4.4/junit-sources.jar" />
+    	
+        <au:assertFileExists file="${project.repo}/org.mortbay.jetty/jetty/6.1.14/jetty-sources.jar" />
+        <au:assertFileExists file="${project.repo}/org.mortbay.jetty/jetty/6.1.14/jetty.jar" />
+        <au:assertFileExists file="${project.repo}/org.mortbay.jetty/jetty/6.1.14/jetty.ivy" />
+    	
+    	<!-- Test that transitive dependencies have been installed -->
+        <au:assertFileExists file="${project.repo}/org.mortbay.jetty/jetty-util/6.1.14/jetty-util.jar" />
+        <au:assertFileExists file="${project.repo}/org.mortbay.jetty/jetty-util/6.1.14/jetty-util.ivy" />
     </target>
 
     <target name="prepare-clean">

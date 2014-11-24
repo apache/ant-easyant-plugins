@@ -21,5 +21,7 @@
     </info>
     <dependencies>
         <dependency org="junit" name="junit" rev="4.4" />
+        <!-- Add a dependency with transitive dependencies -->
+        <dependency org="org.mortbay.jetty" name="jetty" rev="6.1.14" />
     </dependencies>
 </ivy-module>
